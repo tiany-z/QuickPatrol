@@ -1,0 +1,6 @@
+{
+  "apiKey": "sk-e8213c0fb4d64b38af90bea3675aa93d",
+  "apiBase": "https://api.deepseek.com",
+  "model": "deepseek-v4-flash",
+  "initialized": true
+}

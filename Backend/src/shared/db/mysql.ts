@@ -10,10 +10,10 @@ export function initMySQLPool(config?: PoolOptions): StandardResult<Pool> {
       return returnSuccess(pool);
     }
 
-    const host = process.env.MYSQL_HOST || "120.26.139.197";
+    const host = process.env.MYSQL_HOST || "127.0.0.1";
     const port = parseInt(process.env.MYSQL_PORT || "3306", 10);
     const user = process.env.MYSQL_USER || "root";
-    const password = process.env.MYSQL_PASSWORD || "Ldhq_123";
+    const password = process.env.MYSQL_PASSWORD || "root";
     const database = process.env.MYSQL_DATABASE || "xc";
     const connectionLimit = parseInt(process.env.MYSQL_CONNECTION_LIMIT || "20", 10);
 

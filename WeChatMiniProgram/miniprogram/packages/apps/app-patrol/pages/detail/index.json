@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "工单全景详情",
+  "usingComponents": {
+    "before-after-slider": "/components/before-after-slider/index"
+  }
+}

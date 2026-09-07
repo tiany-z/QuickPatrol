@@ -1,0 +1,122 @@
+.qp-login-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
+  visibility: hidden;
+  transition: visibility 0.25s ease;
+}
+
+.qp-login--show {
+  visibility: visible;
+}
+
+.qp-login-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.qp-login--show .qp-login-mask {
+  opacity: 1;
+}
+
+.qp-login-sheet {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--qp-bg-card);
+  border-radius: var(--qp-radius-lg) var(--qp-radius-lg) 0 0;
+  padding: 32rpx var(--qp-space-xl) calc(var(--qp-safe-bottom) + 32rpx);
+  box-shadow: var(--qp-shadow-float);
+  transform: translateY(100%);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.qp-login--show .qp-login-sheet {
+  transform: translateY(0);
+}
+
+.qp-login-bar {
+  width: 72rpx;
+  height: 8rpx;
+  background: var(--qp-gray-300);
+  border-radius: var(--qp-radius-full);
+  margin-bottom: 36rpx;
+}
+
+.qp-login-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.qp-login-brand-logo {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: var(--qp-radius-md);
+  margin-right: 16rpx;
+}
+
+.qp-login-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: var(--qp-text-primary);
+}
+
+.qp-login-prompt {
+  font-size: 26rpx;
+  color: var(--qp-text-secondary);
+  text-align: center;
+  max-width: 520rpx;
+  line-height: 1.5;
+  margin-bottom: 48rpx;
+}
+
+.qp-login-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.qp-btn-phone {
+  width: 100%;
+  background: var(--qp-primary);
+  color: #FFFFFF;
+  font-size: 30rpx;
+  font-weight: 600;
+  padding: 22rpx 0;
+  border-radius: var(--qp-radius-full);
+  box-shadow: 0 8rpx 24rpx var(--qp-primary-glow);
+  border: none;
+}
+
+.qp-btn-phone::after {
+  border: none;
+}
+
+.qp-login-cancel {
+  font-size: 26rpx;
+  color: var(--qp-text-muted);
+  margin-top: 28rpx;
+  padding: 12rpx;
+}
+
+.qp-login-privacy {
+  font-size: 20rpx;
+  color: var(--qp-text-muted);
+  margin-top: 40rpx;
+}

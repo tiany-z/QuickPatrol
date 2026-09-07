@@ -1,0 +1,120 @@
+<!-- 高校后勤巡查e速办 v4.0 - M51 全景日历与值班排班表 -->
+<view class="calendar-container">
+  <qp-navbar title="后勤全景日历与值班表" showBack="{{true}}" />
+  <!-- 顶部年月控制器与概要徽章 -->
+  <view class="calendar-top-header">
+    <view class="month-title-wrap">
+      <text class="calendar-icon">📅</text>
+      <text class="month-text">{{currentYear}}年 {{currentMonth}}月</text>
+    </view>
+    <view class="month-nav">
+      <button class="nav-btn" bindtap="handlePrevMonth" hover-class="btn-hover">◀</button>
+      <button class="nav-btn" bindtap="handleNextMonth" hover-class="btn-hover">▶</button>
+    </view>
+  </view>
+
+  <!-- 当月事件概要统计胶囊 -->
+  <view wx:if="{{monthData && monthData.summary}}" class="summary-pills-bar">
+    <view class="summary-pill pill-red">
+      <text class="pill-dot"></text>
+      <text>SLA 预警 {{monthData.summary.totalSlaAlerts}}</text>
+    </view>
+    <view class="summary-pill pill-blue">
+      <text class="pill-dot"></text>
+      <text>排班轮值 {{monthData.summary.totalShifts}}</text>
+    </view>
+    <view class="summary-pill pill-green">
+      <text class="pill-dot"></text>
+      <text>重大维保 {{monthData.summary.totalMaintenanceEvents}}</text>
+    </view>
+  </view>
+
+  <!-- 星期表头 -->
+  <view class="weekday-bar">
+    <text class="weekday weekend">日</text>
+    <text class="weekday">一</text>
+    <text class="weekday">二</text>
+    <text class="weekday">三</text>
+    <text class="weekday">四</text>
+    <text class="weekday">五</text>
+    <text class="weekday weekend">六</text>
+  </view>
+
+  <!-- 42 单元格自适应月网格 (算法 1) -->
+  <view class="month-grid">
+    <block wx:for="{{monthData.cells}}" wx:key="dateStr">
+      <view
+        class="day-cell {{item.isCurrentMonth ? '' : 'cell-faded'}} {{item.dateStr === selectedDateStr ? 'cell-selected' : ''}} {{item.isToday ? 'cell-today' : ''}}"
+        bindtap="handleDateTap"
+        data-date="{{item.dateStr}}"
+        hover-class="cell-hover"
+      >
+        <text class="day-number">{{item.dayNumber}}</text>
+
+        <!-- 彩色微指示红蓝绿点 -->
+        <view class="dot-container">
+          <view wx:if="{{item.dots.hasSlaWarning}}" class="dot dot-red"></view>
+          <view wx:if="{{item.dots.hasDutyShift}}" class="dot dot-blue"></view>
+          <view wx:if="{{item.dots.hasMaintenance}}" class="dot dot-green"></view>
+          <view wx:if="{{item.dots.hasCustomTodo}}" class="dot dot-gray"></view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 选中日期的日时刻详情大盘 -->
+  <view class="day-detail-section">
+    <view class="day-header-bar">
+      <view class="day-title-wrap">
+        <text class="day-title">{{dayData ? dayData.dateStr : selectedDateStr}}</text>
+        <text class="day-week-badge">{{dayData ? dayData.dayOfWeekText : ''}}</text>
+      </view>
+      <text class="day-events-count">共 {{dayData ? dayData.timelineItems.length : 0}} 项日程</text>
+    </view>
+
+    <!-- 今日值班师傅专属名牌 -->
+    <view wx:if="{{dayData.dutyStaffList && dayData.dutyStaffList.length > 0}}" class="duty-banner-wrap">
+      <block wx:for="{{dayData.dutyStaffList}}" wx:key="userId">
+        <shift-card staff-data="{{item}}" />
+      </block>
+    </view>
+
+    <!-- 00:00 ~ 24:00 垂直时刻时间轴滚动区 -->
+    <scroll-view class="timeline-scroll" scroll-y enable-flex>
+      <view class="timeline-wrapper">
+        <!-- 小时刻度线 (00:00 ~ 23:00) -->
+        <block wx:for="{{[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]}}" wx:key="*this">
+          <view class="hour-line" style="top: {{(item / 24) * 100}}%;">
+            <text class="hour-label">{{item < 10 ? '0' + item : item}}:00</text>
+          </view>
+        </block>
+
+        <!-- 当前时间实时推移红线 (若是今天) -->
+        <view wx:if="{{isTodaySelected}}" class="current-time-red-line" style="top: {{currentTimeRedLineTop}}%;">
+          <view class="red-line-dot"></view>
+        </view>
+
+        <!-- 贪心列布局日程事件卡片 (算法 3) -->
+        <block wx:for="{{dayData.timelineItems}}" wx:key="id">
+          <view
+            class="timeline-card card-{{item.badgeColor}}"
+            style="top: {{item.topPercentage}}%; height: {{item.heightPercentage}}%; left: {{(item.columnIndex / item.totalColumns) * 100}}%; width: {{(1 / item.totalColumns) * 100}}%;"
+            bindtap="handleTimelineItemTap"
+            data-item="{{item}}"
+            hover-class="card-hover"
+          >
+            <view class="card-time-text">{{item.startTimeText}} - {{item.endTimeText}}</view>
+            <view class="card-title-text">{{item.title}}</view>
+            <view wx:if="{{item.location}}" class="card-location-text">📍 {{item.location}}</view>
+          </view>
+        </block>
+
+        <!-- 当天无事件空态提示 -->
+        <view wx:if="{{dayData && dayData.timelineItems.length === 0}}" class="empty-day-state">
+          <text class="empty-icon">☕</text>
+          <text class="empty-text">当日暂无待办日程或预警工单</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

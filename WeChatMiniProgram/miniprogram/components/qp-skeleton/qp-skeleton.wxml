@@ -1,0 +1,39 @@
+<view class="qp-skeleton-container {{ animated ? 'qp-skeleton--animated' : '' }}">
+  <!-- 1. 工单卡片式骨架 (layout === 'card') -->
+  <block wx:if="{{ layout === 'card' }}">
+    <view class="qp-skeleton-card" wx:for="{{ loopList }}" wx:key="index">
+      <view class="qp-skeleton-row qp-skeleton-between">
+        <view class="qp-skeleton-box qp-skeleton-badge"></view>
+        <view class="qp-skeleton-box qp-skeleton-status"></view>
+      </view>
+      <view class="qp-skeleton-box qp-skeleton-title"></view>
+      <view class="qp-skeleton-box qp-skeleton-desc"></view>
+      <view class="qp-skeleton-row qp-skeleton-between qp-skeleton-footer">
+        <view class="qp-skeleton-box qp-skeleton-meta"></view>
+        <view class="qp-skeleton-box qp-skeleton-btn"></view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 2. 工单全景详情页骨架 (layout === 'detail') -->
+  <block wx:elif="{{ layout === 'detail' }}">
+    <view class="qp-skeleton-detail">
+      <view class="qp-skeleton-box qp-skeleton-timeline"></view>
+      <view class="qp-skeleton-box qp-skeleton-hero"></view>
+      <view class="qp-skeleton-grid">
+        <view class="qp-skeleton-box qp-skeleton-photo" wx:for="{{ [1, 2, 3] }}" wx:key="index"></view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 3. 标准列表流骨架 (layout === 'list') -->
+  <block wx:else>
+    <view class="qp-skeleton-list-item" wx:for="{{ loopList }}" wx:key="index">
+      <view class="qp-skeleton-box qp-skeleton-avatar"></view>
+      <view class="qp-skeleton-content">
+        <view class="qp-skeleton-box qp-skeleton-title-sm"></view>
+        <view class="qp-skeleton-box qp-skeleton-desc-sm"></view>
+      </view>
+    </view>
+  </block>
+</view>

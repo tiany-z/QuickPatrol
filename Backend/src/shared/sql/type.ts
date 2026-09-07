@@ -108,9 +108,18 @@ export interface ParseWhereResult {
   needInputValues: Array<NeedInputValue>;
 }
 
+export interface JoinNode {
+  _type?: "join";
+  type?: "LEFT" | "RIGHT" | "INNER";
+  table: TableNode;
+  on: Array<WhereConditionNode>;
+}
+
 export interface SelectCompose {
   allColumns?: boolean;
   columns: Array<ColumnNode>;
+  tables?: Array<TableNode>;
+  joins?: Array<JoinNode>;
   where?: Array<WhereConditionNode>;
   orderBy?: Array<OrderByNode>;
   limit?: LimitNode;
@@ -123,6 +132,9 @@ export interface SelectBuildResult {
   sql: string;
   sqlOnlyId: string;
   needInputValues: Array<NeedInputValue>;
+  parameterizedSql?: string;
+  parameterizedSqlOnlyId?: string;
+  boundParams?: any[];
 }
 
 export interface UndoOperation {
@@ -131,20 +143,28 @@ export interface UndoOperation {
 }
 
 export interface InsertCompose {
+  table?: TableNode;
+  tableNode?: TableNode;
   columns: Array<ColumnNode>;
+  values?: Array<CustomValueNode>;
+  data?: Record<string, any>;
+  valuesPayload?: Record<string, any>;
 }
 
 export interface InsertBuildResult {
   tableName: string;
   sql: string;
   needInputValues: Array<{ columnName: string }>;
+  boundParams?: any[];
   createUndoFn: (insertedId: string | number) => UndoOperation;
 }
 
 export interface UpdateCompose {
-  table: TableNode;
+  table?: TableNode;
+  tableNode?: TableNode;
   targetId: string | number;
   updateData: Record<string, any>;
+  where?: Array<WhereConditionNode>;
 }
 
 export interface UpdateBuildResult {
@@ -157,8 +177,10 @@ export interface UpdateBuildResult {
 }
 
 export interface DeleteCompose {
-  table: TableNode;
+  table?: TableNode;
+  tableNode?: TableNode;
   targetId: string | number;
+  where?: Array<WhereConditionNode>;
 }
 
 export interface DeleteBuildResult {

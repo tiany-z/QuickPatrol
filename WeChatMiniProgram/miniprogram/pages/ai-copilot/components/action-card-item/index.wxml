@@ -1,0 +1,33 @@
+<view wx:if="{{cardData}}" class="action-card-container">
+  <view class="card-header">
+    <view class="card-title-wrap">
+      <text class="title-icon">⚡</text>
+      <text class="card-title">{{cardData.title}}</text>
+    </view>
+    <view class="badge badge-{{cardData.statusBadgeColor}}">
+      {{cardData.statusText}}
+    </view>
+  </view>
+
+  <view class="card-body">
+    <view wx:for="{{cardData.fields}}" wx:key="label" class="field-row">
+      <text class="field-label">{{item.label}}：</text>
+      <text class="field-value {{item.isHighlight ? 'text-highlight' : ''}}">{{item.value}}</text>
+    </view>
+  </view>
+
+  <view class="card-footer">
+    <view class="sla-text">{{cardData.slaRemainingText}}</view>
+    <view class="actions-wrap">
+      <button
+        wx:for="{{cardData.actions}}"
+        wx:key="actionId"
+        class="btn btn-{{item.buttonType}}"
+        bindtap="handleActionTap"
+        data-action="{{item}}"
+      >
+        {{item.label}}
+      </button>
+    </view>
+  </view>
+</view>

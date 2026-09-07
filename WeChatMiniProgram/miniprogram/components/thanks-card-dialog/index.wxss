@@ -1,0 +1,198 @@
+.thanks-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8rpx);
+  z-index: 999;
+  display: flex;
+  align-items: flex-end;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.mask-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.thanks-dialog {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 36rpx 36rpx 0 0;
+  padding: 40rpx 32rpx env(safe-area-inset-bottom);
+  box-sizing: border-box;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dialog-enter {
+  transform: translateY(0);
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30rpx;
+}
+
+.dialog-title-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.dialog-sub {
+  font-size: 22rpx;
+  color: #888888;
+  margin-top: 6rpx;
+}
+
+.dialog-close {
+  width: 56rpx;
+  height: 56rpx;
+  background: #f5f5f5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: #777777;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.card-option {
+  padding: 24rpx 20rpx;
+  background: #fafafa;
+  border-radius: 20rpx;
+  border: 2rpx solid #eeeeee;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.card-selected {
+  background: #fff8f8;
+  border-color: #ba181b;
+  box-shadow: 0 4rpx 16rpx rgba(186, 24, 27, 0.12);
+}
+
+.card-icon {
+  font-size: 40rpx;
+  margin-bottom: 10rpx;
+}
+
+.card-name {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #222222;
+  margin-bottom: 4rpx;
+}
+
+.card-desc {
+  font-size: 20rpx;
+  color: #888888;
+  line-height: 1.3;
+}
+
+.card-bonus {
+  position: absolute;
+  top: 16rpx;
+  right: 16rpx;
+  background: rgba(186, 24, 27, 0.08);
+  color: #ba181b;
+  font-size: 18rpx;
+  font-weight: 700;
+  padding: 4rpx 10rpx;
+  border-radius: 8rpx;
+}
+
+.comment-box {
+  position: relative;
+  margin-bottom: 20rpx;
+}
+
+.comment-textarea {
+  width: 100%;
+  height: 140rpx;
+  background: #f9f9f9;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  font-size: 26rpx;
+  color: #333333;
+  box-sizing: border-box;
+}
+
+.char-counter {
+  position: absolute;
+  bottom: 12rpx;
+  right: 20rpx;
+  font-size: 20rpx;
+  color: #aaaaaa;
+}
+
+.reward-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+  background: rgba(255, 179, 0, 0.08);
+  padding: 16rpx 20rpx;
+  border-radius: 12rpx;
+  margin-bottom: 32rpx;
+}
+
+.reward-tip-icon {
+  font-size: 24rpx;
+}
+
+.reward-tip-text {
+  font-size: 22rpx;
+  color: #b26a00;
+  line-height: 1.4;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 20rpx;
+}
+
+.btn-cancel {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  background: #f5f5f5;
+  color: #666666;
+  font-size: 28rpx;
+  font-weight: 600;
+  border-radius: 44rpx;
+  text-align: center;
+}
+
+.btn-submit {
+  flex: 2;
+  height: 88rpx;
+  line-height: 88rpx;
+  background: linear-gradient(135deg, #e53935 0%, #ba181b 100%);
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 700;
+  border-radius: 44rpx;
+  text-align: center;
+  box-shadow: 0 8rpx 24rpx rgba(186, 24, 27, 0.25);
+}

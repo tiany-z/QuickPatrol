@@ -1,0 +1,54 @@
+<view class="official-banner-container" wx:if="{{banners && banners.length > 0}}">
+  <swiper 
+    class="banner-swiper" 
+    autoplay="{{banners.length > 1}}" 
+    circular="{{true}}" 
+    interval="4500" 
+    duration="500"
+    bindchange="onSwiperChange"
+  >
+    <swiper-item wx:for="{{banners}}" wx:key="noticeId">
+      <view 
+        class="banner-card banner-{{item.urgencyLevel ? item.urgencyLevel.toLowerCase() : 'normal'}}"
+        bindtap="onBannerClick"
+        data-id="{{item.noticeId}}"
+      >
+        <!-- 呼吸徽章与分类标签 -->
+        <view class="banner-header">
+          <view class="tag-badge">
+            <view class="pulse-dot"></view>
+            <text class="tag-text">{{item.bannerTag || '【校官方通告】'}}</text>
+          </view>
+          <text class="dept-text">{{item.publishDeptName || '高校后勤管理处'}}</text>
+        </view>
+
+        <!-- 通告标题与核心内容概要 -->
+        <view class="banner-body">
+          <text class="banner-title">{{item.title}}</text>
+          <text class="banner-desc">{{item.contentSummary}}</text>
+        </view>
+
+        <!-- 底部时效提示与查看详情入口 -->
+        <view class="banner-footer">
+          <view class="expire-tip">
+            <text class="expire-icon">⏳</text>
+            <text class="expire-text">{{item.topExpireAt ? '置顶中 (' + item.topExpireAt + ')' : '重要通告'}}</text>
+          </view>
+          <view class="action-btn">
+            <text>查看详情</text>
+            <text class="arrow">›</text>
+          </view>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 轮播指示点 (多于1条时展示) -->
+  <view class="indicator-bar" wx:if="{{banners.length > 1}}">
+    <view 
+      wx:for="{{banners}}" 
+      wx:key="noticeId" 
+      class="indicator-dot {{currentIndex === index ? 'active' : ''}}"
+    ></view>
+  </view>
+</view>

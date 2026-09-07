@@ -1,0 +1,105 @@
+.app-feed-container {
+  min-height: 100vh;
+  background-color: #F5F6F7;
+  padding-bottom: 40rpx;
+  box-sizing: border-box;
+}
+
+/* 顶部微应用服务号横幅 */
+.app-feed-header {
+  background-color: #FFFFFF;
+  padding: 24rpx 32rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1rpx solid #EBEEF5;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.02);
+}
+
+.app-header-icon {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 16rpx;
+  margin-right: 20rpx;
+  background-color: #F0F2F5;
+}
+
+.app-header-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1F2329;
+  line-height: 40rpx;
+}
+
+.app-header-subtitle {
+  font-size: 22rpx;
+  color: #8F959E;
+  margin-top: 4rpx;
+}
+
+/* 卡片列表 */
+.card-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 空状态 */
+.empty-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 200rpx;
+}
+
+.empty-icon {
+  width: 180rpx;
+  height: 180rpx;
+  opacity: 0.6;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #8F959E;
+  margin-top: 24rpx;
+}
+
+/* 页脚加载指示 */
+.feed-footer {
+  padding: 32rpx 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-more {
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  color: #8F959E;
+}
+
+.loading-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background-color: #1890FF;
+  margin-right: 12rpx;
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+  from { opacity: 0.3; transform: scale(0.8); }
+  to { opacity: 1.0; transform: scale(1.2); }
+}
+
+.no-more-text {
+  font-size: 22rpx;
+  color: #C0C4CC;
+  letter-spacing: 2rpx;
+}

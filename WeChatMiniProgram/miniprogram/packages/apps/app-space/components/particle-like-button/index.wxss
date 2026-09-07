@@ -1,0 +1,126 @@
+.particle-like-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 30rpx;
+  background: rgba(0, 0, 0, 0.03);
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  user-select: none;
+}
+
+.particle-like-wrapper:active {
+  transform: scale(0.92);
+}
+
+.heart-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36rpx;
+  height: 36rpx;
+}
+
+.heart-icon {
+  width: 36rpx;
+  height: 36rpx;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.is-liked .heart-icon {
+  transform: scale(1.15);
+  filter: drop-shadow(0 2rpx 8rpx rgba(255, 45, 85, 0.4));
+}
+
+.is-bouncing .heart-icon {
+  animation: heartPop 0.5s ease-out;
+}
+
+@keyframes heartPop {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.45) rotate(-8deg);
+  }
+  60% {
+    transform: scale(0.9) rotate(4deg);
+  }
+  100% {
+    transform: scale(1.15) rotate(0deg);
+  }
+}
+
+.count-text {
+  font-size: 24rpx;
+  color: #8E8E93;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.count-liked {
+  color: #FF2D55;
+  font-weight: 600;
+}
+
+/* 粒子炸裂微动效层 */
+.sparkles-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.sparkle {
+  position: absolute;
+  width: 6rpx;
+  height: 6rpx;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.sp-1 { background: #FF2D55; animation: blast1 0.55s ease-out forwards; }
+.sp-2 { background: #FF9500; animation: blast2 0.55s ease-out forwards; }
+.sp-3 { background: #FF3B30; animation: blast3 0.55s ease-out forwards; }
+.sp-4 { background: #FFCC00; animation: blast4 0.55s ease-out forwards; }
+.sp-5 { background: #FF2D55; animation: blast5 0.55s ease-out forwards; }
+.sp-6 { background: #AF52DE; animation: blast6 0.55s ease-out forwards; }
+.sp-7 { background: #5856D6; animation: blast7 0.55s ease-out forwards; }
+.sp-8 { background: #FF9500; animation: blast8 0.55s ease-out forwards; }
+
+@keyframes blast1 {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(-28rpx, -24rpx) scale(0); opacity: 0; }
+}
+@keyframes blast2 {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(28rpx, -24rpx) scale(0); opacity: 0; }
+}
+@keyframes blast3 {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(-34rpx, 4rpx) scale(0); opacity: 0; }
+}
+@keyframes blast4 {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(34rpx, 4rpx) scale(0); opacity: 0; }
+}
+@keyframes blast5 {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(-20rpx, 26rpx) scale(0); opacity: 0; }
+}
+@keyframes blast6 {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(20rpx, 26rpx) scale(0); opacity: 0; }
+}
+@keyframes blast7 {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(0rpx, -36rpx) scale(0); opacity: 0; }
+}
+@keyframes blast8 {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(0rpx, 34rpx) scale(0); opacity: 0; }
+}

@@ -1,0 +1,81 @@
+.qp-skeleton-container {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 基础微光块骨架条 */
+.qp-skeleton-box {
+  background-color: var(--qp-gray-200);
+  border-radius: var(--qp-radius-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 核心 60fps GPU 微光掠影动画 */
+.qp-skeleton--animated .qp-skeleton-box::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: qpShimmer 1.5s infinite;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+@keyframes qpShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.qp-skeleton-row {
+  display: flex;
+  align-items: center;
+}
+
+.qp-skeleton-between {
+  justify-content: space-between;
+}
+
+/* 卡片布局规格 */
+.qp-skeleton-card {
+  background: var(--qp-bg-card);
+  border-radius: var(--qp-radius-lg);
+  padding: var(--qp-space-lg);
+  margin-bottom: var(--qp-space-md);
+  box-shadow: var(--qp-shadow-card);
+}
+
+.qp-skeleton-badge { width: 140rpx; height: 36rpx; border-radius: var(--qp-radius-full); }
+.qp-skeleton-status { width: 100rpx; height: 36rpx; border-radius: var(--qp-radius-full); }
+.qp-skeleton-title { width: 85%; height: 44rpx; margin-top: 24rpx; }
+.qp-skeleton-desc { width: 65%; height: 32rpx; margin-top: 16rpx; }
+.qp-skeleton-footer { margin-top: 28rpx; }
+.qp-skeleton-meta { width: 220rpx; height: 28rpx; }
+.qp-skeleton-btn { width: 130rpx; height: 48rpx; border-radius: var(--qp-radius-full); }
+
+/* 详情布局规格 */
+.qp-skeleton-detail { padding: var(--qp-space-lg); }
+.qp-skeleton-timeline { width: 100%; height: 90rpx; margin-bottom: 24rpx; }
+.qp-skeleton-hero { width: 100%; height: 180rpx; margin-bottom: 24rpx; }
+.qp-skeleton-grid { display: flex; gap: 16rpx; }
+.qp-skeleton-photo { width: 210rpx; height: 210rpx; border-radius: var(--qp-radius-md); }
+
+/* 列表流规格 */
+.qp-skeleton-list-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--qp-gray-100);
+}
+.qp-skeleton-avatar { width: 96rpx; height: 96rpx; border-radius: var(--qp-radius-md); margin-right: 24rpx; }
+.qp-skeleton-content { flex: 1; }
+.qp-skeleton-title-sm { width: 60%; height: 36rpx; margin-bottom: 12rpx; }
+.qp-skeleton-desc-sm { width: 40%; height: 26rpx; }

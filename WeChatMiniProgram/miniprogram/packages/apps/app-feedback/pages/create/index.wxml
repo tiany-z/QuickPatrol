@@ -1,0 +1,111 @@
+<view class="container">
+  <qp-navbar title="师生心声反馈" showBack="{{true}}" />
+  <!-- 顶部保险箱说明横幅 -->
+  <view class="vault-banner">
+    <view class="banner-title">
+      <text class="banner-icon">🔒</text>
+      <text>师生心声 · 绝对匿名保险箱</text>
+    </view>
+    <view class="banner-desc">
+      开启匿名后，系统在物理底层将真实姓名与学号彻底抹零，仅您本地持有私钥凭证卡，不可逆、不可查、免除一切后顾之忧。
+    </view>
+  </view>
+
+  <!-- 草稿自愈提示栏 -->
+  <view wx:if="{{hasDraft}}" class="draft-tip-bar">
+    <text>已为您自动恢复上次未提交的建言草稿</text>
+    <text class="draft-clear-btn" bindtap="onClearDraft">放弃</text>
+  </view>
+
+  <!-- 表单卡片 -->
+  <view class="form-card">
+    <!-- 分类选择 -->
+    <view class="form-item">
+      <text class="form-label">诉求门类</text>
+      <picker bindchange="onCategoryChange" value="{{categoryIndex}}" range="{{categories}}" range-key="name">
+        <view class="picker-value">
+          <text>{{categories[categoryIndex].name}}</text>
+          <text class="arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 标题 -->
+    <view class="form-item-vertical">
+      <view class="label-row">
+        <text class="form-label">建言主题</text>
+        <text class="char-count">{{title.length}}/60</text>
+      </view>
+      <input
+        class="input-control"
+        placeholder="简要概括反映问题（5~60字）..."
+        maxlength="60"
+        value="{{title}}"
+        bindinput="onTitleInput"
+      />
+    </view>
+
+    <!-- 详细正文 -->
+    <view class="form-item-vertical">
+      <view class="label-row">
+        <text class="form-label">详细情况与改善建议</text>
+        <text class="char-count">{{content.length}}/1000</text>
+      </view>
+      <textarea
+        class="textarea-control"
+        placeholder="请详细客观阐述现场情况、具体窗口/地点以及您的宝贵建议（10~1000字）..."
+        maxlength="1000"
+        value="{{content}}"
+        bindinput="onContentInput"
+      />
+    </view>
+
+    <!-- 现场实证照片 -->
+    <view class="form-item-vertical">
+      <text class="form-label">现场照片 (可选，最多4张)</text>
+      <view class="photo-grid">
+        <view wx:for="{{imageUrls}}" wx:key="*this" class="photo-item">
+          <image src="{{item}}" mode="aspectFill" class="photo-img" />
+          <view class="photo-delete" bindtap="onDeletePhoto" data-index="{{index}}">×</view>
+        </view>
+        <view wx:if="{{imageUrls.length < 4}}" class="photo-add-btn" bindtap="onChoosePhoto">
+          <text class="add-icon">+</text>
+          <text class="add-text">上传照片</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 隐私保护与公开选项卡片 -->
+  <view class="switch-card">
+    <view class="switch-item">
+      <view class="switch-text">
+        <view class="switch-title">
+          <text>绝对匿名隐私保险箱</text>
+          <text class="secure-tag">物理抹零</text>
+        </view>
+        <view class="switch-desc">彻底清除学号姓名与IP痕迹，仅下发私钥卡至本机</view>
+      </view>
+      <switch checked="{{isAnonymous}}" color="#2563eb" bindchange="onToggleAnonymous" />
+    </view>
+
+    <view class="divider"></view>
+
+    <view class="switch-item">
+      <view class="switch-text">
+        <view class="switch-title">
+          <text>答复满意后公开至校园广场</text>
+        </view>
+        <view class="switch-desc">科室答复处理完毕后，推送到校园广场接受全校师生监督</view>
+      </view>
+      <switch checked="{{allowPublicDisplay}}" color="#2563eb" bindchange="onTogglePublic" />
+    </view>
+  </view>
+
+  <!-- 底部提交按钮 -->
+  <view class="submit-wrapper">
+    <button class="btn-submit" bindtap="onSubmit" loading="{{isSubmitting}}" disabled="{{isSubmitting}}">
+      {{isAnonymous ? '🔒 加密提交至隐私保险箱' : '实名提交建言诉求'}}
+    </button>
+  </view>
+</view>

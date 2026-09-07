@@ -1,0 +1,82 @@
+<view class="stream-container">
+  <qp-navbar title="校园公开空间" showBack="{{true}}" />
+  <!-- 顶部阳光透明形象 Banner -->
+  <view class="hero-banner">
+    <view class="banner-badge">
+      <text class="badge-dot">●</text>
+      <text class="badge-text">高校后勤巡查e速办 v4.0</text>
+    </view>
+    <text class="banner-title">校园公开空间 · 阳光透明中枢</text>
+    <text class="banner-slogan">工程维修眼见为实 · 责任科室正式公函答复 · 全民阳光监督</text>
+  </view>
+
+  <!-- 轨道选择与排序切换栏 -->
+  <view class="filter-bar">
+    <view class="track-tabs">
+      <view
+        class="tab-item {{activeTrack === 'all' ? 'tab-active' : ''}}"
+        data-track="all"
+        bindtap="onSelectTrack"
+      >
+        <text>全部动态</text>
+      </view>
+      <view
+        class="tab-item {{activeTrack === 'repair' ? 'tab-active' : ''}}"
+        data-track="repair"
+        bindtap="onSelectTrack"
+      >
+        <text>🛠️ 工程抢修</text>
+      </view>
+      <view
+        class="tab-item {{activeTrack === 'reply' ? 'tab-active' : ''}}"
+        data-track="reply"
+        bindtap="onSelectTrack"
+      >
+        <text>📜 官方答复</text>
+      </view>
+    </view>
+
+    <!-- 最新 / 热榜切换 -->
+    <view class="sort-toggle" bindtap="onToggleSort">
+      <text class="sort-text">{{activeSort === 'hot' ? '🔥 热度榜' : '🕒 最新'}}</text>
+    </view>
+  </view>
+
+  <!-- 双列瀑布流排版区 (Masonry) -->
+  <view class="masonry-wrap">
+    <!-- 左列 -->
+    <view class="masonry-col col-left">
+      <block wx:for="{{leftColumnCards}}" wx:key="postId">
+        <masonry-feed-card card="{{item}}" bind:comment="onOpenComment" />
+      </block>
+    </view>
+
+    <!-- 右列 -->
+    <view class="masonry-col col-right">
+      <block wx:for="{{rightColumnCards}}" wx:key="postId">
+        <masonry-feed-card card="{{item}}" bind:comment="onOpenComment" />
+      </block>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:if="{{!isLoading && leftColumnCards.length === 0 && rightColumnCards.length === 0}}" class="empty-box">
+    <text class="empty-icon">🍃</text>
+    <text class="empty-title">当前暂无公开动态</text>
+    <text class="empty-desc">待有工程抢修合格验收或官方公函出具后，将自动展示于此</text>
+  </view>
+
+  <!-- 加载状态与底线 -->
+  <view class="footer-loader">
+    <text wx:if="{{isLoading}}" class="loader-text">正在加载阳光动态...</text>
+    <text wx:elif="{{!hasMore && (leftColumnCards.length > 0 || rightColumnCards.length > 0)}}" class="end-text">— 已展示全部阳光治理动态 —</text>
+  </view>
+
+  <!-- 访客快捷留言半屏抽屉 -->
+  <guest-comment-sheet
+    show="{{showCommentSheet}}"
+    postId="{{selectedPostIdForComment}}"
+    bind:close="onCloseComment"
+    bind:success="onCommentSuccess"
+  />
+</view>

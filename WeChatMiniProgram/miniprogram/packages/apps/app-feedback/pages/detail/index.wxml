@@ -1,0 +1,85 @@
+<view class="detail-container">
+  <qp-navbar title="诉求详情与官方答复" showBack="{{true}}" />
+
+  <!-- 顶部状态栏 -->
+  <view class="status-banner status-{{appeal.status === 1 ? 'replied' : 'pending'}}">
+    <view class="status-icon">{{appeal.status === 1 ? '📜' : '⏳'}}</view>
+    <view class="status-info">
+      <text class="status-title">{{appeal.status === 1 ? '已出具官方正式答复公函' : '科室核实调查推进中'}}</text>
+      <text class="status-desc">{{appeal.status === 1 ? '经办责任科室已完成现场核实并出具公函' : '后勤管理处已接收建言，正在协调科室对接'}}</text>
+    </view>
+  </view>
+
+  <scroll-view scroll-y class="detail-scroll">
+    <!-- 原始诉求卡片 -->
+    <view class="appeal-card">
+      <view class="card-header">
+        <view class="badge-anonymous" wx:if="{{appeal.creatorId === 0}}">🛡️ 绝对匿名保险箱</view>
+        <view class="badge-realname" wx:else>👤 实名反馈</view>
+        <text class="appeal-time">{{appeal.createdAt}}</text>
+      </view>
+
+      <view class="appeal-title">{{appeal.title}}</view>
+      <view class="appeal-content">{{appeal.content}}</view>
+
+      <view class="appeal-stats">
+        <text class="stat-item">👍 点赞 {{appeal.likeCount || 0}}</text>
+        <text class="stat-item">💬 互动与追问 {{appeal.commentCount || 0}}</text>
+        <text class="stat-item" wx:if="{{appeal.isTop === 1}}">🔥 全校置顶</text>
+      </view>
+    </view>
+
+    <!-- 官方正式答复公函卡片 (M32 核心组件) -->
+    <view class="decree-section" wx:if="{{appeal.officialReply}}">
+      <view class="section-title">
+        <text class="section-badge">OFFICIAL</text>
+        <text class="section-heading">责任科室正式公函</text>
+      </view>
+      <official-decree-card decreeData="{{appeal.officialReply}}" />
+    </view>
+
+    <!-- 师生文创感谢卡墙 (M32 正向激励) -->
+    <view class="thanks-wall-section" wx:if="{{appeal.thanksCards && appeal.thanksCards.length > 0}}">
+      <view class="section-title">
+        <text class="section-badge badge-heart">GRATITUDE</text>
+        <text class="section-heading">师生致谢卡片墙 ({{appeal.thanksCards.length}})</text>
+      </view>
+      <view class="thanks-cards-list">
+        <view class="thanks-card-item" wx:for="{{appeal.thanksCards}}" wx:key="cardId">
+          <view class="thanks-item-header">
+            <text class="thanks-item-name">{{item.cardTypeName}}</text>
+            <text class="thanks-item-date">{{item.createdAt}}</text>
+          </view>
+          <text class="thanks-item-comment">“{{item.studentComment}}”</text>
+          <view class="thanks-item-badge">+{{item.pointsAwarded}} 啄木鸟治理积分</view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 底部固定交互栏 -->
+  <view class="detail-bottom-bar">
+    <button class="btn-action btn-share" open-type="share">
+      <text class="btn-icon">↗</text> 分享
+    </button>
+    <button 
+      class="btn-action btn-thanks" 
+      wx:if="{{appeal.status === 1 && !hasSentThanksCard}}"
+      bindtap="onOpenThanksDialog"
+    >
+      <text class="btn-icon">🌸</text> 赠送文创感谢卡
+    </button>
+    <view class="btn-action btn-already-sent" wx:elif="{{hasSentThanksCard}}">
+      <text class="btn-icon">✓</text> 已赠送感谢卡
+    </view>
+  </view>
+
+  <!-- 赠送感谢卡弹窗 -->
+  <thanks-card-dialog 
+    show="{{showThanksModal}}"
+    appealId="{{appealId}}"
+    vaultToken="{{vaultToken}}"
+    bind:close="onCloseThanksDialog"
+    bind:success="onThanksCardSuccess"
+  />
+</view>

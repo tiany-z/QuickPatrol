@@ -1,0 +1,321 @@
+/* M37: 类 QQ 聊天气泡样式 (chat-bubble-item) */
+
+.system-bubble-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 20rpx 0;
+}
+
+.system-bubble {
+  background: rgba(0, 0, 0, 0.06);
+  padding: 8rpx 24rpx;
+  border-radius: 24rpx;
+  max-width: 80%;
+}
+
+.system-text {
+  font-size: 22rpx;
+  color: #8C8C8C;
+  line-height: 32rpx;
+  text-align: center;
+}
+
+.bubble-row {
+  display: flex;
+  margin-bottom: 28rpx;
+  padding: 0 24rpx;
+}
+
+.bubble-row-self {
+  flex-direction: row-reverse;
+}
+
+.bubble-row-peer {
+  flex-direction: row;
+}
+
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 14rpx;
+  background-color: #E2E8F0;
+  flex-shrink: 0;
+}
+
+.avatar-self {
+  margin-left: 20rpx;
+}
+
+.avatar-peer {
+  margin-right: 20rpx;
+}
+
+.bubble-body {
+  display: flex;
+  flex-direction: column;
+  max-width: 68%;
+}
+
+.bubble-body-self {
+  align-items: flex-end;
+}
+
+.bubble-body-peer {
+  align-items: flex-start;
+}
+
+.sender-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.sender-name {
+  font-size: 24rpx;
+  color: #718096;
+  margin-right: 12rpx;
+}
+
+.role-badge {
+  font-size: 20rpx;
+  padding: 2rpx 10rpx;
+  border-radius: 6rpx;
+  font-weight: 500;
+}
+
+.role-handler {
+  background: #EBF8FF;
+  color: #2B6CB0;
+}
+
+.role-admin {
+  background: #FEFCBF;
+  color: #975A16;
+}
+
+.bubble-content {
+  position: relative;
+  padding: 20rpx 24rpx;
+  border-radius: 16rpx;
+  font-size: 30rpx;
+  line-height: 44rpx;
+  word-break: break-all;
+}
+
+/* 自己发信: QQ/微信标准主题绿 */
+.content-self {
+  background: #95EC69;
+  color: #1A202C;
+  border-top-right-radius: 4rpx;
+}
+
+/* 对方发信: 纯白微阴影 */
+.content-peer {
+  background: #FFFFFF;
+  color: #1A202C;
+  border-top-left-radius: 4rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.04);
+}
+
+.content-withdrawn {
+  background: #EDF2F7 !important;
+  color: #A0AEC0 !important;
+  font-style: italic;
+  box-shadow: none !important;
+}
+
+.text-withdrawn {
+  font-size: 26rpx;
+  color: #A0AEC0;
+}
+
+.text-reedit {
+  font-size: 26rpx;
+  color: #3182CE;
+  margin-left: 12rpx;
+  font-style: normal;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.text-reedit:active {
+  opacity: 0.7;
+}
+
+.bubble-text {
+  user-select: text;
+}
+
+.bubble-image {
+  border-radius: 12rpx;
+  display: block;
+  background-color: #E2E8F0;
+}
+
+/* 工单卡片样式 */
+.patrol-card {
+  background: #F7FAFC;
+  border: 1rpx solid #E2E8F0;
+  border-radius: 14rpx;
+  padding: 16rpx 20rpx;
+  min-width: 420rpx;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.card-icon {
+  font-size: 26rpx;
+  margin-right: 8rpx;
+}
+
+.card-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #2D3748;
+  flex: 1;
+}
+
+.card-status-pill {
+  font-size: 20rpx;
+  padding: 2rpx 10rpx;
+  border-radius: 12rpx;
+  background: #C6F6D5;
+  color: #22543D;
+  font-weight: 500;
+}
+
+.card-body {
+  font-size: 26rpx;
+  color: #4A5568;
+  line-height: 38rpx;
+  margin-bottom: 12rpx;
+}
+
+.card-footer {
+  border-top: 1rpx dashed #E2E8F0;
+  padding-top: 10rpx;
+}
+
+.card-action {
+  font-size: 22rpx;
+  color: #3182CE;
+}
+
+/* 状态指示器 */
+.status-indicator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36rpx;
+  height: 36rpx;
+}
+
+.indicator-loading {
+  left: -50rpx;
+}
+
+.indicator-failed {
+  left: -50rpx;
+  background: #E53E3E;
+  color: #FFFFFF;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.failed-icon {
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
+.spinner {
+  width: 28rpx;
+  height: 28rpx;
+  border: 4rpx solid #CBD5E0;
+  border-top-color: #3182CE;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* M39: 引用消息展示卡片 */
+.quoted-card {
+  display: flex;
+  align-items: stretch;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8rpx;
+  padding: 10rpx 14rpx;
+  margin-bottom: 12rpx;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.quoted-card:active {
+  opacity: 0.75;
+}
+
+.quoted-bar-line {
+  width: 5rpx;
+  background-color: #3182CE;
+  border-radius: 4rpx;
+  margin-right: 12rpx;
+  flex-shrink: 0;
+}
+
+.quoted-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.quoted-sender {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #4A5568;
+  margin-bottom: 4rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.quoted-summary {
+  font-size: 24rpx;
+  line-height: 32rpx;
+  color: #718096;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+/* M39: 源消息定位高亮发光衰减动画 (1500ms) */
+@keyframes quote-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(49, 130, 206, 0.7);
+    outline: 4rpx solid rgba(49, 130, 206, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 24rpx 6rpx rgba(49, 130, 206, 0.4);
+    outline: 4rpx solid rgba(49, 130, 206, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(49, 130, 206, 0);
+    outline: 0rpx solid rgba(49, 130, 206, 0);
+  }
+}
+
+.bubble-highlight-glow {
+  animation: quote-glow 1500ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  position: relative;
+  z-index: 2;
+}

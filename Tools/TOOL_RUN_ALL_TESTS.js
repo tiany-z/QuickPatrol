@@ -125,16 +125,20 @@ function extractFailureSummary(output) {
 /**
  * 执行单个子项目的测试
  */
-async function runTestForSubproject(sub, index, total, isVerbose = false) {
+async function runTestForSubproject(sub, index, total, isVerbose = false, targetFilter = null) {
   const startTime = Date.now();
   const subDirAbs = path.join(PROJECT_ROOT, sub.dir);
 
-  process.stdout.write(`\t[${index + 1}/${total}] 正在测试:\t${sub.name} ... `);
+  const filterNote = targetFilter ? ` [过滤: "${targetFilter}"]` : '';
+  process.stdout.write(`\t[${index + 1}/${total}] 正在测试:\t${sub.name}${filterNote} ... `);
 
   return new Promise((resolve) => {
     const vitestMjsPath = findVitestPath(subDirAbs);
     const nodeExe = process.execPath;
     const args = vitestMjsPath ? [vitestMjsPath, 'run'] : ['./node_modules/vitest/vitest.mjs', 'run'];
+    if (targetFilter) {
+      args.push('-t', targetFilter);
+    }
 
     let outputBuffer = '';
 
@@ -197,11 +201,27 @@ async function runTestForSubproject(sub, index, total, isVerbose = false) {
 async function main() {
   clearScreen();
 
+  const rawArgs = process.argv.slice(2);
+  let targetFilter = null;
+
+  for (let i = 0; i < rawArgs.length; i++) {
+    const arg = rawArgs[i];
+    if (arg.startsWith('--filter=')) {
+      targetFilter = arg.split('=')[1];
+    } else if (arg.startsWith('--module=')) {
+      targetFilter = arg.split('=')[1];
+    } else if (arg === '-t' && i + 1 < rawArgs.length) {
+      targetFilter = rawArgs[i + 1];
+    } else if (arg.startsWith('-t=')) {
+      targetFilter = arg.split('=')[1];
+    }
+  }
+
   const isCliVerbose = process.argv.includes('--verbose') || process.argv.includes('-v');
   let isVerbose = isCliVerbose;
 
-  // 如果没有 CLI 参数，提供交互式模式选择
-  if (!isCliVerbose && process.stdin.isTTY) {
+  // 如果没有 CLI 参数且没有指定过滤条件，提供交互式模式选择
+  if (!isCliVerbose && !targetFilter && process.stdin.isTTY) {
     console.log('+========================================================================+');
     console.log('|\t🧪 高校后勤巡查e速办 v4.0 单元测试运行器');
     console.log('+========================================================================+\n');
@@ -227,14 +247,15 @@ async function main() {
 
   clearScreen();
   console.log('+========================================================================+');
-  console.log(`|\t🧪 正在执行全部 ${SUBPROJECTS.length} 个子系统的单元测试 (${isVerbose ? '详细模式' : '简洁静默模式'})...`);
+  const filterDesc = targetFilter ? ` (正则过滤: -t "${targetFilter}")` : '';
+  console.log(`|\t🧪 正在执行全部 ${SUBPROJECTS.length} 个子系统的单元测试 (${isVerbose ? '详细模式' : '简洁静默模式'})${filterDesc}...`);
   console.log('+========================================================================+\n');
 
   const results = [];
   let hasFailure = false;
 
   for (let i = 0; i < SUBPROJECTS.length; i++) {
-    const res = await runTestForSubproject(SUBPROJECTS[i], i, SUBPROJECTS.length, isVerbose);
+    const res = await runTestForSubproject(SUBPROJECTS[i], i, SUBPROJECTS.length, isVerbose, targetFilter);
     results.push(res);
     if (res.status !== 'PASS') {
       hasFailure = true;

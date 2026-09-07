@@ -1,0 +1,33 @@
+<view class="qp-login-root {{ visible ? 'qp-login--show' : '' }}" catchtouchmove="true">
+  <!-- 遮罩 -->
+  <view class="qp-login-mask" bindtap="closeModal"></view>
+
+  <!-- 60% 底部半屏抽屉 -->
+  <view class="qp-login-sheet">
+    <view class="qp-login-bar"></view>
+    
+    <view class="qp-login-header">
+      <image class="qp-login-brand-logo" src="/assets/icons/app_logo.png" />
+      <text class="qp-login-title">高校后勤巡查e速办</text>
+    </view>
+
+    <view class="qp-login-prompt">{{ promptText }}</view>
+
+    <view class="qp-login-actions">
+      <!-- 微信官方获取手机号原生按钮 -->
+      <button
+        class="qp-btn-phone"
+        open-type="getPhoneNumber"
+        bindgetphonenumber="onGetPhoneNumber"
+      >
+        微信手机号一键授权登录
+      </button>
+
+      <view class="qp-login-cancel" bindtap="closeModal">暂不登录，仅先浏览</view>
+    </view>
+
+    <view class="qp-login-privacy">
+      登录即代表同意《用户服务协议》与《隐私政策》
+    </view>
+  </view>
+</view>

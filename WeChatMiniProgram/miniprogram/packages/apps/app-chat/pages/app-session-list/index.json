@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "服务号通知",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "app-session-item": "../../components/app-session-item/index"
+  }
+}

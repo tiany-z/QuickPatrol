@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "群聊协同",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "group-notice-banner": "../../components/group-notice-banner/index",
+    "chat-bubble-item": "../../components/chat-bubble-item/index",
+    "quote-input-bar": "../../components/quote-input-bar/index"
+  }
+}

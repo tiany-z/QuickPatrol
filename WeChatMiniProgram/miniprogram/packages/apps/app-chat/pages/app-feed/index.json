@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "微应用助手",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "rich-card-item": "../../components/rich-card-item/index"
+  }
+}

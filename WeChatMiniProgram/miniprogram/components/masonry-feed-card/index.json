@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "before-after-slider": "../before-after-slider/index"
+  }
+}

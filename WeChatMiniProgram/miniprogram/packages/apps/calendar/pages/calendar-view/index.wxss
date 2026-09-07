@@ -1,0 +1,368 @@
+/* 高校后勤巡查e速办 v4.0 - M51 全景日历样式表 (飞书同款设计) */
+
+page {
+  background-color: #FFFFFF;
+  color: #0F172A;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #FFFFFF;
+}
+
+/* 顶部年月与导航 */
+.calendar-top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 32rpx 16rpx 32rpx;
+}
+
+.month-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.calendar-icon {
+  font-size: 36rpx;
+}
+
+.month-text {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1E293B;
+  letter-spacing: -0.3rpx;
+}
+
+.month-nav {
+  display: flex;
+  gap: 12rpx;
+}
+
+.nav-btn {
+  padding: 4rpx 20rpx;
+  background: #F1F5F9;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  color: #475569;
+  border: none;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.btn-hover {
+  background: #E2E8F0;
+}
+
+/* 概要胶囊条 */
+.summary-pills-bar {
+  display: flex;
+  gap: 16rpx;
+  padding: 0 32rpx 16rpx 32rpx;
+  border-bottom: 1rpx solid #F1F5F9;
+}
+
+.summary-pill {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 12rpx;
+  font-size: 20rpx;
+  font-weight: 600;
+}
+
+.pill-dot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.pill-red { background: #FEF2F2; color: #DC2626; border: 1rpx solid rgba(239, 68, 68, 0.2); }
+.pill-blue { background: #EFF6FF; color: #2563EB; border: 1rpx solid rgba(37, 99, 235, 0.2); }
+.pill-green { background: #ECFDF5; color: #059669; border: 1rpx solid rgba(16, 185, 129, 0.2); }
+
+/* 星期表头 */
+.weekday-bar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  padding: 16rpx 0 12rpx 0;
+  border-bottom: 1rpx solid #F1F5F9;
+}
+
+.weekday {
+  font-size: 22rpx;
+  color: #64748B;
+  font-weight: 600;
+}
+
+.weekday.weekend {
+  color: #94A3B8;
+}
+
+/* 42 单元格月网格 */
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(6, 80rpx);
+  padding: 8rpx 0;
+  border-bottom: 1rpx solid #E2E8F0;
+  background: #FFFFFF;
+}
+
+.day-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 16rpx;
+  margin: 2rpx 4rpx;
+  transition: all 0.15s ease;
+}
+
+.cell-hover {
+  background: #F8FAFC;
+}
+
+.day-number {
+  font-size: 26rpx;
+  color: #1E293B;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.cell-faded .day-number {
+  color: #CBD5E1;
+}
+
+.cell-today .day-number {
+  color: #2563EB;
+  font-weight: 700;
+}
+
+.cell-selected {
+  background: #EFF6FF;
+  border: 1rpx solid rgba(37, 99, 235, 0.3);
+}
+
+.cell-selected .day-number {
+  color: #1D4ED8;
+  font-weight: 700;
+}
+
+/* 彩色指示小圆点 */
+.dot-container {
+  display: flex;
+  gap: 4rpx;
+  margin-top: 4rpx;
+  height: 8rpx;
+  align-items: center;
+}
+
+.dot {
+  width: 8rpx;
+  height: 8rpx;
+  border-radius: 50%;
+}
+
+.dot-red { background: #EF4444; }
+.dot-blue { background: #3B82F6; }
+.dot-green { background: #10B981; }
+.dot-gray { background: #94A3B8; }
+
+/* 选中日期的日时刻大盘 */
+.day-detail-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #F8FAFC;
+  overflow: hidden;
+}
+
+.day-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18rpx 32rpx;
+  background: #FFFFFF;
+  border-bottom: 1rpx solid #E2E8F0;
+}
+
+.day-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.day-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #1E293B;
+}
+
+.day-week-badge {
+  font-size: 20rpx;
+  color: #64748B;
+  background: #F1F5F9;
+  padding: 2rpx 10rpx;
+  border-radius: 8rpx;
+}
+
+.day-events-count {
+  font-size: 22rpx;
+  color: #64748B;
+  font-weight: 500;
+}
+
+/* 值班名牌区域 */
+.duty-banner-wrap {
+  padding: 16rpx 24rpx;
+  background: #FFFFFF;
+  border-bottom: 1rpx solid #E2E8F0;
+  margin-bottom: 8rpx;
+}
+
+/* 垂直时刻滚动区域 */
+.timeline-scroll {
+  flex: 1;
+  height: 100%;
+}
+
+.timeline-wrapper {
+  position: relative;
+  height: 2880rpx; /* 1440分钟对应2880rpx (1分钟=2rpx) */
+  margin-left: 90rpx;
+  margin-right: 20rpx;
+  border-left: 2rpx solid #E2E8F0;
+}
+
+.hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1rpx dashed #E2E8F0;
+}
+
+.hour-label {
+  position: absolute;
+  left: -80rpx;
+  top: -14rpx;
+  font-size: 20rpx;
+  color: #94A3B8;
+  font-family: monospace;
+}
+
+/* 时间轴事件色块卡片 */
+.timeline-card {
+  position: absolute;
+  box-sizing: border-box;
+  padding: 10rpx 14rpx;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(15, 23, 42, 0.05);
+  overflow: hidden;
+  transition: transform 0.15s ease;
+  z-index: 5;
+}
+
+.card-hover {
+  transform: scale(0.98);
+}
+
+.card-red {
+  background: #FEF2F2;
+  border-left: 6rpx solid #EF4444;
+  color: #991B1B;
+}
+
+.card-blue {
+  background: #EFF6FF;
+  border-left: 6rpx solid #2563EB;
+  color: #1E40AF;
+}
+
+.card-green {
+  background: #F0FDF4;
+  border-left: 6rpx solid #10B981;
+  color: #166534;
+}
+
+.card-gray {
+  background: #F8FAFC;
+  border-left: 6rpx solid #64748B;
+  color: #334155;
+}
+
+.card-time-text {
+  font-size: 18rpx;
+  opacity: 0.85;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.card-title-text {
+  font-size: 22rpx;
+  font-weight: 700;
+  margin: 4rpx 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.card-location-text {
+  font-size: 18rpx;
+  opacity: 0.8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 当前时间推移红线 */
+.current-time-red-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 3rpx solid #EF4444;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.red-line-dot {
+  position: absolute;
+  left: -8rpx;
+  top: -7rpx;
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  background: #EF4444;
+  box-shadow: 0 0 8rpx rgba(239, 68, 68, 0.6);
+}
+
+/* 当天无待办缺省 */
+.empty-day-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 160rpx;
+}
+
+.empty-icon {
+  font-size: 64rpx;
+  margin-bottom: 16rpx;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: 24rpx;
+  color: #94A3B8;
+}

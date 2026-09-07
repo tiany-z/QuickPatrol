@@ -1,0 +1,7 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "action-card-item": "./components/action-card-item/index",
+    "history-drawer": "./components/history-drawer/index"
+  }
+}

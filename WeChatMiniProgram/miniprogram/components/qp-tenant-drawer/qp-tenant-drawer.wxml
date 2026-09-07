@@ -1,0 +1,84 @@
+<view class="qp-drawer-root {{ visible ? 'qp-drawer--open' : '' }}" catchtouchmove="true">
+  <!-- 1. 全屏毛玻璃背景遮罩 -->
+  <view class="qp-drawer-mask" bindtap="closeDrawer"></view>
+
+  <!-- 2. 75% 宽度滑出主面板 -->
+  <view class="qp-drawer-panel">
+    <!-- 面板头部 -->
+    <view class="qp-drawer-header">
+      <view class="qp-drawer-user-info">
+        <text class="qp-drawer-phone-title">当前微信手机号</text>
+        <text class="qp-drawer-phone">{{ maskedPhone }}</text>
+      </view>
+      <view class="qp-drawer-close-btn" bindtap="closeDrawer">✕</view>
+    </view>
+
+    <!-- 滚动区域 -->
+    <scroll-view scroll-y class="qp-drawer-body">
+      <!-- 模块 A: 当前使用中单位 -->
+      <view class="qp-drawer-section-title">当前使用中单位</view>
+      <view class="qp-tenant-card qp-tenant-card--active" wx:if="{{ activeAccount }}">
+        <image class="qp-tenant-logo" src="{{ activeAccount.logoUrl || '/assets/icons/default_school.png' }}" />
+        <view class="qp-tenant-meta">
+          <view class="qp-tenant-name-row">
+            <text class="qp-tenant-name qp-ellipsis">{{ activeAccount.schoolName }}</text>
+            <qp-badge variant="primary" text="当前单位" />
+          </view>
+          <text class="qp-tenant-sub">{{ activeAccount.campusName }} · {{ activeAccount.roleName }}</text>
+        </view>
+      </view>
+
+      <!-- 模块 B: 本机曾登录的历史单位 (同手机号) -->
+      <view class="qp-drawer-section-title" style="margin-top: 36rpx;">
+        本机历史单位 ({{ historyList.length }})
+      </view>
+
+      <block wx:for="{{ historyList }}" wx:key="schoolId">
+        <!-- 有效会话卡片 vs 已过期卡片 -->
+        <view
+          class="qp-tenant-card {{ item.isExpired ? 'qp-tenant-card--expired' : 'qp-tenant-card--valid' }}"
+          bindtap="onSelectValidTenant"
+          data-account="{{ item }}"
+        >
+          <image
+            class="qp-tenant-logo {{ item.isExpired ? 'qp-logo--gray' : '' }}"
+            src="{{ item.logoUrl || '/assets/icons/default_school.png' }}"
+          />
+          <view class="qp-tenant-meta">
+            <view class="qp-tenant-name-row">
+              <text class="qp-tenant-name qp-ellipsis">{{ item.schoolName }}</text>
+              <qp-badge
+                variant="{{ item.isExpired ? 'warning' : 'success' }}"
+                text="{{ item.isExpired ? '已过期 · 续期' : '已登录' }}"
+              />
+            </view>
+            <view class="qp-tenant-footer-row">
+              <text class="qp-tenant-sub">{{ item.campusName }} · {{ item.realName }}</text>
+              <!-- 跨校离线未读红点 -->
+              <qp-badge wx:if="{{ item.unreadCount }}" variant="danger" count="{{ item.unreadCount }}" />
+            </view>
+          </view>
+        </view>
+      </block>
+    </scroll-view>
+
+    <!-- 底部操作入口 -->
+    <view class="qp-drawer-footer">
+      <view class="qp-drawer-action-btn">
+        <text class="qp-action-icon">➕</text>
+        <text class="qp-action-label">在本机登录新单位</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 3. 原地半屏快捷免密续期弹层 -->
+<view class="qp-renew-modal {{ renewModalVisible ? 'qp-renew-modal--show' : '' }}">
+  <view class="qp-renew-mask" bindtap="closeRenewModal"></view>
+  <view class="qp-renew-sheet">
+    <view class="qp-renew-title">快捷登录续期</view>
+    <view class="qp-renew-school">{{ targetRenewAccount.schoolName }}</view>
+    <view class="qp-renew-tip">您的登录凭证已过期，点击一键授权即可快速切入工作台</view>
+    <button class="qp-renew-btn" bindtap="onQuickRenewSuccess">微信手机号一键授权续期</button>
+  </view>
+</view>

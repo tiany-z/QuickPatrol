@@ -1,0 +1,53 @@
+<view class="thanks-mask {{show ? 'mask-visible' : ''}}" catchtouchmove="preventTouchMove" bindtap="onClose">
+  <view class="thanks-dialog {{show ? 'dialog-enter' : ''}}" catchtap="preventBubble">
+    <view class="dialog-header">
+      <view class="dialog-title-box">
+        <text class="dialog-title">🎁 赠送后勤文创感谢卡</text>
+        <text class="dialog-sub">件件有着落 · 善意促共治</text>
+      </view>
+      <view class="dialog-close" bindtap="onClose">✕</view>
+    </view>
+
+    <!-- 四大文创感谢卡展示网格 -->
+    <view class="cards-grid">
+      <view 
+        wx:for="{{cards}}" 
+        wx:key="type"
+        class="card-option {{selectedType === item.type ? 'card-selected' : ''}}"
+        data-type="{{item.type}}"
+        bindtap="onSelectCard"
+      >
+        <view class="card-icon">{{item.icon}}</view>
+        <text class="card-name">{{item.name}}</text>
+        <text class="card-desc">{{item.desc}}</text>
+        <view class="card-bonus">+{{item.points}}积分</view>
+      </view>
+    </view>
+
+    <!-- 真挚评语输入 -->
+    <view class="comment-box">
+      <textarea 
+        class="comment-textarea" 
+        placeholder="写下您对科室经办老师或现场师傅的真诚寄语 (至少3字)..." 
+        maxlength="200"
+        value="{{studentComment}}"
+        bindinput="onInputComment"
+      />
+      <view class="char-counter">{{studentComment.length}}/200</view>
+    </view>
+
+    <!-- 奖励提示说明 -->
+    <view class="reward-tip">
+      <text class="reward-tip-icon">✨</text>
+      <text class="reward-tip-text">赠送成功后，科室将获得治理口碑加分，您将获得啄木鸟治理积分与荣誉徽章！</text>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="dialog-actions">
+      <button class="btn-cancel" bindtap="onClose">稍后再送</button>
+      <button class="btn-submit" loading="{{isSubmitting}}" disabled="{{isSubmitting}}" bindtap="onSubmitCard">
+        确认赠送并领积分
+      </button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,39 @@
+<!-- M40: 协同会话大盘列表视窗 (Tab 1) -->
+<view class="session-list-container">
+  <qp-navbar title="协同工单会话大盘" showBack="{{true}}" />
+  <!-- 顶部状态统计摘要条 -->
+  <view class="stats-bar">
+    <view class="stats-info">
+      <text class="stats-title">协同工单会话</text>
+      <text class="stats-count">共 {{sessions.length}} 个工单</text>
+    </view>
+    <view wx:if="{{totalUnread > 0}}" class="stats-unread-pill">
+      <text class="unread-dot"></text>
+      <text class="unread-text">{{totalUnread}} 条未读待处理</text>
+    </view>
+  </view>
+
+  <!-- 会话列表瀑布流 -->
+  <scroll-view class="session-scroll-list" scroll-y="true">
+    <view wx:if="{{isLoading}}" class="loading-state">
+      <view class="spinner"></view>
+      <text class="loading-text">正在同步工单会话大盘...</text>
+    </view>
+
+    <view wx:elif="{{sessions.length === 0}}" class="empty-state">
+      <text class="empty-icon">💬</text>
+      <text class="empty-title">暂无协同会话</text>
+      <text class="empty-desc">当巡查工单派发或流转时，将自动开启专属沟通通道</text>
+    </view>
+
+    <view wx:else class="session-items-wrapper">
+      <session-item
+        wx:for="{{sessions}}"
+        wx:key="chatRoomId"
+        session="{{item}}"
+        bind:tapitem="onSessionTapItem"
+        bind:togglepin="onSessionTogglePin"
+      />
+    </view>
+  </scroll-view>
+</view>

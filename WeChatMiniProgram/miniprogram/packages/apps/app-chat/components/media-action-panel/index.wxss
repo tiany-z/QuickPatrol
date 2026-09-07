@@ -1,0 +1,99 @@
+/* M37: 底部多媒体扩展条样式 (media-action-panel) */
+
+.media-panel-wrap {
+  background: #F8F9FA;
+  border-top: 1rpx solid #E5E7EB;
+  transition: all 0.25s ease-out;
+  overflow: hidden;
+}
+
+.panel-show {
+  height: 400rpx;
+  opacity: 1;
+  padding: 20rpx 0 30rpx 0;
+}
+
+.panel-hide {
+  height: 0;
+  opacity: 0;
+  padding: 0;
+}
+
+/* 常用语横向滚动条 */
+.canned-scroll-container {
+  padding: 0 20rpx 20rpx 20rpx;
+  border-bottom: 1rpx solid #ECEFF1;
+}
+
+.canned-scroll-view {
+  display: flex;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.canned-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 10rpx 24rpx;
+  margin-right: 16rpx;
+  background: #FFFFFF;
+  border: 1rpx solid #E2E8F0;
+  border-radius: 30rpx;
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.02);
+  flex-shrink: 0;
+}
+
+.canned-pill:active {
+  background: #EDF2F7;
+}
+
+.canned-pill-text {
+  font-size: 24rpx;
+  color: #4A5568;
+}
+
+/* 工具栅格 */
+.tools-grid {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20rpx 20rpx 0 20rpx;
+}
+
+.tool-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 25%;
+  margin-bottom: 16rpx;
+}
+
+.tool-item:active .tool-icon-box {
+  transform: scale(0.92);
+}
+
+.tool-icon-box {
+  width: 108rpx;
+  height: 108rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.04);
+  transition: transform 0.15s ease;
+  margin-bottom: 12rpx;
+}
+
+.bg-blue { background: #EBF8FF; }
+.bg-green { background: #F0FFF4; }
+.bg-orange { background: #FFFAF0; }
+.bg-purple { background: #FAF5FF; }
+.bg-teal { background: #E6FFFA; }
+
+.tool-emoji {
+  font-size: 46rpx;
+}
+
+.tool-label {
+  font-size: 24rpx;
+  color: #4A5568;
+}

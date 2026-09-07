@@ -1,0 +1,55 @@
+<!-- M37: 底部多媒体扩展条面板 (media-action-panel) -->
+<view class="media-panel-wrap {{show ? 'panel-show' : 'panel-hide'}}">
+  <!-- 1. 常用语横向胶囊条 -->
+  <view class="canned-scroll-container">
+    <scroll-view class="canned-scroll-view" scroll-x="true" enable-flex="true">
+      <view
+        wx:for="{{cannedReplies}}"
+        wx:key="*this"
+        class="canned-pill"
+        data-text="{{item}}"
+        bindtap="onSelectCannedReply"
+      >
+        <text class="canned-pill-text">{{item}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 2. 多媒体功能工具矩阵 -->
+  <view class="tools-grid">
+    <view class="tool-item" bindtap="onTapCamera">
+      <view class="tool-icon-box bg-blue">
+        <text class="tool-emoji">📷</text>
+      </view>
+      <text class="tool-label">拍照直发</text>
+    </view>
+
+    <view class="tool-item" bindtap="onTapAlbum">
+      <view class="tool-icon-box bg-green">
+        <text class="tool-emoji">🖼️</text>
+      </view>
+      <text class="tool-label">手机相册</text>
+    </view>
+
+    <view class="tool-item" bindtap="onTapLocation">
+      <view class="tool-icon-box bg-orange">
+        <text class="tool-emoji">📍</text>
+      </view>
+      <text class="tool-label">发送位置</text>
+    </view>
+
+    <view class="tool-item" bindtap="onTapSendCard">
+      <view class="tool-icon-box bg-purple">
+        <text class="tool-emoji">📋</text>
+      </view>
+      <text class="tool-label">工单卡片</text>
+    </view>
+
+    <view class="tool-item" bindtap="onTapCallHotline">
+      <view class="tool-icon-box bg-teal">
+        <text class="tool-emoji">📞</text>
+      </view>
+      <text class="tool-label">后勤热线</text>
+    </view>
+  </view>
+</view>

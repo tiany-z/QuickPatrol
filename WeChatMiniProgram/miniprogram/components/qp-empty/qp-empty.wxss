@@ -1,0 +1,59 @@
+.qp-empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx var(--qp-space-lg);
+  box-sizing: border-box;
+}
+
+.qp-empty-illustration {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: var(--qp-radius-full);
+  background: var(--qp-gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--qp-space-lg);
+}
+
+.qp-empty-icon {
+  font-size: 72rpx;
+}
+
+.qp-empty-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--qp-text-primary);
+  margin-bottom: var(--qp-space-xs);
+  text-align: center;
+}
+
+.qp-empty-desc {
+  font-size: 26rpx;
+  color: var(--qp-text-muted);
+  text-align: center;
+  max-width: 500rpx;
+  line-height: 1.5;
+  margin-bottom: var(--qp-space-xl);
+}
+
+.qp-empty-action {
+  margin-top: var(--qp-space-sm);
+}
+
+.qp-empty-btn {
+  background: var(--qp-primary);
+  color: var(--qp-text-inverse);
+  font-size: 28rpx;
+  font-weight: 500;
+  padding: 18rpx 48rpx;
+  border-radius: var(--qp-radius-full);
+  box-shadow: 0 8rpx 24rpx var(--qp-primary-glow);
+  border: none;
+}
+
+.qp-empty-btn::after {
+  border: none;
+}

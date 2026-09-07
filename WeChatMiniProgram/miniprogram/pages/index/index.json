@@ -1,5 +1,12 @@
 {
   "usingComponents": {
-    "navigation-bar": "/components/navigation-bar/navigation-bar"
+    "navigation-bar": "/components/navigation-bar/navigation-bar",
+    "qp-skeleton": "/components/qp-skeleton/qp-skeleton",
+    "qp-empty": "/components/qp-empty/qp-empty",
+    "qp-badge": "/components/qp-badge/qp-badge",
+    "qp-navbar": "/components/qp-navbar/qp-navbar",
+    "qp-tenant-drawer": "/components/qp-tenant-drawer/qp-tenant-drawer",
+    "qp-tabbar": "/components/qp-tabbar/qp-tabbar",
+    "qp-quick-login": "/components/qp-quick-login/qp-quick-login"
   }
 }

@@ -1,0 +1,79 @@
+<!-- M22: 防篡改硬件级水印相机全景界面 -->
+<view class="camera-container">
+  <!-- 原生硬件摄像头预览 -->
+  <camera
+    class="hardware-camera"
+    device-position="{{cameraPosition}}"
+    flash="{{flashMode}}"
+  >
+    <!-- 取景对齐辅助框 (十字准星与九宫格辅线) -->
+    <view class="viewfinder-scrim">
+      <view class="corner-marker top-left"></view>
+      <view class="corner-marker top-right"></view>
+      <view class="corner-marker bottom-left"></view>
+      <view class="corner-marker bottom-right"></view>
+      <view class="grid-cross center-h"></view>
+      <view class="grid-cross center-v"></view>
+    </view>
+
+    <!-- 顶部极简沉浸控制栏 -->
+    <view class="top-nav-bar">
+      <view class="icon-btn back-btn" bindtap="handleBack">
+        <text class="btn-icon">←</text>
+      </view>
+
+      <view class="mode-capsule-group">
+        <view class="capsule-btn {{flashMode !== 'off' ? 'active' : ''}}" bindtap="handleToggleFlash">
+          <text class="capsule-icon">⚡</text>
+          <text class="capsule-text">{{flashMode === 'on' ? '常开' : (flashMode === 'auto' ? '自动' : '关闭')}}</text>
+        </view>
+
+        <view class="capsule-btn" bindtap="handleToggleCamera">
+          <text class="capsule-icon">🔄</text>
+          <text class="capsule-text">{{cameraPosition === 'back' ? '后置' : '前置'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部半透明防篡改水印准星感知区 (现场直观可视) -->
+    <view class="watermark-live-preview">
+      <view class="watermark-badge-row">
+        <view class="scene-tag">
+          <text class="tag-icon">🛡️</text>
+          <text class="tag-label">{{scene === 'handle' ? '整改完工存证' : '隐患现场存证'}}</text>
+        </view>
+        <view class="fingerprint-indicator">
+          <text class="pulse-dot"></text>
+          <text class="indicator-text">硬件级防篡改已激活</text>
+        </view>
+      </view>
+
+      <view class="meta-line primary-loc">
+        <text class="pin-icon">📍</text>
+        <text class="loc-text">{{campusName}} · {{locationDescription}}</text>
+      </view>
+
+      <view class="meta-line sec-info">
+        <text class="info-text">物理NTP授时同步 · 坐标高精吸附 · 零带宽直传</text>
+      </view>
+    </view>
+  </camera>
+
+  <!-- 底部快门控制底座 -->
+  <view class="bottom-control-deck">
+    <view class="status-indicator-bar">
+      <text class="status-text {{isShooting ? 'processing' : ''}}">{{statusText}}</text>
+    </view>
+
+    <view class="shutter-action-area">
+      <view
+        class="shutter-outer-ring {{isShooting ? 'shooting' : ''}}"
+        bindtap="handleTakePhoto"
+      >
+        <view class="shutter-inner-core {{isShooting ? 'busy' : ''}}">
+          <view wx:if="{{isShooting}}" class="spinner-ring"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

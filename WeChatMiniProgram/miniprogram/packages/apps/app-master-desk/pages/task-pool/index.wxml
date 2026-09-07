@@ -1,0 +1,148 @@
+<!-- 师傅现场抢修工作台 (Master Desk 四象限看板) -->
+<view class="desk-container">
+  <qp-navbar title="师傅现场抢修看板" showBack="{{true}}" />
+  <!-- 顶部沉浸式四象限 Tab 栏 -->
+  <view class="quadrant-tabs">
+    <view 
+      class="tab-item {{activeTab === 'pool' ? 'active' : ''}}" 
+      bindtap="onTabChange" 
+      data-tab="pool"
+    >
+      <text class="tab-label">抢单池</text>
+      <view class="badge badge-pool" wx:if="{{summary.poolCount > 0}}">{{summary.poolCount}}</view>
+    </view>
+    <view 
+      class="tab-item {{activeTab === 'assigned' ? 'active' : ''}}" 
+      bindtap="onTabChange" 
+      data-tab="assigned"
+    >
+      <text class="tab-label">待出发</text>
+      <view class="badge badge-assigned" wx:if="{{summary.assignedCount > 0}}">{{summary.assignedCount}}</view>
+    </view>
+    <view 
+      class="tab-item {{activeTab === 'inProgress' ? 'active' : ''}}" 
+      bindtap="onTabChange" 
+      data-tab="inProgress"
+    >
+      <text class="tab-label">施工中</text>
+      <view class="badge badge-progress" wx:if="{{summary.inProgressCount > 0}}">{{summary.inProgressCount}}</view>
+    </view>
+    <view 
+      class="tab-item {{activeTab === 'review' ? 'active' : ''}}" 
+      bindtap="onTabChange" 
+      data-tab="review"
+    >
+      <text class="tab-label">待验收</text>
+      <view class="badge badge-review" wx:if="{{summary.reviewCount > 0}}">{{summary.reviewCount}}</view>
+    </view>
+  </view>
+
+  <!-- 工单列表滚动区 -->
+  <scroll-view class="task-scroll" scroll-y>
+    <view class="task-list" wx:if="{{taskList.length > 0}}">
+      <block wx:for="{{taskList}}" wx:key="id">
+        <view class="task-card {{item.isUrgentNotice ? 'card-urgent' : ''}}">
+          <!-- 卡片头部: 状态与单号 -->
+          <view class="card-header">
+            <view class="order-no-wrap">
+              <text class="order-no">{{item.orderNo}}</text>
+              <text class="priority-tag p-{{item.priorityLevel}}">
+                {{item.priorityLevel === 2 ? '加急' : item.priorityLevel === 1 ? '中等' : '普通'}}
+              </text>
+            </view>
+            <view class="sla-badge {{item.remainingHours <= 2 ? 'sla-danger' : 'sla-normal'}}">
+              <text class="sla-text">剩 {{item.remainingHours}}h</text>
+            </view>
+          </view>
+
+          <!-- 卡片内容: 标题与描述 -->
+          <view class="card-body" bindtap="navigateToDetail" data-id="{{item.id}}">
+            <view class="task-title">{{item.title}}</view>
+            <view class="task-desc">{{item.desc}}</view>
+            <view class="task-location">
+              <text class="loc-icon">📍</text>
+              <text class="loc-text">{{item.campusName}} · {{item.location}}</text>
+            </view>
+          </view>
+
+          <!-- 卡片底栏: 快速动作 -->
+          <view class="card-footer">
+            <view class="category-pill">{{item.categoryName}}</view>
+            <view class="actions-wrap">
+              <!-- 抢单池 / 待出发: 抢单/接单按钮 -->
+              <button 
+                wx:if="{{activeTab === 'pool' || activeTab === 'assigned'}}" 
+                class="btn-action btn-claim" 
+                bindtap="handleClaimTask" 
+                data-id="{{item.id}}"
+                loading="{{isClaiming}}"
+              >
+                {{activeTab === 'pool' ? '⚡ 秒抢工单' : '🚀 确认接单'}}
+              </button>
+
+              <!-- 施工中: 协同改派与完工交卷 -->
+              <button 
+                wx:if="{{activeTab === 'inProgress'}}" 
+                class="btn-action btn-transfer" 
+                bindtap="openTransferModal" 
+                data-id="{{item.id}}" 
+                data-orderno="{{item.orderNo}}"
+              >
+                工种不符改派
+              </button>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 空状态提示 -->
+    <view class="empty-state" wx:if="{{taskList.length === 0 && !isLoading}}">
+      <text class="empty-icon">☕</text>
+      <text class="empty-text">当前象限暂无工单，辛苦师傅稍事休息！</text>
+    </view>
+  </scroll-view>
+
+  <!-- 工种不符改派弹窗 Modal -->
+  <view class="modal-mask" wx:if="{{isTransferModalVisible}}">
+    <view class="modal-dialog">
+      <view class="modal-header">
+        <text class="modal-title">现场工种不符协同改派</text>
+        <text class="modal-close" bindtap="closeTransferModal">✕</text>
+      </view>
+      <view class="modal-body">
+        <view class="modal-row">
+          <text class="label">当前工单：</text>
+          <text class="value">{{transferOrderNo}}</text>
+        </view>
+        <view class="modal-row">
+          <text class="label">修正分类：</text>
+          <picker 
+            mode="selector" 
+            range="{{categoriesList}}" 
+            range-key="name" 
+            value="{{categoryIndex}}" 
+            bindchange="onCategoryPickerChange"
+          >
+            <view class="picker-box">
+              {{categoriesList[categoryIndex].name}} ▼
+            </view>
+          </picker>
+        </view>
+        <view class="modal-row">
+          <text class="label">改派原因：</text>
+          <textarea 
+            class="reason-input" 
+            placeholder="请详细说明现场勘验发现的客观情况 (至少5字)..." 
+            bindinput="onReasonInput"
+            value="{{transferReason}}"
+          />
+        </view>
+      </view>
+      <view class="modal-footer">
+        <button class="btn-cancel" bindtap="closeTransferModal">取消</button>
+        <button class="btn-confirm" bindtap="submitTransfer">确认改派重新派单</button>
+      </view>
+    </view>
+  </view>
+</view>

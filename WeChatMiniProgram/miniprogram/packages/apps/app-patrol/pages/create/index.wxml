@@ -1,0 +1,143 @@
+<!-- M21: 隐患巡查提报核心页面 -->
+<view class="patrol-create-container">
+  <qp-navbar title="隐患巡查提报" showBack="{{true}}" />
+
+  <!-- 1. 顶部状态横幅 (若来自 M20 扫码进件，高亮打卡勋章) -->
+  <view wx:if="{{isFromQrScan}}" class="scan-provenance-banner">
+    <view class="banner-icon">📍</view>
+    <view class="banner-content">
+      <view class="banner-title">已绑定现场固定资产二维码</view>
+      <view class="banner-desc">防作弊打卡已核验通过，校区与故障门类已智能回填</view>
+    </view>
+    <view class="banner-badge">已验真</view>
+  </view>
+
+  <!-- 2. 空间与分类卡片 -->
+  <view class="form-card">
+    <view class="card-title-row">
+      <text class="card-section-title">故障归属与空间定位</text>
+      <text class="required-tag">*必填</text>
+    </view>
+
+    <!-- 校区选择 -->
+    <view class="form-row">
+      <text class="row-label">发生校区</text>
+      <picker range="{{campusesList}}" range-key="name" value="{{campusIndex}}" bindchange="onCampusChange" disabled="{{isFromQrScan}}">
+        <view class="picker-value {{isFromQrScan ? 'disabled' : ''}}">
+          <text>{{campusesList[campusIndex].name || '请选择校区'}}</text>
+          <text wx:if="{{!isFromQrScan}}" class="arrow-icon">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 故障门类 -->
+    <view class="form-row">
+      <text class="row-label">报修分类</text>
+      <picker range="{{categoriesList}}" range-key="name" value="{{categoryIndex}}" bindchange="onCategoryChange" disabled="{{isFromQrScan}}">
+        <view class="picker-value {{isFromQrScan ? 'disabled' : ''}}">
+          <text>{{categoriesList[categoryIndex].icon}} {{categoriesList[categoryIndex].name || '请选择分类'}}</text>
+          <text wx:if="{{!isFromQrScan}}" class="arrow-icon">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 一级建筑物 (带地图选点与 POI 吸附按钮) -->
+    <view class="form-row">
+      <text class="row-label">建筑/区域</text>
+      <view class="location-input-wrap">
+        <input class="row-input" placeholder="如：11号教学楼、中心食堂" value="{{location1}}" bindinput="onInputLocation1" />
+        <view class="map-snapping-btn" bindtap="handleChooseMapLocation">
+          <text class="map-icon">🗺️</text>
+          <text class="map-text">地图选点</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 二级具体房间号 -->
+    <view class="form-row no-border">
+      <text class="row-label">具体位置</text>
+      <input class="row-input" placeholder="如：3楼西侧男卫生间、B102开水间" value="{{location2}}" bindinput="onInputLocation2" />
+    </view>
+  </view>
+
+  <!-- 3. 故障详情与标题卡片 -->
+  <view class="form-card">
+    <view class="card-title-row">
+      <text class="card-section-title">故障勘验详情</text>
+      <text class="required-tag">*必填</text>
+    </view>
+
+    <!-- 故障标题 -->
+    <view class="form-row">
+      <text class="row-label">故障标题</text>
+      <input class="row-input" placeholder="用一句话概述故障 (4~64字)" value="{{title}}" bindinput="onInputTitle" maxlength="64" />
+    </view>
+
+    <!-- 详细描述 -->
+    <view class="textarea-wrap">
+      <textarea class="form-textarea" placeholder="请详细描述隐患现场实况 (漏水、断电、裂缝等)，维修师傅将根据描述备件响应 (不少于5字)..." value="{{desc}}" bindinput="onInputDesc" maxlength="500"></textarea>
+      <view class="char-counter">{{desc.length || 0}}/500</view>
+    </view>
+
+    <!-- 九宫格照片直传区 -->
+    <view class="media-section">
+      <view class="media-title-row">
+        <text class="media-label">现场照片证据</text>
+        <text class="media-counter">({{images.length}}/9 张)</text>
+      </view>
+
+      <view class="photos-grid">
+        <block wx:for="{{images}}" wx:key="*this">
+          <view class="photo-item">
+            <image class="photo-img" src="{{item}}" mode="aspectFill" data-url="{{item}}" bindtap="handlePreviewImage"></image>
+            <view class="remove-btn" data-index="{{index}}" catchtap="handleRemoveImage">✕</view>
+          </view>
+        </block>
+
+        <!-- 上传按钮 -->
+        <view wx:if="{{images.length < 9}}" class="upload-slot" bindtap="handleChooseImages">
+          <view class="camera-icon">📷</view>
+          <view class="upload-tip">拍照/相册</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 4. 优先级与公开选项卡片 -->
+  <view class="form-card">
+    <view class="card-title-row">
+      <text class="card-section-title">紧急程度与监督设置</text>
+    </view>
+
+    <!-- 优先级胶囊组 -->
+    <view class="form-row">
+      <text class="row-label">紧急程度</text>
+      <view class="priority-chips">
+        <view class="chip {{priorityLevel === 0 ? 'active-0' : ''}}" data-level="0" bindtap="selectPriority">普通</view>
+        <view class="chip {{priorityLevel === 1 ? 'active-1' : ''}}" data-level="1" bindtap="selectPriority">中等</view>
+        <view class="chip {{priorityLevel === 2 ? 'active-2' : ''}}" data-level="2" bindtap="selectPriority">加急</view>
+      </view>
+    </view>
+
+    <!-- 校园广场公开开关 -->
+    <view class="form-row no-border">
+      <view class="switch-text-col">
+        <text class="row-label">公开透明监督</text>
+        <text class="switch-sub">工单施工进展将同步全校公开广场，允许师生监督</text>
+      </view>
+      <switch color="#0078D4" checked="{{isPublic === 1}}" bindchange="togglePublic" />
+    </view>
+  </view>
+
+  <!-- 5. 底部安全悬浮提交栏 -->
+  <view class="bottom-submit-bar">
+    <view class="draft-status-tip">
+      <text class="tip-dot">●</text>
+      <text>3秒防抖草稿箱实时保护中</text>
+    </view>
+    <button class="submit-action-btn {{isSubmitting ? 'submitting' : ''}}" loading="{{isSubmitting}}" disabled="{{isSubmitting}}" bindtap="handleSubmitPatrol">
+      立即提交隐患工单
+    </button>
+  </view>
+
+</view>

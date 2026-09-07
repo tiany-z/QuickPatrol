@@ -1,0 +1,55 @@
+<view class="input-bar-wrapper">
+  <!-- 被回复人指示条 -->
+  <view wx:if="{{replyAuthorName}}" class="reply-target-bar">
+    <text class="target-text">正在回复 @{{replyAuthorName}}</text>
+    <view class="cancel-reply-btn" bindtap="onCancelReply">
+      <text class="cancel-icon">✕</text>
+    </view>
+  </view>
+
+  <view class="input-row">
+    <!-- 微信头像微缩按钮 (点击打开授权设置) -->
+    <view class="avatar-trigger" bindtap="onOpenAuthModal">
+      <image class="guest-thumb" src="{{guestAvatarUrl || '/assets/avatar_guest.png'}}" mode="aspectFill" />
+    </view>
+
+    <!-- 文本输入框 -->
+    <input
+      class="text-input"
+      type="text"
+      confirm-type="send"
+      placeholder="{{replyAuthorName ? '回复 @' + replyAuthorName + '...' : '写下对维修治理的建议或鼓励...'}}"
+      value="{{content}}"
+      bindinput="onInput"
+      bindconfirm="onSubmit"
+    />
+
+    <!-- 发送按钮 -->
+    <button
+      class="send-btn {{!content || isSending ? 'send-disabled' : ''}}"
+      loading="{{isSending}}"
+      bindtap="onSubmit"
+    >
+      发送
+    </button>
+  </view>
+
+  <!-- 微信头像昵称授权弹窗 (可选轻量微调) -->
+  <view wx:if="{{showAuthModal}}" class="auth-modal-mask" bindtap="onCloseAuthModal">
+    <view class="auth-modal-body" catchtap="stopProp">
+      <text class="modal-title">设置阳光留言形象</text>
+      <button class="modal-avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image class="modal-avatar-img" src="{{guestAvatarUrl || '/assets/avatar_guest.png'}}" mode="aspectFill" />
+        <text class="modal-avatar-tip">点击切换头像</text>
+      </button>
+      <input
+        class="modal-nick-input"
+        type="nickname"
+        placeholder="请输入昵称"
+        value="{{guestNick}}"
+        bindinput="onNickChange"
+      />
+      <button class="modal-confirm-btn" bindtap="onCloseAuthModal">确定</button>
+    </view>
+  </view>
+</view>

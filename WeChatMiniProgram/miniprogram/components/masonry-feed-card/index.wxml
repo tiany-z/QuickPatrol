@@ -1,0 +1,78 @@
+<view class="masonry-card {{card.isTop ? 'card-top' : ''}}">
+  <!-- 置顶标签 / 轨道类别徽标 -->
+  <view class="card-header">
+    <view class="track-badge {{card.trackType === 'REPAIR' ? 'badge-repair' : 'badge-reply'}}">
+      <text class="badge-icon">{{card.trackType === 'REPAIR' ? '🛠️' : '📜'}}</text>
+      <text class="badge-text">{{card.trackType === 'REPAIR' ? '工程抢修交卷' : '官方正式答复'}}</text>
+    </view>
+    <view wx:if="{{card.isTop}}" class="top-tag">
+      <text class="top-text">📌 置顶</text>
+    </view>
+  </view>
+
+  <!-- 轨 A: 抢修前后对比视差滑块 -->
+  <view wx:if="{{card.trackType === 'REPAIR' && card.repairCompare}}" class="repair-slider-box">
+    <before-after-slider
+      beforeImage="{{card.repairCompare.beforeImageUrl}}"
+      afterImage="{{card.repairCompare.afterImageUrl}}"
+      beforeLabel="施工前"
+      afterLabel="已修复"
+      height="{{280}}"
+    />
+    <view class="repair-meta">
+      <text class="meta-tag">⚡ 耗时 {{card.repairCompare.durationHours}} 小时</text>
+      <text class="meta-handler">{{card.repairCompare.handlerTag}}</text>
+    </view>
+  </view>
+
+  <!-- 轨 B: 官方红头答复迷你印章公函卡 -->
+  <view wx:if="{{card.trackType === 'OFFICIAL_REPLY' && card.officialDecree}}" class="decree-preview-box">
+    <view class="decree-header">
+      <text class="decree-dept">{{card.officialDecree.replyDeptName}}</text>
+      <text class="decree-officer">{{card.officialDecree.responderTitle}}</text>
+    </view>
+    <view class="decree-seal-wrap">
+      <image class="decree-seal" src="{{card.officialDecree.sealUrl}}" mode="aspectFit" />
+      <view class="promise-tag">
+        <text class="promise-text">{{card.officialDecree.remainingDaysText}}</text>
+      </view>
+    </view>
+    <view wx:if="{{card.officialDecree.hasThanksCard}}" class="thanks-badge">
+      <text class="thanks-text">{{card.officialDecree.thanksCardType || '🌸 暖心关怀卡'}}</text>
+    </view>
+  </view>
+
+  <!-- 标题与摘要 -->
+  <view class="card-body">
+    <text class="card-title">{{card.title}}</text>
+    <text class="card-content">{{card.content}}</text>
+  </view>
+
+  <!-- 现场附图小相册 -->
+  <view wx:if="{{card.albumImages && card.albumImages.length > 0 && card.trackType !== 'REPAIR'}}" class="album-preview">
+    <image class="album-img" src="{{card.albumImages[0]}}" mode="aspectFill" />
+    <view wx:if="{{card.albumImages.length > 1}}" class="album-count-tag">
+      <text>+{{card.albumImages.length}}</text>
+    </view>
+  </view>
+
+  <!-- 底部发布人与轻量互动区 -->
+  <view class="card-footer">
+    <view class="creator-info">
+      <image class="creator-avatar" src="{{card.creatorAvatar}}" mode="aspectFill" />
+      <text class="creator-name">{{card.creatorName}}</text>
+    </view>
+    <view class="actions-group">
+      <!-- 点赞按钮 -->
+      <view class="action-btn like-btn {{isLiked ? 'active' : ''}}" bindtap="onLikeTap">
+        <text class="action-icon {{isLiked ? 'icon-pulse' : ''}}">{{isLiked ? '❤️' : '🤍'}}</text>
+        <text class="action-count">{{likeCountDisplay}}</text>
+      </view>
+      <!-- 评论按钮 -->
+      <view class="action-btn comment-btn" bindtap="onCommentTap">
+        <text class="action-icon">💬</text>
+        <text class="action-count">{{card.commentCount || 0}}</text>
+      </view>
+    </view>
+  </view>
+</view>

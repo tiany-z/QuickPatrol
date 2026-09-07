@@ -1,0 +1,39 @@
+<view
+  class="qp-navbar-wrapper qp-navbar--{{ bgMode }} qp-navbar--{{ theme }}"
+  style="height: {{ headerTotalHeight }}px; padding-top: {{ statusBarHeight }}px;"
+>
+  <view class="qp-navbar-content" style="height: {{ navBarHeight }}px;">
+    <!-- 左侧操作区：返回箭头 或 头像 -->
+    <view class="qp-navbar-left">
+      <block wx:if="{{ showBack }}">
+        <view class="qp-navbar-back-btn" bindtap="onBackTap">
+          <text class="qp-back-arrow">‹</text>
+        </view>
+      </block>
+      <block wx:elif="{{ showAvatar }}">
+        <view class="qp-navbar-avatar-box" bindtap="onAvatarTap">
+          <image
+            class="qp-navbar-avatar"
+            src="{{ avatarUrl || '/assets/icons/default_avatar.png' }}"
+            mode="aspectFill"
+          />
+          <view class="qp-navbar-avatar-glow"></view>
+        </view>
+      </block>
+      <slot name="left"></slot>
+    </view>
+
+    <!-- 居中标题：严格水平对称居中，并避让右侧胶囊 -->
+    <view class="qp-navbar-title" style="padding-right: {{ capsulePaddingRight }}px;">
+      <text class="qp-title-text qp-ellipsis">{{ title }}</text>
+    </view>
+
+    <!-- 右侧插槽 -->
+    <view class="qp-navbar-right">
+      <slot name="right"></slot>
+    </view>
+  </view>
+</view>
+
+<!-- 页面顶部占位插槽，防止内容被沉浸式导航栏遮挡 -->
+<view wx:if="{{ placeholder }}" style="height: {{ headerTotalHeight }}px; width: 100%; pointer-events: none;"></view>

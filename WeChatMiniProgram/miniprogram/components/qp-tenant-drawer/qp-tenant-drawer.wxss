@@ -1,0 +1,236 @@
+.qp-drawer-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  visibility: hidden;
+  transition: visibility 0.25s ease;
+}
+
+.qp-drawer--open {
+  visibility: visible;
+}
+
+/* 毛玻璃遮罩 */
+.qp-drawer-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.qp-drawer--open .qp-drawer-mask {
+  opacity: 1;
+}
+
+/* 75% 滑出面板 */
+.qp-drawer-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 76%;
+  max-width: 600rpx;
+  background: var(--qp-bg-card);
+  box-shadow: var(--qp-shadow-float);
+  transform: translateX(-100%);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  padding-top: calc(var(--qp-status-bar) + 20rpx);
+  box-sizing: border-box;
+}
+
+.qp-drawer--open .qp-drawer-panel {
+  transform: translateX(0);
+}
+
+/* 头部 */
+.qp-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--qp-space-lg);
+  border-bottom: 1rpx solid var(--qp-gray-100);
+}
+
+.qp-drawer-phone-title {
+  font-size: 22rpx;
+  color: var(--qp-text-muted);
+  display: block;
+}
+
+.qp-drawer-phone {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--qp-text-primary);
+}
+
+.qp-drawer-close-btn {
+  font-size: 32rpx;
+  color: var(--qp-text-muted);
+  padding: 8rpx;
+}
+
+/* 列表滚动容器 */
+.qp-drawer-body {
+  flex: 1;
+  padding: var(--qp-space-lg);
+  box-sizing: border-box;
+}
+
+.qp-drawer-section-title {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--qp-text-muted);
+  margin-bottom: 16rpx;
+}
+
+/* 卡片基座 */
+.qp-tenant-card {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  border-radius: var(--qp-radius-md);
+  margin-bottom: 16rpx;
+  border: 1rpx solid var(--qp-gray-200);
+  background: var(--qp-bg-card);
+  transition: all 0.2s ease;
+}
+
+.qp-tenant-card--active {
+  border-color: var(--qp-primary);
+  background: var(--qp-primary-50);
+  box-shadow: 0 0 16rpx var(--qp-primary-glow);
+}
+
+.qp-tenant-card--expired {
+  background: var(--qp-gray-50);
+  opacity: 0.85;
+}
+
+.qp-tenant-logo {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: var(--qp-radius-sm);
+  margin-right: 20rpx;
+}
+
+.qp-logo--gray {
+  filter: grayscale(80%);
+}
+
+.qp-tenant-meta {
+  flex: 1;
+  overflow: hidden;
+}
+
+.qp-tenant-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.qp-tenant-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--qp-text-primary);
+}
+
+.qp-tenant-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.qp-tenant-sub {
+  font-size: 22rpx;
+  color: var(--qp-text-muted);
+}
+
+/* 底部操作 */
+.qp-drawer-footer {
+  padding: var(--qp-space-lg);
+  border-top: 1rpx solid var(--qp-gray-100);
+  margin-bottom: var(--qp-safe-bottom);
+}
+
+.qp-drawer-action-btn {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--qp-primary);
+}
+
+.qp-action-icon {
+  margin-right: 12rpx;
+}
+
+/* 原地半屏续期弹层 */
+.qp-renew-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  visibility: hidden;
+}
+
+.qp-renew-modal--show {
+  visibility: visible;
+}
+
+.qp-renew-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.qp-renew-sheet {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--qp-bg-card);
+  border-radius: var(--qp-radius-lg) var(--qp-radius-lg) 0 0;
+  padding: 48rpx var(--qp-space-lg) calc(var(--qp-safe-bottom) + 32rpx);
+  box-sizing: border-box;
+}
+
+.qp-renew-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  margin-bottom: 12rpx;
+}
+
+.qp-renew-school {
+  font-size: 28rpx;
+  color: var(--qp-primary);
+  font-weight: 600;
+  margin-bottom: 16rpx;
+}
+
+.qp-renew-tip {
+  font-size: 24rpx;
+  color: var(--qp-text-muted);
+  margin-bottom: 36rpx;
+}
+
+.qp-renew-btn {
+  background: var(--qp-primary);
+  color: #fff;
+  border-radius: var(--qp-radius-full);
+}

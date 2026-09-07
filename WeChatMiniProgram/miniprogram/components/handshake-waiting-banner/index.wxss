@@ -1,0 +1,149 @@
+.handshake-banner-root {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 16rpx 24rpx;
+}
+
+/* 师傅端主动激活卡片 */
+.handler-action-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #FFF9E6 0%, #FFF0C2 100%);
+  border: 1rpx solid rgba(245, 166, 35, 0.35);
+  border-radius: 20rpx;
+  padding: 16rpx 20rpx;
+  box-shadow: 0 6rpx 20rpx rgba(245, 166, 35, 0.15);
+}
+
+.card-left {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+}
+
+.radar-dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  background: #F5A623;
+  box-shadow: 0 0 10rpx #F5A623;
+  animation: radarBlink 1.5s infinite;
+}
+
+@keyframes radarBlink {
+  0% { transform: scale(0.9); opacity: 0.6; }
+  50% { transform: scale(1.4); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.6; }
+}
+
+.action-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.action-title {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #8A5300;
+}
+
+.action-sub {
+  font-size: 20rpx;
+  color: #B37D28;
+  margin-top: 2rpx;
+}
+
+.handshake-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6rpx;
+  background: linear-gradient(135deg, #FF9500 0%, #FF5E3A 100%);
+  color: #FFFFFF;
+  font-size: 24rpx;
+  font-weight: 700;
+  padding: 10rpx 24rpx;
+  border-radius: 30rpx;
+  border: none;
+  box-shadow: 0 4rpx 14rpx rgba(255, 94, 58, 0.35);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.handshake-btn-hover {
+  transform: scale(0.96);
+  opacity: 0.9;
+}
+
+.btn-icon {
+  font-size: 22rpx;
+}
+
+/* 师生端等待横幅 */
+.waiting-card {
+  background: #F2F4F7;
+  border: 1rpx solid rgba(0, 0, 0, 0.06);
+  border-radius: 20rpx;
+  padding: 20rpx 24rpx;
+  box-sizing: border-box;
+}
+
+.waiting-header {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.hourglass-box {
+  position: relative;
+  width: 44rpx;
+  height: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hourglass-icon {
+  font-size: 30rpx;
+  z-index: 2;
+}
+
+.pulse-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(0, 122, 255, 0.15);
+  animation: pulseExpand 2s infinite ease-out;
+}
+
+@keyframes pulseExpand {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.waiting-title {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #1C1C1E;
+}
+
+.waiting-tag {
+  font-size: 20rpx;
+  color: #007AFF;
+  font-weight: 600;
+  margin-top: 2rpx;
+}
+
+.waiting-desc {
+  font-size: 22rpx;
+  color: #8E8E93;
+  line-height: 32rpx;
+  margin-top: 10rpx;
+  display: block;
+}

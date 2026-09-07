@@ -1,0 +1,381 @@
+.copilot-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f7f8fa;
+  box-sizing: border-box;
+}
+
+.copilot-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid #ebedf0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+  padding-left: 16px;
+}
+
+.copilot-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.copilot-back-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+}
+
+.copilot-back-btn:active {
+  transform: scale(0.92);
+}
+
+.copilot-back-btn .back-arrow {
+  font-size: 22px;
+  color: #1f2329;
+  line-height: 1;
+  margin-top: -3px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #52c41a;
+  box-shadow: 0 0 6px rgba(82, 196, 26, 0.6);
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2329;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  background: #e8f3ff;
+  color: #1664ff;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.chat-scroll-container {
+  flex: 1;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.message-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 24px;
+}
+
+.message-row {
+  display: flex;
+  width: 100%;
+}
+
+.user-row {
+  justify-content: flex-end;
+}
+
+.user-bubble {
+  max-width: 80%;
+  padding: 12px 16px;
+  background: #3370ff;
+  color: #ffffff;
+  border-radius: 14px 14px 2px 14px;
+  font-size: 15px;
+  line-height: 1.5;
+  box-shadow: 0 2px 8px rgba(51, 112, 255, 0.15);
+  word-break: break-all;
+}
+
+.ai-row {
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.ai-avatar {
+  font-size: 24px;
+  line-height: 1;
+  padding-top: 2px;
+}
+
+.ai-content-wrap {
+  max-width: 86%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Thinking Pills 胶囊微质感设计 */
+.thinking-pill {
+  background: #f0f4ff;
+  border: 1px solid #d0e2ff;
+  border-radius: 16px;
+  padding: 6px 14px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #3370ff;
+  transition: all 0.3s ease-in-out;
+}
+
+.pill-pulsing {
+  animation: pulse-glow 1.8s infinite ease-in-out;
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(51, 112, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(51, 112, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(51, 112, 255, 0);
+  }
+}
+
+.pill-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pill-icon {
+  font-size: 13px;
+}
+
+.pill-title {
+  flex: 1;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pill-time {
+  color: #8f959e;
+  font-size: 11px;
+}
+
+.expand-arrow {
+  font-size: 10px;
+  color: #8f959e;
+}
+
+.pill-details {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed #d0e2ff;
+  color: #646a73;
+  font-size: 12px;
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+.think-markdown {
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.tool-logs-title {
+  margin-top: 8px;
+  font-weight: 600;
+  color: #1f2329;
+}
+
+.tool-log-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #52c41a;
+}
+
+.tool-desc {
+  color: #4e5969;
+}
+
+.ai-bubble {
+  padding: 14px 18px;
+  background: #ffffff;
+  border-radius: 2px 14px 14px 14px;
+  font-size: 15px;
+  color: #1f2329;
+  line-height: 1.6;
+  border: 1px solid #dee0e3;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  word-break: break-all;
+}
+
+.bubble-text {
+  white-space: pre-wrap;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  color: #3370ff;
+  font-weight: bold;
+  animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.error-badge {
+  margin-top: 6px;
+  padding: 6px 12px;
+  background: #fff7e8;
+  border: 1px solid #ffd591;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #d46b08;
+}
+
+.suggestions-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.suggestion-chip {
+  padding: 6px 12px;
+  background: #ffffff;
+  border: 1px solid #d0d3d6;
+  border-radius: 14px;
+  font-size: 12px;
+  color: #1f2329;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.scroll-bottom-float {
+  position: absolute;
+  right: 20px;
+  bottom: 84px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  border-radius: 18px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: #3370ff;
+  z-index: 99;
+}
+
+.copilot-footer {
+  padding: 10px 16px 24px;
+  background: #ffffff;
+  border-top: 1px solid #ebedf0;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.stop-btn-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.stop-btn {
+  background: #fff1f0;
+  border: 1px solid #ffa39e;
+  color: #f5222d;
+  font-size: 12px;
+  padding: 4px 16px;
+  border-radius: 14px;
+  line-height: 1.4;
+}
+
+.input-bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.chat-input {
+  flex: 1;
+  background: #f2f3f5;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  height: 38px;
+  box-sizing: border-box;
+}
+
+.send-btn {
+  background: #c9d8ff;
+  color: #ffffff;
+  border-radius: 20px;
+  font-size: 14px;
+  padding: 0 18px;
+  height: 38px;
+  line-height: 38px;
+  border: none;
+}
+
+.send-active {
+  background: #3370ff !important;
+}
+
+.history-entry {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #f2f3f5;
+  padding: 4px 8px;
+  border-radius: 12px;
+  margin-right: 8px;
+  font-size: 12px;
+  color: #1f2329;
+}
+
+.history-icon {
+  font-size: 13px;
+}
+
+.history-text {
+  font-weight: 500;
+}
+
+.action-cards-wrap {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+

@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "app-card-item": "./components/app-card-item/index"
+  },
+  "navigationBarTitleText": "智慧工作台",
+  "navigationBarBackgroundColor": "#F8FAFC",
+  "navigationBarTextStyle": "black",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}

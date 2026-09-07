@@ -1,0 +1,238 @@
+.decree-card {
+  position: relative;
+  margin: 24rpx 0;
+  padding: 36rpx 32rpx;
+  background: #ffffff;
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 30rpx rgba(186, 24, 27, 0.08);
+  border: 2rpx solid rgba(229, 57, 53, 0.2);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.decree-header {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.decree-emblem {
+  font-size: 40rpx;
+}
+
+.decree-heading {
+  display: flex;
+  flex-direction: column;
+}
+
+.decree-dept {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #ba181b;
+  letter-spacing: 1rpx;
+}
+
+.decree-official-tag {
+  font-size: 20rpx;
+  color: #e53935;
+  letter-spacing: 2rpx;
+  font-weight: 600;
+}
+
+.decree-divider {
+  height: 4rpx;
+  background: linear-gradient(90deg, #ba181b 0%, #e53935 50%, rgba(229, 57, 53, 0.1) 100%);
+  margin: 20rpx 0 24rpx 0;
+  border-radius: 2rpx;
+}
+
+.decree-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.4;
+  margin-bottom: 20rpx;
+}
+
+.decree-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  background: #fafafa;
+  padding: 16rpx 20rpx;
+  border-radius: 12rpx;
+  margin-bottom: 24rpx;
+}
+
+.meta-item {
+  font-size: 24rpx;
+  color: #666666;
+}
+
+.meta-label {
+  color: #888888;
+}
+
+.meta-value {
+  color: #222222;
+  font-weight: 500;
+}
+
+.decree-countdown-box {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 18rpx 24rpx;
+  border-radius: 14rpx;
+  margin-bottom: 24rpx;
+}
+
+.countdown-green {
+  background: rgba(46, 125, 50, 0.08);
+  border: 1rpx solid rgba(46, 125, 50, 0.25);
+  color: #2e7d32;
+}
+
+.countdown-yellow {
+  background: rgba(245, 124, 0, 0.08);
+  border: 1rpx solid rgba(245, 124, 0, 0.25);
+  color: #ef6c00;
+}
+
+.countdown-red {
+  background: rgba(211, 47, 47, 0.08);
+  border: 1rpx solid rgba(211, 47, 47, 0.25);
+  color: #c62828;
+}
+
+.countdown-icon {
+  font-size: 36rpx;
+}
+
+.countdown-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.countdown-title {
+  font-size: 26rpx;
+  font-weight: 600;
+}
+
+.countdown-sub {
+  font-size: 20rpx;
+  opacity: 0.85;
+  margin-top: 4rpx;
+}
+
+.decree-body {
+  font-size: 28rpx;
+  color: #333333;
+  line-height: 1.7;
+  letter-spacing: 0.5rpx;
+  margin-bottom: 24rpx;
+  white-space: pre-wrap;
+}
+
+.body-text {
+  word-break: break-all;
+}
+
+.decree-images-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12rpx;
+  margin-bottom: 30rpx;
+}
+
+.decree-image-thumb {
+  width: 100%;
+  height: 180rpx;
+  border-radius: 10rpx;
+  background: #f0f0f0;
+}
+
+.decree-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 24rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx dashed #e0e0e0;
+}
+
+.fingerprint-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.fp-label {
+  font-size: 20rpx;
+  color: #999999;
+}
+
+.fp-code {
+  font-size: 22rpx;
+  font-family: monospace;
+  color: #ba181b;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+  margin-top: 4rpx;
+}
+
+/* 官方印章微质感与动效 */
+.official-seal {
+  width: 140rpx;
+  height: 140rpx;
+  border: 4rpx solid #d32f2f;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(1.6) rotate(-20deg);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seal-stamped {
+  opacity: 0.88;
+  transform: scale(1) rotate(-8deg);
+}
+
+.seal-inner-circle {
+  width: 124rpx;
+  height: 124rpx;
+  border: 2rpx dashed #d32f2f;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rpx;
+  box-sizing: border-box;
+}
+
+.seal-star {
+  color: #d32f2f;
+  font-size: 20rpx;
+  line-height: 1;
+}
+
+.seal-dept-text {
+  font-size: 14rpx;
+  color: #d32f2f;
+  font-weight: 700;
+  max-width: 110rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 2rpx 0;
+}
+
+.seal-type-text {
+  font-size: 12rpx;
+  color: #d32f2f;
+  font-weight: 600;
+  letter-spacing: 1rpx;
+}

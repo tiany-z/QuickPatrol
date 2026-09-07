@@ -1,0 +1,93 @@
+<!-- M37: 类 QQ 四态双向气泡组件 (chat-bubble-item) -->
+
+<!-- 1. 系统居中通知气泡 (type === 3) -->
+<view wx:if="{{message.type === 3}}" class="system-bubble-wrap">
+  <view class="system-bubble">
+    <text class="system-text">{{message.content}}</text>
+  </view>
+</view>
+
+<!-- 2. 双向对齐聊天消息 (type !== 3) -->
+<view wx:else class="bubble-row {{message.isSelf ? 'bubble-row-self' : 'bubble-row-peer'}}">
+  <!-- 发信人头像 -->
+  <image
+    class="avatar {{message.isSelf ? 'avatar-self' : 'avatar-peer'}}"
+    src="{{message.senderAvatar || '/assets/avatar_default.png'}}"
+    mode="aspectFill"
+  />
+
+  <view class="bubble-body {{message.isSelf ? 'bubble-body-self' : 'bubble-body-peer'}}">
+    <!-- 昵称与身份药丸 (对方发信时展示) -->
+    <view wx:if="{{!message.isSelf}}" class="sender-header">
+      <text class="sender-name">{{message.senderName || '用户'}}</text>
+      <text wx:if="{{message.senderRole === 1}}" class="role-badge role-handler">维修师傅</text>
+      <text wx:elif="{{message.senderRole === 4}}" class="role-badge role-admin">后勤主管</text>
+    </view>
+
+    <!-- 气泡容器主体: 绑定长按事件 -->
+    <view
+      class="bubble-content {{message.isSelf ? 'content-self' : 'content-peer'}} {{message.isWithDraw ? 'content-withdrawn' : ''}} {{isHighlight ? 'bubble-highlight-glow' : ''}}"
+      bindlongpress="onLongPressBubble"
+    >
+      <!-- 内联引用卡片 (M39) -->
+      <view
+        wx:if="{{message.quotedMessage && !message.isWithDraw}}"
+        class="quoted-card"
+        catchtap="onTapQuotedCard"
+      >
+        <view class="quoted-bar-line"></view>
+        <view class="quoted-card-body">
+          <text class="quoted-sender">{{message.quotedMessage.senderName || '用户'}}：</text>
+          <text class="quoted-summary">{{message.quotedMessage.summary}}</text>
+        </view>
+      </view>
+
+      <!-- 撤回遮蔽态 (M38) -->
+      <block wx:if="{{message.isWithDraw}}">
+        <text class="text-withdrawn">{{message.content || '该消息已被撤回'}}</text>
+        <text wx:if="{{message.canReEdit}}" class="text-reedit" catchtap="onTapReEdit">重新编辑</text>
+      </block>
+
+      <!-- 文本消息 (type === 0) -->
+      <block wx:elif="{{message.type === 0}}">
+        <text class="bubble-text" user-select="true">{{message.content}}</text>
+      </block>
+
+      <!-- 图片消息 (type === 1) -->
+      <block wx:elif="{{message.type === 1}}">
+        <image
+          class="bubble-image"
+          src="{{message.content}}"
+          mode="aspectFill"
+          style="width: {{message.imageMeta ? message.imageMeta.boxWidth + 'rpx' : '360rpx'}}; height: {{message.imageMeta ? message.imageMeta.boxHeight + 'rpx' : '360rpx'}};"
+          bindtap="onPreviewImage"
+        />
+      </block>
+
+      <!-- 工单协同微卡片 (type === 2) -->
+      <block wx:elif="{{message.type === 2}}">
+        <view class="patrol-card" bindtap="onTapPatrolCard">
+          <view class="card-header">
+            <text class="card-icon">🛠️</text>
+            <text class="card-title">工单现场协同卡片</text>
+            <text class="card-status-pill">跟进中</text>
+          </view>
+          <view class="card-body">
+            <text class="card-summary">{{message.content}}</text>
+          </view>
+          <view class="card-footer">
+            <text class="card-action">查看工单完整进展 ></text>
+          </view>
+        </view>
+      </block>
+
+      <!-- 发送中转圈与失败重试指示 -->
+      <view wx:if="{{message.isLoading}}" class="status-indicator indicator-loading">
+        <view class="spinner"></view>
+      </view>
+      <view wx:elif="{{message.isFailed}}" class="status-indicator indicator-failed">
+        <text class="failed-icon">!</text>
+      </view>
+    </view>
+  </view>
+</view>

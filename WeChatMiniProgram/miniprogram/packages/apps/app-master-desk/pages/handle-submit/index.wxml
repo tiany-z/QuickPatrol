@@ -1,0 +1,97 @@
+<!-- packages/apps/app-master-desk/pages/handle-submit/index.wxml -->
+<view class="handle-container">
+  <qp-navbar title="施工交卷与核验" showBack="{{true}}" />
+  <!-- 顶部工单基本信息卡片 -->
+  <view class="card patrol-card">
+    <view class="card-header">
+      <view class="badge-status">施工中待交卷</view>
+      <text class="order-no">{{orderNo}}</text>
+    </view>
+    <view class="patrol-title">{{title || '施工整改工单'}}</view>
+    <view class="patrol-meta">
+      <text class="meta-label">作业位置：</text>
+      <text class="meta-val">{{location || '现场作业点'}}</text>
+    </view>
+  </view>
+
+  <!-- 施工整改说明输入区 -->
+  <view class="card form-card">
+    <view class="section-title">
+      <text class="title-text">整改处理措施说明</text>
+      <text class="required-star">*</text>
+    </view>
+    <textarea 
+      class="content-textarea"
+      placeholder="请详述现场处理措施、更换配件型号、安全加压测试结果等（至少 5 字）..."
+      maxlength="1000"
+      value="{{content}}"
+      bindinput="onContentInput"
+    />
+    <view class="word-counter">{{content.length}} / 1000</view>
+  </view>
+
+  <!-- 实际工时记录 -->
+  <view class="card form-card">
+    <view class="section-title">
+      <text class="title-text">实际施工耗时 (小时)</text>
+      <text class="required-star">*</text>
+    </view>
+    <view class="hours-selector">
+      <view 
+        wx:for="{{quickHours}}" 
+        wx:key="*this"
+        class="hour-chip {{durationHours === item ? 'active' : ''}}"
+        data-hour="{{item}}"
+        bindtap="onSelectHour"
+      >
+        {{item}} 小时
+      </view>
+    </view>
+    <view class="custom-hour-box">
+      <text class="custom-label">自定义工时：</text>
+      <input 
+        class="hour-input" 
+        type="digit" 
+        value="{{durationHours}}" 
+        placeholder="0.1 ~ 120.0"
+        bindinput="onCustomHourInput"
+      />
+      <text class="unit-text">h</text>
+    </view>
+  </view>
+
+  <!-- 现场完工带水印实拍证据 -->
+  <view class="card form-card">
+    <view class="section-title">
+      <text class="title-text">现场实拍完工照片</text>
+      <text class="required-star">*</text>
+      <text class="sub-hint">(需 1~9 张，支持防篡改水印)</text>
+    </view>
+
+    <view class="image-grid">
+      <view wx:for="{{images}}" wx:key="*this" class="image-item">
+        <image class="preview-img" src="{{item}}" mode="aspectFill" bindtap="onPreviewImage" data-src="{{item}}" />
+        <view class="delete-btn" catchtap="onDeleteImage" data-index="{{index}}">×</view>
+        <view class="watermark-tag">防伪水印</view>
+      </view>
+
+      <view wx:if="{{images.length < 9}}" class="upload-btn" bindtap="onTakeWatermarkPhoto">
+        <text class="plus-icon">📷</text>
+        <text class="upload-text">拍照存证</text>
+        <text class="count-text">{{images.length}}/9</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部固底提交工具栏 -->
+  <view class="bottom-bar">
+    <button 
+      class="submit-btn {{submitting ? 'disabled' : ''}}" 
+      loading="{{submitting}}" 
+      disabled="{{submitting}}" 
+      bindtap="onSubmitHandle"
+    >
+      {{submitting ? '正在安全交卷...' : '确认完工并交付质检'}}
+    </button>
+  </view>
+</view>

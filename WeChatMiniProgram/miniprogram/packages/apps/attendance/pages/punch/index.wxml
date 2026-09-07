@@ -1,0 +1,74 @@
+<!-- packages/apps/attendance/pages/punch/index.wxml -->
+<view class="punch-page">
+  <qp-navbar title="师傅考勤打卡" showBack="{{true}}" />
+  <!-- 顶部状态栏与时间卡 -->
+  <view class="time-header">
+    <text class="date-text">{{currentDateStr}}</text>
+    <text class="clock-text">{{currentTimeStr}}</text>
+    <view class="geo-status-tag {{isInFence ? 'in-fence' : 'out-fence'}}">
+      <view class="geo-dot"></view>
+      <text class="geo-text">{{distanceText}}</text>
+    </view>
+  </view>
+
+  <!-- 今日排班信息横幅 -->
+  <view class="shift-summary-bar" wx:if="{{hasSchedule}}">
+    <text class="shift-icon">📅</text>
+    <text class="shift-title">{{shiftName}}</text>
+    <text class="shift-time">({{plannedStartTime}} ~ {{plannedEndTime}})</text>
+  </view>
+
+  <!-- 原生 Camera 人脸采集环形取景器 -->
+  <view class="camera-wrapper">
+    <camera 
+      class="face-camera" 
+      device-position="front" 
+      flash="off" 
+      bindready="onCameraReady" 
+      binderror="onCameraError">
+      <cover-view class="face-guideline-circle">
+        <cover-view class="scanning-ripple {{isProcessing ? 'animating' : ''}}"></cover-view>
+      </cover-view>
+    </camera>
+  </view>
+
+  <!-- 动态交互活体提示 -->
+  <view class="hint-card">
+    <text class="hint-icon">👁️</text>
+    <text class="hint-text">{{livenessHint}}</text>
+  </view>
+
+  <!-- 今日已打卡状态指示 -->
+  <view class="records-row">
+    <view class="record-pill {{punchInInfo ? 'done' : ''}}">
+      <text class="pill-label">上班:</text>
+      <text class="pill-val">{{punchInInfo ? punchInInfo.punchTime + ' (' + punchInInfo.statusText + ')' : '未打卡'}}</text>
+    </view>
+    <view class="record-pill {{punchOutInfo ? 'done' : ''}}">
+      <text class="pill-label">下班:</text>
+      <text class="pill-val">{{punchOutInfo ? punchOutInfo.punchTime + ' (' + punchOutInfo.statusText + ')' : '未打卡'}}</text>
+    </view>
+  </view>
+
+  <!-- 核心大圆打卡按钮 -->
+  <view class="action-area">
+    <button 
+      class="punch-circle-btn {{isProcessing ? 'disabled' : ''}}" 
+      bindtap="handleTriggerPunch" 
+      disabled="{{isProcessing}}">
+      <text class="btn-title">{{punchType === 1 ? '上班打卡' : '下班打卡'}}</text>
+      <text class="btn-time">{{currentTimeStr}}</text>
+    </button>
+  </view>
+
+  <!-- 底部地下室/弱信号点位降级入口 -->
+  <view class="fallback-footer">
+    <view class="switch-type-link" bindtap="togglePunchType">
+      <text>切换为{{punchType === 1 ? '下班打卡' : '上班打卡'}}</text>
+    </view>
+    <view class="qr-fallback-btn" bindtap="handleScanAssetQr">
+      <text class="qr-icon">📷</text>
+      <text class="qr-text">地下室弱信号？扫描机房资产二维码打卡</text>
+    </view>
+  </view>
+</view>

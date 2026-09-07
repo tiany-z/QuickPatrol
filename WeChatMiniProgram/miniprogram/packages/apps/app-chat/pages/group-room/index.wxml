@@ -1,0 +1,46 @@
+<view class="group-room-container">
+  <qp-navbar title="{{groupName || (patrolId ? '突发险情群聊' : '科室协同群聊')}}" showBack="{{true}}" />
+  <!-- 顶部吸顶群公告横幅 -->
+  <group-notice-banner notice="{{currentNotice}}"></group-notice-banner>
+
+  <!-- 顶部群快捷信息条 -->
+  <view class="group-header-bar">
+    <view class="header-left">
+      <text class="tag-badge {{patrolId ? 'incident' : 'dept'}}">{{patrolId ? '突发抢险' : '科室班组'}}</text>
+      <text class="member-count">({{memberCount}}人)</text>
+    </view>
+    <view class="header-right" bindtap="onTapSetting">
+      <text class="setting-btn">⚙️ 群设置</text>
+    </view>
+  </view>
+
+  <!-- 消息流滚动区域 -->
+  <scroll-view 
+    class="message-scroll-area" 
+    scroll-y 
+    scroll-into-view="{{scrollIntoViewId}}"
+    enable-back-to-top
+  >
+    <view class="message-list-inner">
+      <block wx:for="{{messageList}}" wx:key="id">
+        <view id="msg_{{item.id}}" class="message-row-wrapper">
+          <chat-bubble-item message="{{item}}" currentUserId="{{currentUserId}}"></chat-bubble-item>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+
+  <!-- 底部发信输入区 -->
+  <view class="bottom-input-bar">
+    <input 
+      class="msg-input" 
+      type="text" 
+      placeholder="输入消息，支持 @所有人..." 
+      value="{{inputText}}" 
+      bindinput="onInput"
+      confirm-type="send"
+      bindconfirm="onSendMessage"
+    />
+    <button class="send-btn" bindtap="onSendMessage">发送</button>
+  </view>
+</view>

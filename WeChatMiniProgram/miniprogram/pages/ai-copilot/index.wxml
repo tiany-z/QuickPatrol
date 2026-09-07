@@ -1,0 +1,150 @@
+<view class="copilot-container">
+  <!-- 顶部沉浸式导航条（自适应状态栏避让与微信胶囊避让） -->
+  <view 
+    class="copilot-header"
+    style="padding-top: {{statusBarHeight}}px; padding-right: {{capsulePaddingRight}}px; height: {{headerTotalHeight}}px;"
+  >
+    <view class="copilot-header-content" style="height: {{navBarHeight}}px;">
+      <view class="header-left">
+        <view wx:if="{{canBack}}" class="copilot-back-btn" bindtap="handleBack">
+          <text class="back-arrow">‹</text>
+        </view>
+        <view class="status-indicator"></view>
+        <text class="title">后勤巡查 AI Copilot</text>
+      </view>
+      <view class="header-right">
+        <view class="history-entry" bindtap="openHistoryDrawer">
+          <text class="history-icon">📋</text>
+          <text class="history-text">历史</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 顶部占位插槽 -->
+  <view style="height: {{headerTotalHeight}}px; width: 100%; pointer-events: none; flex-shrink: 0;"></view>
+
+  <!-- 中部问答滚动视口 -->
+  <scroll-view
+    class="chat-scroll-container"
+    scroll-y
+    scroll-into-view="{{scrollIntoViewId}}"
+    scroll-with-animation
+    bindscroll="onScroll"
+  >
+    <view class="message-list">
+      <block wx:for="{{messages}}" wx:key="id" wx:for-index="index" wx:for-item="item">
+        <!-- 用户提问气泡 (右侧) -->
+        <view wx:if="{{item.role === 'user'}}" class="message-row user-row">
+          <view class="user-bubble">{{item.renderedContent}}</view>
+        </view>
+
+        <!-- AI 回答气泡 (左侧) -->
+        <view wx:if="{{item.role === 'assistant'}}" class="message-row ai-row">
+          <view class="ai-avatar">🤖</view>
+          <view class="ai-content-wrap">
+            <!-- 核心创新：Thinking Pills 思考折叠胶囊 -->
+            <view
+              wx:if="{{item.thinkingPill}}"
+              class="thinking-pill {{item.thinkingPill.status === 'THINKING' || item.thinkingPill.status === 'TOOL_CALLING' ? 'pill-pulsing' : ''}}"
+              bindtap="togglePillExpand"
+              data-index="{{index}}"
+            >
+              <view class="pill-header">
+                <text class="pill-icon">{{item.thinkingPill.status === 'FINISHED' ? '✅' : item.thinkingPill.status === 'TOOL_CALLING' ? '🔍' : '🧠'}}</text>
+                <text class="pill-title">{{item.thinkingPill.title}}</text>
+                <text class="pill-time">{{item.thinkingPill.elapsedSecondsText}}</text>
+                <text class="expand-arrow">{{item.thinkingPill.isExpanded ? '▲' : '▼'}}</text>
+              </view>
+              <!-- 展开后的完整思维链明细 -->
+              <view wx:if="{{item.thinkingPill.isExpanded}}" class="pill-details">
+                <text class="think-markdown">{{item.thinkingPill.thinkContent || '暂无详细思考链内容'}}</text>
+                <block wx:if="{{item.thinkingPill.toolLogs && item.thinkingPill.toolLogs.length > 0}}">
+                  <view class="tool-logs-title">工具调用流水：</view>
+                  <view wx:for="{{item.thinkingPill.toolLogs}}" wx:key="toolName" wx:for-item="tool" class="tool-log-item">
+                    <text class="tool-status">{{tool.success ? '✔' : '✖'}}</text>
+                    <text class="tool-desc">{{tool.pillTitle}} ({{tool.durationMs}}ms)</text>
+                  </view>
+                </block>
+              </view>
+            </view>
+
+            <!-- 正文内容打字机流式渲染 -->
+            <view wx:if="{{item.renderedContent.length > 0 || item.isStreaming}}" class="ai-bubble">
+              <text class="bubble-text">{{item.renderedContent}}</text>
+              <text wx:if="{{item.isStreaming}}" class="typewriter-cursor">▎</text>
+            </view>
+
+            <!-- 核心创新：M49 智能工单直达卡片 (Action Cards) -->
+            <view wx:if="{{item.actionCards && item.actionCards.length > 0}}" class="action-cards-wrap">
+              <action-card-item
+                wx:for="{{item.actionCards}}"
+                wx:key="cardId"
+                wx:for-item="card"
+                card-data="{{card}}"
+              />
+            </view>
+
+            <!-- 报错友好提示 -->
+            <view wx:if="{{item.errorMessage}}" class="error-badge">
+              <text class="error-text">⚠️ {{item.errorMessage}}</text>
+            </view>
+
+            <!-- 快捷推荐追问气泡 (Suggestion Chips) -->
+            <view wx:if="{{item.suggestions && item.suggestions.length > 0}}" class="suggestions-wrap">
+              <view
+                wx:for="{{item.suggestions}}"
+                wx:key="*this"
+                wx:for-item="chip"
+                class="suggestion-chip"
+                bindtap="handleSelectSuggestion"
+                data-chip="{{chip}}"
+              >
+                {{chip}}
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+      <!-- 滚动定位锚点 -->
+      <view id="scroll-anchor-bottom" style="height: 1px;"></view>
+    </view>
+  </scroll-view>
+
+  <!-- 回到底部浮动按钮 -->
+  <view wx:if="{{showScrollBottomBtn}}" class="scroll-bottom-float" bindtap="scrollToBottom">
+    <text>⬇️ 回到最新</text>
+  </view>
+
+  <!-- 底部交互控制输入条 -->
+  <view class="copilot-footer">
+    <view wx:if="{{isGenerating}}" class="stop-btn-wrap">
+      <button class="stop-btn" bindtap="handleStopGeneration">⏹️ 停止生成</button>
+    </view>
+    <view class="input-bar">
+      <input
+        class="chat-input"
+        placeholder="向 AI 咨询后勤报修、工单进展..."
+        value="{{inputText}}"
+        bindinput="onInputChange"
+        confirm-type="send"
+        bindconfirm="handleSend"
+        disabled="{{isGenerating}}"
+      />
+      <button
+        class="send-btn {{inputText.length > 0 && !isGenerating ? 'send-active' : ''}}"
+        bindtap="handleSend"
+        disabled="{{!inputText.length || isGenerating}}"
+      >
+        发送
+      </button>
+    </view>
+  </view>
+
+  <!-- 历史会话侧边抽屉 -->
+  <history-drawer
+    is-open="{{isHistoryDrawerOpen}}"
+    bind:close="closeHistoryDrawer"
+    bind:selectSession="handleSelectHistoricalSession"
+  />
+</view>

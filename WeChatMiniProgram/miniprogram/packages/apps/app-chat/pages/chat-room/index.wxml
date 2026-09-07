@@ -1,0 +1,136 @@
+<!-- M37: 类 QQ 即时协同聊天视窗 (WeChat MiniProgram) -->
+<view class="chat-container">
+  <qp-navbar title="{{orderNo ? '工单 #' + orderNo + ' 协同沟通' : '即时协同聊天'}}" showBack="{{true}}" />
+  <!-- 1. 顶部工单微状态吸顶药丸 -->
+  <sticky-patrol-bar
+    patrolId="{{patrolId}}"
+    orderNo="{{orderNo}}"
+    statusText="{{statusText}}"
+    locationName="{{locationName}}"
+    bind:openDetailDrawer="handleViewPatrolDetail"
+  />
+
+  <!-- 2. 师傅端未激活置顶横幅 -->
+  <view wx:if="{{showHandshakeButton}}" class="initiate-banner">
+    <view class="banner-text">
+      <text class="banner-icon">⚡</text>
+      <text class="banner-desc">责任师傅已接单，请点击主动激活协同沟通通道</text>
+    </view>
+    <button class="initiate-btn" bindtap="handleInitiateChat">主动开启协同</button>
+  </view>
+
+  <!-- 3. 师生端未激活提示条 -->
+  <view wx:if="{{!initiatedByHandler && !isMaster && !isClosed}}" class="silent-banner">
+    <text class="silent-icon">⏳</text>
+    <text class="silent-desc">师傅正在赶往现场备料中，通道将在师傅接单到场后主动为您开启</text>
+  </view>
+
+  <!-- 3.5. 历史切片浏览浮动横幅 (M39 联动) -->
+  <view wx:if="{{isViewingHistoricalSlice}}" class="historical-slice-banner" bindtap="handleReturnToLatest">
+    <text class="slice-banner-icon">📜</text>
+    <text class="slice-banner-text">正在查看历史引用切片，点击返回最新消息</text>
+    <text class="slice-banner-btn">返回最新 ❯</text>
+  </view>
+
+  <!-- 4. 消息瀑布流滚动区域 -->
+  <scroll-view 
+    class="messages-scroll-area" 
+    scroll-y="true" 
+    scroll-into-view="{{scrollIntoViewId}}"
+    upper-threshold="50"
+    bindscrolltoupper="loadMoreMessages"
+  >
+    <view wx:if="{{isLoadingMore}}" class="loading-more">
+      <text>加载更早的沟通记录...</text>
+    </view>
+
+    <!-- 遍历渲染四态双向聊天气泡组件 -->
+    <view wx:for="{{messageList}}" wx:key="id" id="msg_{{item.id}}">
+      <chat-bubble-item
+        message="{{item}}"
+        isHighlight="{{highlightMessageId === item.id}}"
+        bind:actionPopover="handleActionPopover"
+        bind:reedit="handleReEditMessage"
+        bind:locatequote="handleLocateQuote"
+      />
+    </view>
+
+    <view class="scroll-bottom-anchor" id="scroll-bottom-anchor"></view>
+  </scroll-view>
+
+  <!-- 5. 引用回复浮层条 (M39 联动) -->
+  <quote-input-bar
+    visible="{{Boolean(replyingToMessage)}}"
+    senderName="{{replyingToMessage.senderName || '用户'}}"
+    summary="{{replyingToMessage.content}}"
+    bind:cancel="handleCancelQuote"
+  />
+
+  <!-- 6. 底部输入工具栏 -->
+  <view class="input-toolbar-wrap {{isClosed ? 'toolbar-disabled' : ''}}">
+    <!-- 结案锁定提示 -->
+    <view wx:if="{{isClosed}}" class="closed-tip">
+      <text>🔒 工单已办结归档，协同通道已转为只读</text>
+    </view>
+
+    <!-- 正常输入条 -->
+    <view wx:else class="input-toolbar">
+      <view class="tool-btn icon-mic" bindtap="handleMicVoice">
+        <text class="icon-text">🎤</text>
+      </view>
+
+      <view class="input-box-wrap">
+        <input 
+          class="chat-input"
+          value="{{inputText}}"
+          placeholder="{{canInput ? '请输入沟通内容...' : (lockReason || '等待师傅激活通道...')}}"
+          disabled="{{!canInput}}"
+          confirm-type="send"
+          bindinput="handleInput"
+          bindconfirm="handleSendMessage"
+        />
+      </view>
+
+      <view class="tool-btn icon-emoji" bindtap="handleToggleEmoji">
+        <text class="icon-text">😊</text>
+      </view>
+
+      <!-- 有输入文字时展示发送按钮，否则展示多媒体扩展【➕】 -->
+      <view wx:if="{{inputText.length > 0}}" class="send-btn" bindtap="handleSendMessage">
+        <text class="send-text">发送</text>
+      </view>
+      <view wx:else class="tool-btn icon-plus" bindtap="handleToggleMediaPanel">
+        <text class="icon-text">➕</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 7. 底部多媒体扩展抽屉组件 -->
+  <media-action-panel
+    show="{{showMediaPanel}}"
+    isHandler="{{isMaster}}"
+    bind:camera="handleCamera"
+    bind:album="handleAlbum"
+    bind:location="handleLocation"
+    bind:sendCard="handleSendCard"
+    bind:canned="handleQuickReply"
+  />
+
+  <!-- 8. 长按操作浮层菜单 (复制/引用/撤回) -->
+  <view wx:if="{{showActionMenu}}" class="action-menu-mask" bindtap="handleCloseActionMenu">
+    <view class="action-menu-card" catchtap="true">
+      <view class="menu-action-item" bindtap="handleMenuCopy">
+        <text class="menu-action-icon">📋</text>
+        <text class="menu-action-text">复制文字</text>
+      </view>
+      <view class="menu-action-item" bindtap="handleMenuQuote">
+        <text class="menu-action-icon">💬</text>
+        <text class="menu-action-text">引用回复</text>
+      </view>
+      <view wx:if="{{selectedActionMsg && selectedActionMsg.isSelf}}" class="menu-action-item" bindtap="handleMenuWithdraw">
+        <text class="menu-action-icon">↩️</text>
+        <text class="menu-action-text">撤回 (120秒内)</text>
+      </view>
+    </view>
+  </view>
+</view>

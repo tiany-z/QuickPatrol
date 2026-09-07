@@ -1,0 +1,45 @@
+<!-- 高校后勤巡查e速办 v4.0 - M50 飞书工作台微应用卡片 -->
+<view 
+  class="app-card-wrapper status-{{app.accessStatus.toLowerCase()}} {{app.isPinned ? 'is-pinned' : ''}}"
+  bindtap="handleCardTap"
+  bindlongpress="handleLongPress"
+  hover-class="app-card-hover"
+  hover-stay-time="100"
+>
+  <!-- 置顶状态角标 / 编辑管理按钮 -->
+  <view 
+    wx:if="{{pinManageMode}}" 
+    class="pin-badge-btn {{app.isPinned ? 'active' : ''}}" 
+    catchtap="handlePinTap"
+  >
+    <text class="pin-symbol">{{app.isPinned ? '✓' : '+'}}</text>
+  </view>
+  <view wx:elif="{{app.isPinned}}" class="pinned-indicator">
+    <text class="pin-icon">📌</text>
+  </view>
+
+  <!-- 图标容器与状态徽标 -->
+  <view class="app-icon-box category-{{app.category}}">
+    <text class="app-icon-text">{{app.icon || '📦'}}</text>
+
+    <!-- 动态高并发聚合红点徽标 -->
+    <view wx:if="{{app.badgeCount && app.badgeCount > 0 && app.accessStatus === 'ACTIVE'}}" class="app-badge-pill">
+      {{app.badgeCount > 99 ? '99+' : app.badgeCount}}
+    </view>
+
+    <!-- 动态门禁 毛玻璃 / 受限覆盖层 -->
+    <view wx:if="{{app.accessStatus === 'FROSTED_LOCK'}}" class="gate-mask frosted-gate">
+      <text class="gate-symbol">🔒</text>
+    </view>
+    <view wx:elif="{{app.accessStatus === 'RESTRICTED'}}" class="gate-mask restricted-gate">
+      <text class="gate-symbol">⛔</text>
+    </view>
+  </view>
+
+  <!-- 微应用名称 -->
+  <view class="app-title-wrap">
+    <text class="app-title {{app.accessStatus !== 'ACTIVE' ? 'dimmed' : ''}}">{{app.name}}</text>
+    <text wx:if="{{app.accessStatus === 'FROSTED_LOCK'}}" class="lock-tag">需认证</text>
+    <text wx:elif="{{app.accessStatus === 'RESTRICTED'}}" class="lock-tag restricted">受限</text>
+  </view>
+</view>

@@ -1,0 +1,185 @@
+<!-- packages/apps/dashboard/pages/macro-cockpit/index.wxml -->
+<view class="cockpit-viewport {{isEmergencyAlert ? 'emergency-mode' : ''}}">
+  <qp-navbar title="后勤宏观运维决策大盘" theme="dark" bgMode="translucent" showBack="{{true}}" />
+  <!-- 顶部天顶星控制台标题栏 -->
+  <view class="cockpit-header">
+    <view class="header-left">
+      <view class="stealth-toggle-btn {{stealthMode ? 'active' : ''}}" bindtap="toggleStealthMode">
+        <text class="stealth-icon">{{stealthMode ? '🔒' : '👁️'}}</text>
+        <text class="btn-text">{{stealthMode ? '已开启脱敏防窥' : '公开大屏脱敏'}}</text>
+      </view>
+    </view>
+
+    <view class="header-center-title">
+      <text class="main-title">{{dashboard.schoolName || '高校后勤'}} · 宏观运维全景决策大盘</text>
+      <text class="sub-title">DIGITAL TWIN DECISION COCKPIT</text>
+    </view>
+
+    <view class="header-right">
+      <text class="time-clock">{{dashboard.updateTimestamp}}</text>
+      <view class="sync-refresh-btn" bindtap="handleManualSync">
+        <text class="refresh-icon">🔄</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 特大险情高亮横幅 (突发特大危机触发) -->
+  <view class="emergency-banner" wx:if="{{isEmergencyAlert}}">
+    <text class="alarm-icon">🚨</text>
+    <text class="alarm-text">【特大突发险情预警】事发建筑物: {{emergencyLocation}}，请应急突击队立即集结！</text>
+    <button class="dismiss-alarm-btn" bindtap="dismissEmergencyAlert">解除警报</button>
+  </view>
+
+  <!-- 大盘三栏核心内容容器 -->
+  <view class="cockpit-grid-container">
+    <!-- 左栏: 巡查工单与 SLA 态势 -->
+    <view class="grid-column left-col">
+      <!-- 工单池 KPI -->
+      <view class="hud-card">
+        <view class="card-header"><text class="card-title">工单闭环全景态势</text></view>
+        <view class="kpi-row">
+          <view class="kpi-item">
+            <text class="kpi-num">{{dashboard.patrolOverview.totalCount}}</text>
+            <text class="kpi-label">累计提单</text>
+          </view>
+          <view class="kpi-item highlight-green">
+            <text class="kpi-num">{{dashboard.patrolOverview.completionRate}}%</text>
+            <text class="kpi-label">闭环办结率</text>
+          </view>
+          <view class="kpi-item highlight-red">
+            <text class="kpi-num">{{dashboard.patrolOverview.overdueCount}}</text>
+            <text class="kpi-label">超期滞留</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 门类占比 -->
+      <view class="hud-card mt-20">
+        <view class="card-header"><text class="card-title">各门类报修占比</text></view>
+        <view class="category-list">
+          <block wx:for="{{dashboard.patrolOverview.categoryDistribution}}" wx:key="categoryId">
+            <view class="cat-item">
+              <text class="cat-name">{{item.categoryName}}</text>
+              <view class="cat-progress-bg">
+                <view class="cat-progress-fill" style="width: {{item.percentage}}%;"></view>
+              </view>
+              <text class="cat-count">{{item.count}}件</text>
+            </view>
+          </block>
+        </view>
+      </view>
+
+      <!-- SLA 风险走势 -->
+      <view class="hud-card mt-20">
+        <view class="card-header"><text class="card-title">SLA 违约动态预测走势</text></view>
+        <view class="sla-trend-slots">
+          <block wx:for="{{dashboard.patrolOverview.slaRiskTrend}}" wx:key="hourSlot">
+            <view class="sla-slot-item">
+              <text class="slot-hour">{{item.hourSlot}}</text>
+              <view class="slot-badge safe">安全: {{item.safeCount}}</view>
+              <view class="slot-badge warning" wx:if="{{item.warningCount > 0}}">预警: {{item.warningCount}}</view>
+              <view class="slot-badge critical" wx:if="{{item.criticalCount > 0}}">超期: {{item.criticalCount}}</view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+
+    <!-- 中栏: 设施健康指数与 2.5D 高斯核密度热力图 -->
+    <view class="grid-column center-col">
+      <!-- CFHI 健康指数牌 -->
+      <view class="cfhi-badge-panel">
+        <view class="cfhi-left">
+          <text class="cfhi-title">全校综合设施健康指数 (CFHI)</text>
+          <view class="cfhi-status-tag {{dashboard.cfhiLevel}}">
+            <text>{{dashboard.cfhiLevel === 'CRITICAL' ? '警报恶化' : (dashboard.cfhiLevel === 'WARNING' ? '需加监管' : '卓越运转中')}}</text>
+          </view>
+        </view>
+        <text class="cfhi-score">{{dashboard.cfhiScore}}</text>
+      </view>
+
+      <!-- 2.5D 数字孪生空间热力画布舞台 -->
+      <view class="map-twin-stage">
+        <canvas type="2d" id="kdeHeatCanvas" class="kde-canvas"></canvas>
+        <view class="hud-radar-scan"></view>
+        <view class="map-overlay-title">2.5D 校区隐患高斯核密度分布 (KDE)</view>
+        <view class="map-legend">
+          <text class="legend-item blue">● 轻微</text>
+          <text class="legend-item orange">● 重点</text>
+          <text class="legend-item red">● 高危集聚</text>
+        </view>
+      </view>
+
+      <!-- SaaS 配额与服务体检 -->
+      <view class="quota-hud-bar">
+        <text class="quota-plan">{{dashboard.tenantQuota.planLevelText}}</text>
+        <text class="quota-val">工单配额已用: {{dashboard.tenantQuota.quotaUsagePercent}}%</text>
+        <text class="quota-days">服务剩余: {{dashboard.tenantQuota.remainingDays}}天</text>
+      </view>
+    </view>
+
+    <!-- 右栏: 现场在岗、值班指挥与舆情词云 -->
+    <view class="grid-column right-col">
+      <!-- 队伍在岗率 -->
+      <view class="hud-card">
+        <view class="card-header"><text class="card-title">现场队伍在岗率 (M52)</text></view>
+        <view class="kpi-row">
+          <view class="kpi-item">
+            <text class="kpi-num">{{dashboard.attendanceOverview.actualPresent}} / {{dashboard.attendanceOverview.scheduledTotal}}</text>
+            <text class="kpi-label">今日实时在岗</text>
+          </view>
+          <view class="kpi-item highlight-blue">
+            <text class="kpi-num">{{dashboard.attendanceOverview.attendanceRate}}%</text>
+            <text class="kpi-label">准点到岗率</text>
+          </view>
+        </view>
+
+        <view class="on-duty-list" wx:if="{{dashboard.attendanceOverview.onDutyWorkers.length > 0}}">
+          <block wx:for="{{dashboard.attendanceOverview.onDutyWorkers}}" wx:key="userId">
+            <view class="worker-badge">
+              <text class="w-name">{{stealthMode ? maskName(item.name) : item.name}}</text>
+              <text class="w-loc">{{item.currentBuilding}}</text>
+              <text class="w-time">{{item.lastPunchTime}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+
+      <!-- 今日总值班指挥长 (M51) -->
+      <view class="hud-card mt-20">
+        <view class="card-header"><text class="card-title">今日后勤总值班指挥 (M51)</text></view>
+        <view class="shift-commander-card">
+          <view class="commander-info">
+            <text class="c-title">{{dashboard.shiftOverview.chiefCommander.title}}</text>
+            <text class="c-name">{{stealthMode ? maskName(dashboard.shiftOverview.chiefCommander.name) : dashboard.shiftOverview.chiefCommander.name}}</text>
+          </view>
+          <button class="call-btn" bindtap="handleCallCommander">📞 一键呼叫</button>
+        </view>
+      </view>
+
+      <!-- 师生好评与舆情热词 -->
+      <view class="hud-card mt-20">
+        <view class="card-header"><text class="card-title">师生满意度与舆情词云</text></view>
+        <view class="feedback-stars-row">
+          <text class="score-num">⭐ {{dashboard.feedbackOverview.overallSatisfactionScore}}</text>
+          <text class="feedback-total">({{dashboard.feedbackOverview.totalFeedbacks}}人评价)</text>
+        </view>
+        <view class="hot-words-cloud">
+          <block wx:for="{{dashboard.feedbackOverview.hotKeywords}}" wx:key="text">
+            <view class="word-tag" style="font-size: {{20 + item.weight * 0.15}}rpx;">
+              <text>{{item.text}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部离线 Excel 台账导出入口 -->
+  <view class="export-footer-bar">
+    <button class="export-excel-btn" bindtap="handleExportPatrolExcel">
+      <text class="excel-icon">📊</text>
+      <text class="excel-text">导出本月巡查工单台账 (含高德地图实景导航二维码)</text>
+    </button>
+  </view>
+</view>

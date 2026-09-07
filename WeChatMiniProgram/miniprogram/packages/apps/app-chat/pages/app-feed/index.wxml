@@ -1,0 +1,39 @@
+<view class="app-feed-container">
+  <qp-navbar title="{{appName || '服务号动态卡片流'}}" showBack="{{true}}" />
+  <!-- 头部微应用标识条 -->
+  <view class="app-feed-header" wx:if="{{appName}}">
+    <image class="app-header-icon" src="{{appIcon || '/assets/icons/app_default.png'}}" mode="aspectFit" />
+    <view class="app-header-info">
+      <view class="app-header-title">{{appName}}</view>
+      <view class="app-header-subtitle">专属服务号 · 实时动态卡片流</view>
+    </view>
+  </view>
+
+  <!-- 卡片瀑布流列表 -->
+  <view class="card-list" wx:if="{{cards && cards.length > 0}}">
+    <block wx:for="{{cards}}" wx:key="messageId">
+      <rich-card-item 
+        card="{{item}}" 
+        bind:previewimage="onCardPreviewImage"
+        bind:cardaction="onCardActionTap"
+      />
+    </block>
+  </view>
+
+  <!-- 空状态提示 -->
+  <view class="empty-wrap" wx:elif="{{!isLoading}}">
+    <image class="empty-icon" src="/assets/icons/empty_box.png" mode="aspectFit" />
+    <view class="empty-text">暂无历史通知卡片</view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="feed-footer">
+    <view class="loading-more" wx:if="{{isLoading}}">
+      <text class="loading-dot"></text>
+      <text>正在拉取最新卡片...</text>
+    </view>
+    <view class="no-more-text" wx:elif="{{!hasMore && cards.length > 0}}">
+      — 已展示全部历史通知 —
+    </view>
+  </view>
+</view>

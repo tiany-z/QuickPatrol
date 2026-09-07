@@ -1,0 +1,85 @@
+/**
+ * 高校后勤巡查e速办 v4.0 - 全局 Design Token 样式系统
+ * 规范标准：HSL 极光主题调色板、4px 栅格律、企业级圆角拓扑与微阴影
+ */
+
+page {
+  /* ================= 1. HSL 品牌色彩系统 (默认科技蓝) ================= */
+  --qp-primary-h: 215;
+  --qp-primary-s: 100%;
+  --qp-primary-l: 50%;
+
+  --qp-primary-50:  hsl(var(--qp-primary-h), 90%, 96%);
+  --qp-primary-100: hsl(var(--qp-primary-h), 85%, 90%);
+  --qp-primary-200: hsl(var(--qp-primary-h), 80%, 80%);
+  --qp-primary-300: hsl(var(--qp-primary-h), 85%, 65%);
+  --qp-primary:     hsl(var(--qp-primary-h), var(--qp-primary-s), var(--qp-primary-l)); /* #0066FF */
+  --qp-primary-600: hsl(var(--qp-primary-h), 95%, 44%);
+  --qp-primary-700: hsl(var(--qp-primary-h), 90%, 34%);
+  --qp-primary-800: hsl(var(--qp-primary-h), 90%, 20%);
+  --qp-primary-glow: hsla(var(--qp-primary-h), var(--qp-primary-s), var(--qp-primary-l), 0.28);
+
+  /* 次级极光青 */
+  --qp-aurora: #00D2B4;
+  --qp-aurora-glow: rgba(0, 210, 180, 0.25);
+
+  /* 功能语义色彩 */
+  --qp-success: #10B981;
+  --qp-success-bg: #ECFDF5;
+  --qp-warning: #F59E0B;
+  --qp-warning-bg: #FFFBEB;
+  --qp-purple:  #8B5CF6; /* 警示紫: 即将超时 */
+  --qp-purple-bg: #F5F3FF;
+  --qp-danger:  #EF4444;
+  --qp-danger-bg: #FEF2F2;
+
+  /* 灰阶色系 (Neutral Grays) */
+  --qp-gray-50:  #F8FAFC;
+  --qp-gray-100: #F1F5F9;
+  --qp-gray-200: #E2E8F0;
+  --qp-gray-300: #CBD5E1;
+  --qp-gray-400: #94A3B8;
+  --qp-gray-500: #64748B;
+  --qp-gray-600: #475569;
+  --qp-gray-700: #334155;
+  --qp-gray-800: #1E293B;
+  --qp-gray-900: #0F172A;
+
+  /* 文字排版色彩 */
+  --qp-text-primary:   #0F172A;
+  --qp-text-secondary: #475569;
+  --qp-text-muted:     #94A3B8;
+  --qp-text-inverse:   #FFFFFF;
+
+  /* 背景底色 */
+  --qp-bg-page: #F8FAFC;
+  --qp-bg-card: #FFFFFF;
+  --qp-bg-translucent: rgba(255, 255, 255, 0.85);
+
+  /* ================= 2. 4px 栅格间距系统 (rpx) ================= */
+  --qp-space-xs: 8rpx;   /* 4px */
+  --qp-space-sm: 16rpx;  /* 8px */
+  --qp-space-md: 24rpx;  /* 12px */
+  --qp-space-lg: 32rpx;  /* 16px */
+  --qp-space-xl: 48rpx;  /* 24px */
+  --qp-space-2xl: 64rpx; /* 32px */
+
+  /* ================= 3. 企业级微质感圆角拓扑 ================= */
+  --qp-radius-xs: 6rpx;
+  --qp-radius-sm: 12rpx;
+  --qp-radius-md: 20rpx;
+  --qp-radius-lg: 32rpx;
+  --qp-radius-full: 9999rpx;
+
+  /* ================= 4. 毛玻璃与微质感阴影 ================= */
+  --qp-shadow-card: 0 4rpx 20rpx rgba(15, 23, 42, 0.05);
+  --qp-shadow-float: 0 12rpx 36rpx rgba(15, 23, 42, 0.12);
+  --qp-shadow-active: 0 0 24rpx var(--qp-primary-glow);
+  --qp-blur-glass: blur(24px);
+
+  /* ================= 5. 视口度量动态插槽 (由 app.ts 运行时注入) ================= */
+  --qp-status-bar: 44px;
+  --qp-nav-bar: 44px;
+  --qp-header-total: 88px;
+  --qp-safe-bottom: 20px;
+}

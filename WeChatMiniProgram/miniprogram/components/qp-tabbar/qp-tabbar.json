@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "componentFramework": "glass-easel",
+  "usingComponents": {
+    "qp-badge": "../qp-badge/qp-badge"
+  }
+}

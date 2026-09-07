@@ -1,0 +1,214 @@
+.group-detail-container {
+  min-height: 100vh;
+  background-color: #F4F6F9;
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+
+.section-card {
+  background-color: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #1F2329;
+  margin-bottom: 20rpx;
+}
+
+.member-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.member-item {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.avatar-wrap {
+  position: relative;
+  width: 90rpx;
+  height: 90rpx;
+}
+
+.member-avatar {
+  width: 90rpx;
+  height: 90rpx;
+  border-radius: 12rpx;
+  background-color: #E4E7ED;
+}
+
+.role-badge {
+  position: absolute;
+  bottom: -6rpx;
+  right: -6rpx;
+  font-size: 18rpx;
+  padding: 2rpx 8rpx;
+  border-radius: 6rpx;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.role-badge.owner {
+  background: linear-gradient(135deg, #FA8C16, #D46B08);
+}
+
+.role-badge.admin {
+  background: linear-gradient(135deg, #1890FF, #096DD9);
+}
+
+.member-name {
+  font-size: 22rpx;
+  color: #595959;
+  margin-top: 8rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100rpx;
+  text-align: center;
+}
+
+.cell-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #F0F2F5;
+}
+
+.cell-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.cell-row:first-child {
+  padding-top: 0;
+}
+
+.cell-label {
+  font-size: 28rpx;
+  color: #1F2329;
+}
+
+.cell-value {
+  font-size: 26rpx;
+  color: #8C8C8C;
+}
+
+.cell-value.tag {
+  color: #D4380D;
+  background-color: #FFF2E8;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  font-size: 22rpx;
+}
+
+.cell-right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.notice-preview {
+  max-width: 400rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.arrow {
+  font-size: 32rpx;
+  color: #BFBFBF;
+  margin-left: 8rpx;
+}
+
+.action-btn-area {
+  margin-top: 40rpx;
+}
+
+.leave-btn {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  background-color: #FFF1F0;
+  color: #F5222D;
+  border: 1rpx solid #FFA39E;
+  border-radius: 12rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+/* 弹窗样式 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-box {
+  width: 600rpx;
+  background-color: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  box-sizing: border-box;
+}
+
+.modal-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1F2329;
+  margin-bottom: 24rpx;
+  text-align: center;
+}
+
+.modal-textarea {
+  width: 100%;
+  height: 200rpx;
+  background-color: #F7F8FA;
+  border-radius: 12rpx;
+  padding: 16rpx;
+  box-sizing: border-box;
+  font-size: 26rpx;
+  margin-bottom: 24rpx;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.modal-btn {
+  width: 46%;
+  height: 72rpx;
+  line-height: 72rpx;
+  font-size: 26rpx;
+  border-radius: 36rpx;
+}
+
+.modal-btn.cancel {
+  background-color: #F0F2F5;
+  color: #595959;
+}
+
+.modal-btn.confirm {
+  background: linear-gradient(135deg, #1890FF, #096DD9);
+  color: #FFFFFF;
+}

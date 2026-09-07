@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "校园阳光公开空间",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "masonry-feed-card": "/components/masonry-feed-card/index",
+    "guest-comment-sheet": "/components/guest-comment-sheet/index"
+  }
+}

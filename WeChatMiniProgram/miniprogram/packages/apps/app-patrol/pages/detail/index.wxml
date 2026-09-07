@@ -1,0 +1,190 @@
+<view class="container">
+  <qp-navbar title="巡查工单详情" showBack="{{true}}" />
+  <!-- 骨架屏 / 加载态 -->
+  <view wx:if="{{loading}}" class="loading-wrapper">
+    <view class="skeleton-card skeleton-header"></view>
+    <view class="skeleton-card skeleton-body"></view>
+    <view class="skeleton-card skeleton-timeline"></view>
+  </view>
+
+  <block wx:elif="{{detail}}">
+    <!-- 1. 顶部工单状态看板 -->
+    <view class="header-card">
+      <view class="header-top">
+        <text class="order-no">{{detail.orderNo}}</text>
+        <view class="badge-group">
+          <text class="priority-tag priority-{{detail.priorityLevel}}">{{detail.priorityText}}</text>
+          <text class="status-tag status-{{detail.status}}">{{detail.statusText}}</text>
+        </view>
+      </view>
+      <view class="header-meta">
+        <text class="meta-item">{{detail.schoolName}} · {{detail.campusName}}</text>
+        <text class="meta-dot">·</text>
+        <text class="meta-item">{{detail.categoryName}}</text>
+      </view>
+    </view>
+
+    <!-- 2. 施工前后实拍对比视差轴 / 现场勘验照片 -->
+    <view class="section-card">
+      <view class="section-title">
+        <text class="title-text">现场实拍视差比对</text>
+        <text class="title-sub" wx:if="{{detail.visualPair.hasPair}}">按住滑块左右滑动比对</text>
+      </view>
+
+      <block wx:if="{{detail.visualPair.hasPair}}">
+        <before-after-slider
+          beforeImageUrl="{{detail.visualPair.beforeImageUrl}}"
+          afterImageUrl="{{detail.visualPair.afterImageUrl}}"
+        />
+      </block>
+      <block wx:elif="{{detail.images && detail.images.length > 0}}">
+        <view class="images-grid">
+          <image
+            wx:for="{{detail.images}}"
+            wx:key="*this"
+            class="patrol-photo"
+            src="{{item}}"
+            mode="aspectFill"
+            bindtap="onPreviewImage"
+            data-url="{{item}}"
+          />
+        </view>
+      </block>
+      <block wx:else>
+        <view class="empty-media">暂无现场实拍照片</view>
+      </block>
+    </view>
+
+    <!-- 3. 故障隐患详细信息与当事人 -->
+    <view class="section-card">
+      <view class="section-title">
+        <text class="title-text">工单基本概况</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">报修标题：</text>
+        <text class="info-value title-val">{{detail.title}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">具体位置：</text>
+        <text class="info-value">{{detail.location}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">承诺截止：</text>
+        <text class="info-value deadline-val">{{detail.deadline}}</text>
+      </view>
+      <view class="info-row" wx:if="{{detail.desc}}">
+        <text class="info-label">故障描述：</text>
+        <text class="info-value desc-val">{{detail.desc}}</text>
+      </view>
+
+      <view class="divider"></view>
+
+      <!-- 当事双方信息 (带脱敏屏障) -->
+      <view class="parties-row">
+        <view class="party-box">
+          <text class="party-role">提报师生</text>
+          <text class="party-name">{{detail.creator.name}}</text>
+          <text class="party-phone">{{detail.creator.phone || '未留电话'}}</text>
+        </view>
+        <view class="party-arrow">→</view>
+        <view class="party-box">
+          <text class="party-role">责任师傅</text>
+          <text class="party-name">{{detail.handler ? detail.handler.name : '等待接单'}}</text>
+          <text class="party-phone">{{detail.handler ? (detail.handler.phone || '已脱敏保护') : '-'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 4. 全生命周期时序大盘时间轴 -->
+    <view class="section-card">
+      <view class="section-title">
+        <text class="title-text">全息生命周期时序</text>
+        <text class="title-sub">{{detail.timeline.length}} 阶段节点</text>
+      </view>
+
+      <view class="timeline-container">
+        <view
+          wx:for="{{detail.timeline}}"
+          wx:key="stageKey"
+          class="timeline-item stage-{{item.stageKey}}"
+        >
+          <view class="timeline-dot"></view>
+          <view class="timeline-content">
+            <view class="timeline-head">
+              <text class="timeline-node-title">{{item.title}}</text>
+              <text class="timeline-time">{{item.timestamp}}</text>
+            </view>
+            <view class="timeline-operator">操作主体: {{item.operatorName}}</view>
+            <view class="timeline-desc">{{item.summaryText}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部垫高占位 -->
+    <view class="bottom-spacer"></view>
+
+    <!-- 5. 动态九维操作工具栏 (Action Bar) -->
+    <view class="action-bar">
+      <!-- 协同聊天室快捷入口 -->
+      <button wx:if="{{detail.permissions.canChat}}" class="btn-chat" bindtap="onOpenChat">
+        <text class="btn-icon">💬</text>
+        <text>协同会话</text>
+      </button>
+
+      <!-- 师傅接单 -->
+      <button wx:if="{{detail.permissions.canTake}}" class="btn-primary" bindtap="onTakePatrol">
+        立即抢单认领
+      </button>
+
+      <!-- 完工交卷 -->
+      <button wx:if="{{detail.permissions.canHandle}}" class="btn-primary" bindtap="onHandlePatrol">
+        现场完工交卷
+      </button>
+
+      <!-- 延期申请 -->
+      <button wx:if="{{detail.permissions.canDelay}}" class="btn-secondary" bindtap="onApplyDelay">
+        申请延期
+      </button>
+
+      <!-- 质检验收 -->
+      <button wx:if="{{detail.permissions.canReview}}" class="btn-review" bindtap="onReviewPatrol">
+        质检复核
+      </button>
+
+      <!-- 服务评价 -->
+      <button wx:if="{{detail.permissions.canFeedback}}" class="btn-feedback" bindtap="onFeedbackPatrol">
+        满意度评价
+      </button>
+
+      <!-- 催办督办 -->
+      <button wx:if="{{detail.permissions.canUrge}}" class="btn-urge" bindtap="onUrgePatrol">
+        催办督促
+      </button>
+
+      <!-- 工单作废 -->
+      <button wx:if="{{detail.permissions.canAbort}}" class="btn-abort" bindtap="onOpenAbortModal">
+        申请废单
+      </button>
+    </view>
+
+    <!-- 作废工单确认弹窗 -->
+    <view wx:if="{{showAbortModal}}" class="modal-mask">
+      <view class="modal-dialog">
+        <view class="modal-title">申请作废巡查工单</view>
+        <view class="modal-desc">工单作废后不可恢复，会话将自动封存并移出 SLA 监控</view>
+        <textarea
+          class="modal-input"
+          placeholder="请输入客观作废原因说明（至少5个字符）..."
+          bindinput="onAbortReasonInput"
+          value="{{abortReason}}"
+          maxlength="200"
+        />
+        <view class="modal-buttons">
+          <button class="btn-cancel" bindtap="onCloseAbortModal">取消</button>
+          <button class="btn-confirm-abort" bindtap="onConfirmAbort" loading="{{aborting}}">确认作废</button>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

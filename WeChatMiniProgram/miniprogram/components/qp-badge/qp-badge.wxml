@@ -1,0 +1,12 @@
+<!-- 场景 1: 纯红点角标 -->
+<view wx:if="{{ isDot }}" class="qp-badge-dot qp-badge--{{ variant }}"></view>
+
+<!-- 场景 2: 数字待办角标 (支持 99+ 折叠) -->
+<view wx:elif="{{ displayCount }}" class="qp-badge-count qp-badge--{{ variant }}">
+  {{ displayCount }}
+</view>
+
+<!-- 场景 3: 状态胶囊标签 (如 "待接单", "处理中", "即将超时", "已办结") -->
+<view wx:else class="qp-badge-capsule qp-badge--{{ variant }} {{ glow ? 'qp-badge--glow' : '' }}">
+  <text class="qp-badge-text">{{ text }}</text>
+</view>

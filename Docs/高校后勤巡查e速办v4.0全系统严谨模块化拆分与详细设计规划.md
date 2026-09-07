@@ -95,7 +95,7 @@ flowchart TD
 | **M07** | 小程序宿主架构与 Design Token 基座 | 前端公共样式 | HSL 极光主题色映射、骨架屏微光呼吸计算 | 无 | 小程序单元测试 M07 |
 | **M08** | 顶部沉浸式导航与多单位切换抽屉 | 本机设备存储 | 本机存根过滤算法、三态卡片渲染状态机 | M07 | 小程序单元测试 M08 |
 | **M09** | 飞书式 4-Tab 导航中枢与微前端路由守卫 | 前端路由守卫 | 访客动态门禁拦截、半屏一键登录放行调度 | M07, M08 | 小程序单元测试 M09 |
-| **M10** | 模块化单元测试与 Mock 桩点测试中枢 | `testHarness.ts` | 虚拟租户上下文注入、JWT 自动签发、AST 探针 | M01~M06 | `npm test -- -t "M10"` |
+| **M10** | 模块测试中枢 TestHarness 与 Mock 桩点 | `testHarness.ts` | 虚拟租户上下文注入、JWT 自动签发、AST 探针 | M01~M06 | `npm test -- -t "M10"` |
 | **M11** | 学校租户准入、SaaS 级别与配额拦截 | `schools` | 到期时间判断、月工单配额 Redis 原子累加熔断 | M02, M05 | `npm test -- -t "M11"` |
 | **M12** | 学校个性化设置字典与敏感配置加密 | `school_settings` | AES-256-GCM 加解密、敏感 Key 前后掩码脱敏 | M02, M05 | `npm test -- -t "M12"` |
 | **M13** | 微信静默授权登录与多租户双身份签发 | `users` | 微信 code2Session、租户防串号建档、双身份 JWT | M01, M02 | `npm test -- -t "M13"` |
@@ -110,12 +110,12 @@ flowchart TD
 | **M22** | 防篡改硬件级水印相机与 OSS 租户直传 | 前端 Canvas / OSS | 离线水印像素合成、租户隔离 Policy 临时签名 | M12 | `npm test -- -t "M22"` |
 | **M23** | 智能网格派单与职能标签广播匹配 | `permissions`, `tags` | 故障分类+校区交叉匹配、多节点 WS 广播推送 | M16, M18 | `npm test -- -t "M23"` |
 | **M24** | 师傅现场抢修工作台与接单协同状态机 | `patrols`, `operation_logs` | 行级排他锁、接单状态跃迁、协同改派/转派流转 | M03, M23 | `npm test -- -t "M24"` |
-| **M25** | 规范工期延期申请与校管线上审批 | `patrol_delay_records` | 审批链表追加、截止时间顺延原子计算 | M24 | `npm test -- -t "M25"` |
-| **M26** | 施工整改现场交卷与 Saga 逆序补偿 | `patrols_handle`, `patrols` | 完工证据快照入库、Saga 逆序补偿栈回滚自愈 | M03, M22, M24 | `npm test -- -t "M26"` |
-| **M27** | 质检复核到场核验与合格/驳回状态机 | `patrols_review`, `patrols` | 质检权限校验、合格办结/驳回返工状态机跃迁 | M26 | `npm test -- -t "M27"` |
-| **M28** | 满意度星级评价与超时自动好评归档 | `feedbacks`, `patrols` | 唯一索引防并发刷评、72小时超时扫描自动好评 | M27 | `npm test -- -t "M28"` |
-| **M29** | 工单 SLA 履约动态倒计时与预警引擎 | `patrols` | 除零保护时效百分比、黄/红多级色标光晕运算 | M24, M25 | `npm test -- -t "M29"` |
-| **M30** | 工单详情对比轴、异常废单与操作权限 | `v_patrol_details` | 视图 0 连表开销秒开、身份动态权限掩码、废单审批 | M20~M29 | `npm test -- -t "M30"` |
+| **M25** | 责任人主动发起聊天与师生多媒体会话 | `chat_rooms`, `chat_messages` | 责任人主动单向门禁、双向气泡、120s软撤回、引用回复 | M06, M24 | `npm test -- -t "M25"` |
+| **M26** | 多次动态延期申请与多级审批流 | `patrol_delay_records` | 审批链表追加、截止时间顺延原子计算与 SLA 联动 | M24, M25 | `npm test -- -t "M26"` |
+| **M27** | 施工整改现场交卷与 Saga 逆序补偿 | `patrols_handle`, `patrols` | 完工证据快照入库、Saga 逆序补偿栈回滚自愈 | M03, M22, M24 | `npm test -- -t "M27"` |
+| **M28** | 质检复核到场核验与合格/驳回状态机 | `patrols_review`, `patrols` | 质检权限校验、合格办结/驳回返工状态机跃迁 | M27 | `npm test -- -t "M28"` |
+| **M29** | 满意度五星评价与超时自动好评结案 | `feedbacks`, `patrols` | 唯一索引防并发刷评、72小时超时扫描自动好评 | M28 | `npm test -- -t "M29"` |
+| **M30** | 巡查工单综合大宽表视图与全景详情对比轴 | `v_patrol_details` | 视图 0 连表开销秒开、内置 SLA 倒计时光晕引擎、动态权限掩码、废单审批 | M20~M29 | `npm test -- -t "M30"` |
 | **M31** | 师生诉求与绝对匿名加盐散列保险箱 | 前端反馈 / 服务端 | 匿名单向不可逆加盐散列、真实 UID 物理抹零 | M01, M13 | `npm test -- -t "M31"` |
 | **M32** | 诉求责任科室流转与官方正式答复流 | 诉求数据表 / 答复流 | 科室认领派发、官方富文本答复、校园啄木鸟勋章 | M31, M42 | `npm test -- -t "M32"` |
 | **M33** | 双轨合一校园公开空间与免密瀑布流 | `posts`, `v_post_feeds` | 0 鉴权免密公开读、置顶与时间复合多级排序 | M01 | `npm test -- -t "M33"` |
@@ -125,7 +125,7 @@ flowchart TD
 | **M37** | 类 QQ 聊天气泡渲染与多媒体扩展条 | `chat_messages` | 双向气泡排版、媒体面板直发、工单事件药丸 | M36 | `npm test -- -t "M37"` |
 | **M38** | 类 QQ 2分钟消息撤回与审计存根 | `chat_messages` | 120 秒时限校验、文本离库屏蔽但留底审计存根 | M37 | `npm test -- -t "M38"` |
 | **M39** | 聊天消息长按引用回复与源消息联动 | `chat_messages` | 上文快照关联、原消息撤回自动优雅降级提示 | M37, M38 | `npm test -- -t "M39"` |
-| **M40** | 盯盘已读瞬间消除与工单置顶排序 | `v_chat_sessions` | 视口停留 WS 读回执、置顶与最后活跃复合排序 | M06 | `npm test -- -t "M40"` |
+| **M40** | 视口停留已读瞬间消除与工单置顶排序大盘 | `v_chat_sessions` | 视口停留 WS 读回执、置顶与最后活跃复合排序 | M06 | `npm test -- -t "M40"` |
 | **M41** | 科室工作群与突发险情应急抢险群聊 | `chat_group_members` | 群成员角色阶梯、全员置顶公告、已读游标同步 | M06, M15 | `npm test -- -t "M41"` |
 | **M42** | 统一消息中枢 (`NotificationHub`) 总线 | `messages` | 强类型事件总线接入、结构化富卡片落盘 | M01 | `npm test -- -t "M42"` |
 | **M43** | 用户在线状态感知防骚扰穿透引擎 | Redis 在线心跳 | 活跃在线阻断外部推送、180s防抖离线短信降级 | M05, M06, M42 | `npm test -- -t "M43"` |
@@ -136,9 +136,9 @@ flowchart TD
 | **M48** | 7 大受控后勤事实数据工具箱 (沙箱) | `aiToolRegistry.ts` | 7 大强类型 Function Calling、当前租户强制绑定 | M02, M21 | `npm test -- -t "M48"` |
 | **M49** | AI 会话持久化与智能工单卡片直达 | `ai_agent_sessions` | 对话上下文与 Token 审计、单号正则匹配直达卡片 | M30, M47 | `npm test -- -t "M49"` |
 | **M50** | 飞书工作台微应用矩阵与动态门禁 | `apps` | 分组宫格编排、未登录访客毛玻璃锁、角标拉取 | M09 | `npm test -- -t "M50"` |
-| **M51** | 全景日历日程联动与值班排班表 | `schedules` | 月/周无缝滑动、SLA 倒计时光晕、值班一键拨号 | M16, M29 | `npm test -- -t "M51"` |
-| **M52** | 电子巡更路线规划与覆盖率报表 | `patrol_qrcode_points` | 当日必巡路线规划、点位覆盖率百分比核算 | M20 | `npm test -- -t "M52"` |
-| **M53** | 后勤宏观数据大盘与内嵌地图 Excel 导出 | `v_tenant_overview` | 宏观办结率趋势大盘、高德经纬度二维码内嵌 Excel | M01~M52 | `npm test -- -t "M53"` |
+| **M51** | 全景日历日程联动与值班排班表 | `schedules` | 月/周无缝滑动、SLA 倒计时光晕、值班一键拨号 | M16, M30 | `npm test -- -t "M51"` |
+| **M52** | 师傅现场考勤打卡与人脸识别真实性核验 | `attendances`, `schedules` | 百度/腾讯活体人脸识别、GPS 防作弊打卡、在岗热力散点 | M13, M20 | `npm test -- -t "M52"` |
+| **M53** | 全校后勤宏观运维决策大盘与内嵌地图 Excel 导出 | `v_tenant_overview` | 2.5D KDE空间热力图、CFHI设施健康度、3秒差分推送、高德二维码Excel | M01~M52 | `npm test -- -t "M53"` |
 
 ---
 
@@ -480,7 +480,7 @@ flowchart TD
 - **逻辑运算与算法**：
   1. Canvas 离屏渲染水印：拍摄完成后，硬件底层叠加学校全称、校区、当前北京时间（精确到秒）与经纬度；
   2. OSS 直传签名：生成前缀限定为 `schools/{schoolId}/patrols/{year}/{month}/` 的临时 Policy，前端通过 `wx.uploadFile` 直传阿里云 OSS。
-- **依赖与流转**：依赖 M12 (OSS凭据)；为 M21 (提单) 与 M26 (完工交卷) 提供证据图片。
+- **依赖与流转**：依赖 M12 (OSS凭据)；为 M21 (提单) 与 M27 (施工整改现场交卷) 提供证据图片。
 - **即时独立测试**：请求直传签名并上传测试图片，验证 OSS 路径包含正确租户目录，下载图片验证含有水印。执行命令：`npm test -- -t "M22"`。
 
 ---
@@ -524,23 +524,39 @@ flowchart TD
 
 ---
 
-### M25: 规范工期延期申请与校管线上审批模块 (Patrol Delay & Approval)
-- **定位**：施工遇复杂故障申请工期顺延，告别旧版硬编码，支持无限次延期审批链表。
+### M25: 责任人主动发起聊天与师生多媒体会话模块 (Patrol Chat & Media Session)
+- **定位**：工单现场协同即时会话与事实沟通中枢，基于 `chat_rooms` 与 `chat_messages` 物理表，独创责任人单向主动联络门禁，彻底杜绝无序催单轰炸。
+- **物理映射**：
+  - 后端：`src/apps/chat/chatService.ts`, `src/apps/chat/chatController.ts`, `src/apps/chat/chatSessionService.ts`
+  - 前端：`miniprogram/packages/apps/app-chat/pages/chat-room/`
+- **逻辑运算与算法**：
+  1. 责任人单向激活门禁模型（`initiatedByHandler`）：
+     - 工单提报后会话室初始处于静默状态，师生端输入框禁用，提示“等待维修师傅到场主动联系”；
+     - 责任师傅在工作台接单后点击【主动联络】，原子更新 `initiatedByHandler = 1` 并下发系统欢迎帧，畅通双工通话；
+  2. 2 分钟安全撤回与审计存根：校验 $\Delta t \le 120\text{s}$，更新 `isWithDraw = 1`，数据库正文保留供合规审计，前端友好呈现撤回提示；
+  3. 协同阶段分工：作为工单维度的 1v1 协同业务入口，通用网络与通信底座复用阶段四 M36~M40 规范。
+- **依赖与流转**：依赖 M06 (WS), M24 (接单确立责任人)；驱动 M26 (延期沟通), M30 (详情沟通轴)。
+- **即时独立测试**：编写 `src/__tests__/unit/m25_patrol_chat.test.ts`。验证未激活时师生发信拦截，师傅激活后消息收发正常。执行命令：`npm test -- -t "M25"`。
+
+---
+
+### M26: 多次动态延期申请与多级审批流模块 (Patrol Delay & Multi-Level Approval)
+- **定位**：施工现场遇复杂故障申请工期顺延，告别旧版硬编码，支持无限次延期审批链表与截止时间动态更新。
 - **物理映射**：
   - 前端：`miniprogram/packages/apps/app-patrol/pages/delay-apply/`
   - 后端：`src/apps/patrol/delayController.ts`, `src/apps/patrol/delayService.ts`
 - **逻辑运算与算法**：
-  1. 师傅提交申请：指定延期小时数与原因，插入 `patrol_delay_records (status=0)`；
-  2. 校管审批：
-     - 批准：`patrols.deadline = DATE_ADD(patrols.deadline, INTERVAL :delayHours HOUR)`；
-     - 驳回：维持原截止时间，记录审批批注。
-- **依赖与流转**：依赖 M24；直接影响 M29 (SLA 倒计时)。
-- **即时独立测试**：师傅申请延期 24 小时，校管调用批准接口，断言截止时间严格增加 24 小时。执行命令：`npm test -- -t "M25"`。
+  1. 延期审批状态机：师傅提交申请存入 `patrol_delay_records (status=0)`；
+  2. 批准顺延原子计算：
+     $$\text{patrols.deadline} = \text{DATE\_ADD}(\text{patrols.deadline}, \text{INTERVAL} :delayHours \text{ HOUR})$$
+  3. 审批通过后自动重新触发 SLA 履约倒计时时钟更新，消除即将超时误警报。
+- **依赖与流转**：依赖 M24, M25；直接驱动 M27 (交卷) 与 M30 (宽表详情)。
+- **即时独立测试**：编写 `src/__tests__/unit/m26_patrol_delay.test.ts`。申请延期 24 小时并批准，断言工单截止时间严格顺延 24 小时。执行命令：`npm test -- -t "M26"`。
 
 ---
 
-### M26: 施工整改现场交卷与 Saga 逆序补偿模块 (Patrol Handle & Saga Rollback)
-- **定位**：施工完毕现场拍照交卷，登记耗材与整改说明，Saga 事务保障零脏数据。
+### M27: 施工整改现场交卷与 Saga 逆序补偿模块 (Patrol Handle & Saga Rollback)
+- **定位**：施工整改完毕现场拍照交卷，登记耗材与整改说明，Saga 事务反向补偿保障零脏数据。
 - **物理映射**：
   - 前端：`miniprogram/packages/apps/app-master-desk/pages/handle/`
   - 后端：`src/apps/patrol/handleController.ts`, `src/shared/sql/WithdrawStack.ts`
@@ -548,81 +564,58 @@ flowchart TD
   1. 获取行级排他锁，捕获工单旧快照；
   2. 压入反向补偿闭包：`stack.push(() => restoreSnapshot(oldSnapshot))`；
   3. 插入 `patrols_handle`，更新 `patrols.status = 2` (已整改待复核)；
-  4. 抛出业务完成事件；若任何下游通信或写库崩溃，自动逆序回滚，工单复原为 `status = 1`。
-- **依赖与流转**：依赖 M03 (Saga)、M22 (照片)；驱动工单进入 M27 (复核验收)。
-- **即时独立测试**：完工提交时人为注入下游失败，验证数据库状态自动逆序撤回至 `status = 1`。执行命令：`npm test -- -t "M26"`。
+  4. 抛出业务交卷事件；若任何下游写库或通信崩溃，自动逆序回滚，工单复原为 `status = 1`。
+- **依赖与流转**：依赖 M03 (Saga), M22 (照片), M24 (工作台)；驱动工单进入 M28 (复核验收)。
+- **即时独立测试**：编写 `src/__tests__/unit/m27_patrol_handle.test.ts`。交卷时人为注入下游崩溃，验证工单状态自动逆序撤回至处理中。执行命令：`npm test -- -t "M27"`。
 
 ---
 
-### M27: 质检复核到场核验与合格/驳回状态机模块 (Patrol Review & Quality Control)
-- **定位**：专职质检人员现场核验施工质量，判定合格办结或驳回重新施工。
+### M28: 质检复核到场核验与合格/驳回状态机模块 (Patrol Review & Quality Control)
+- **定位**：专职质检人员现场核验施工质量，判定合格办结或驳回重新返工施工。
 - **物理映射**：
   - 前端：`miniprogram/packages/apps/app-inspection/pages/review-detail/`
-  - 后端：`src/apps/patrol/reviewController.ts`
+  - 后端：`src/apps/patrol/reviewController.ts`, `src/apps/patrol/reviewService.ts`
 - **逻辑运算与算法**：
   1. 权限校验：操作者必须在 `permissions` 中拥有 `type = 2` (验收复核人) 权限；
-  2. 判定流转：
+  2. 判定流转状态机：
      - 验收通过：插入 `patrols_review (isPassed=1)`，跃迁为 `status = 3` (已办结，待评价)，记录 `completedAt = NOW()`；
      - 验收不合格：插入 `patrols_review (isPassed=0)`，跃迁为 `status = 5` 并立即重置回 `status = 1`，向师傅推送返工告警。
-- **依赖与流转**：依赖 M26；合格后进入 M28 (师生评价)。
-- **即时独立测试**：调用复核驳回接口，验证工单重新变更为处理中，师傅待办重新浮现。执行命令：`npm test -- -t "M27"`。
+- **依赖与流转**：依赖 M27；合格后驱动工单进入 M29 (师生评价)。
+- **即时独立测试**：编写 `src/__tests__/unit/m28_patrol_review.test.ts`。调用驳回接口，验证工单状态重置为处理中且责任师傅收到告警。执行命令：`npm test -- -t "M28"`。
 
 ---
 
-### M28: 满意度星级评价与超时自动好评归档模块 (Feedbacks & Auto-Archival)
-- **定位**：师生完工打分与 72 小时超时自动好评归档机制。
+### M29: 满意度五星评价与超时自动好评结案模块 (Feedbacks & Auto-Archival)
+- **定位**：师生完工星级打分与 72 小时超时自动好评结案归档机制。
 - **物理映射**：
   - 前端：`miniprogram/packages/apps/app-patrol/pages/feedback-rate/`
   - 后端：`/api/patrol/feedback`, `src/apps/patrol/autoPassScheduler.ts`
 - **逻辑运算与算法**：
   1. 师生手动打分：1~5 星打分，联合唯一键 `(schoolId, patrolId)` 引擎级卡死防并发刷好评，更新 `patrols.status = 4` (已评价结案)；
   2. 超时自动好评定时器：每日扫描 `status = 3` 且复核通过超过 72 小时的工单，自动插入默认 5 星打分并标记 `isAutoPassed = 1`，归档办结为 `status = 4`。
-- **依赖与流转**：依赖 M27；最终办结工单归档。
-- **即时独立测试**：对同一办结工单并发提交两次评价，断言仅一次成功；触发定时任务，验证超时工单自动好评。执行命令：`npm test -- -t "M28"`。
+- **依赖与流转**：依赖 M28；最终办结工单归档，数据流向 M30 与 M53。
+- **即时独立测试**：编写 `src/__tests__/unit/m29_feedbacks.test.ts`。并发两次评价验证唯一键幂等，触发定时器验证超时工单自动好评。执行命令：`npm test -- -t "M29"`。
 
 ---
 
-### M29: 工单 SLA 履约动态倒计时与黄/红多级预警模块 (SLA Countdown Engine)
-- **定位**：实时计算工单承诺办结时限，输出动态预警色标与超时升级。
+### M30: 巡查工单综合大宽表视图与全景详情对比轴模块 (Patrol Master View & Action Engine)
+- **定位**：工单全景信息呈现、施工前后视差对比滑块、**内置工单 SLA 履约倒计时预警计算引擎**、异常虚假报修废单关闭与动态操作权限掩码。
 - **物理映射**：
-  - 后端：`src/apps/patrol/slaEngine.ts`
-  - 前端：工单状态光晕组件
+  - 后端：`/api/patrol/detail`, `/api/patrol/abort`, `src/apps/patrol/slaEngine.ts` (`v_patrol_details` 视图查询)
+  - 前端：`miniprogram/packages/apps/app-patrol/pages/detail/`
 - **逻辑运算与算法**：
-  1. 剩余百分比运算（具备除零防御）：
+  1. 单表查询 `v_patrol_details` 视图，0 连表开销秒开；
+  2. **核心内置算法：工单 SLA 履约动态倒计时与黄/红多级预警引擎**：
      $$\text{TotalDuration} = \max(1, \text{toTimestamp}(\text{deadline}) - \text{toTimestamp}(\text{createdAt}))$$
      $$\text{RemainingDuration} = \text{toTimestamp}(\text{deadline}) - \text{toTimestamp}(\text{NOW}())$$
      $$\text{Ratio} = \frac{\text{RemainingDuration}}{\text{TotalDuration}}$$
-  2. 多级光晕判定：
      - $\text{Ratio} > 0.20$：正常（极光青/科技蓝）；
      - $0 < \text{Ratio} \le 0.20$：临期警示（极光紫，伴随呼吸微光）；
-     - $\text{Ratio} \le 0$：严重超时（珊瑚红，自动向科室长发送督办通知）。
-- **依赖与流转**：依赖 M24、M25；为 M30 (详情)、M44 (卡片) 与 M51 (日历) 提供视觉色标。
-- **即时独立测试**：构造剩余 15% 工时的工单，断言状态接口输出 `urgencyLevel: 'warning'` 与紫色光晕色标。执行命令：`npm test -- -t "M29"`。
-
----
-
-### M30: 巡查工单详情对比轴、异常废单与操作权限引擎 (Patrol Detail & Action Engine)
-- **定位**：工单全景信息呈现、施工前后对比视差滑块、异常虚假报修废单关闭与动态操作按钮。
-- **物理映射**：
-  - 前端：`miniprogram/packages/apps/app-patrol/pages/detail/`
-  - 后端：`/api/patrol/detail`, `/api/patrol/abort` (`v_patrol_details` 视图查询)
-- **逻辑运算与算法**：
-  1. 单表查询 `v_patrol_details` 视图，0 连表开销秒开；
-  2. 动态权限按钮掩码算法：
-     ```typescript
-     const permissions = {
-       canHandle: isHandler && status === 1,
-       canDelay: isHandler && status === 1,
-       canTransfer: isHandler && status === 1,
-       canReview: isReviewer && status === 2,
-       canFeedback: isCreator && status === 3,
-       canAbort: (isAdmin || isHandler) && status < 3,
-       canChat: (isCreator || isHandler) && status >= 1
-     };
-     ```
-  3. 异常废单关闭（Abort / Invalidation）：经核实为恶作剧或不具备施工条件，管理员审批后将工单软删除或置为归档关闭，不计入负面考评。
-- **依赖与流转**：聚合 M20~M29 全部状态数据；驱动前端所有按钮渲染。
-- **即时独立测试**：以提报人、接单师傅、质检员三种身份调用同一单详情接口，验证返回的权限字典完全准确。执行命令：`npm test -- -t "M30"`。
+     - $\text{Ratio} \le 0$：严重超时（珊瑚红，自动向科室长发送督办通知）；
+     该算法输出强类型 `urgencyLevel`、`remainingRatio` 与倒计时字符串，为 M44（富卡片流）、M51（全景日历）与 M53（宏观大盘）提供全校时效感知支撑；
+  3. 动态权限按钮掩码与异常废单关闭：管理员与责任师傅可审批关闭虚假恶作剧报修，归档废单不计入负面考评。
+- **依赖与流转**：聚合 M20~M29 全部状态数据；驱动前端所有按钮渲染，并向下游阶段三、阶段四与大盘输送全息宽表数据。
+- **即时独立测试**：编写 `src/__tests__/unit/m30_patrol_detail.test.ts`。传入不同工单状态与身份，验证权限掩码精确且 SLA 预警级别计算无误。执行命令：`npm test -- -t "M30"`。
 
 ---
 
@@ -918,35 +911,42 @@ flowchart TD
 - **逻辑运算与算法**：
   1. 月视图/周视图无缝手势形变滑动；
   2. 日程聚合算法：整合个人在办工单截止日（展示黄/红光晕）、当日值班师傅一键呼叫（`dutyPhone`）及重大停水停电订阅。
-- **依赖与流转**：依赖 M29 (SLA)、M16 (值班标签)。
+- **依赖与流转**：依赖 M30 (工单宽表SLA引擎)、M16 (值班标签)。
 - **即时独立测试**：在日历中查询某天日程，验证在办工单截止时间准确标出并支持点击直达。执行命令：`npm test -- -t "M51"`。
 
 ---
 
-### M52: 电子巡更路线规划与覆盖率报表模块 (Electronic Patrol Route)
-- **定位**：线下固定点位扫码防作弊打卡与当日安全巡检覆盖率统计。
+### M52: 师傅现场考勤打卡与人脸识别真实性核验模块 (Face Attendance & Real-Name Verification)
+- **定位**：高校后勤一线施工与运维队伍真实性现场核验守门人，活体人脸识别防代打卡与在岗热力流输出。
 - **物理映射**：
-  - 前端：`miniprogram/packages/apps/app-inspection/pages/route-plan/`
-  - 后端：`src/apps/inspection/inspectionService.ts`
+  - 后端：`src/apps/attendance/attendanceService.ts`, `src/apps/attendance/faceVerifyEngine.ts`
+  - 前端：`miniprogram/packages/apps/app-attendance/pages/punch/`
 - **逻辑运算与算法**：
-  1. 巡更路线规划：设定当日必巡点位列表；
-  2. 覆盖率核算公式：
-     $$\text{CoverageRate} = \frac{\text{CompletedPoints}}{\text{TotalAssignedPoints}} \times 100\%$$
-- **依赖与流转**：依赖 M20 (点位打卡)。
-- **即时独立测试**：扫码完成 4/5 点位，断言当日覆盖率输出 80% 且高亮未完成点位。执行命令：`npm test -- -t "M52"`。
+  1. 活体人脸核身与防作弊算法：
+     - 摄像头采集人脸特征向量，调用活体检测模型进行眨眼/张嘴真实性验证，防翻拍照片与录屏冒领工时；
+     - 相似度置信度判定：$\text{Confidence} \ge 85.0\%$ 判定为本人在岗打卡；
+  2. 地理多边形电子围栏防越界（具备防 NaN 几何保护）；
+  3. 输出全校维修班组今日实时在岗率与各楼宇散点分布，直接驱动 M53 顶层宏观大盘。
+- **依赖与流转**：依赖 M13 (身份鉴权), M20 (防作弊坐标计算)；驱动 M53 (宏观大盘在岗人员热力散点)。
+- **即时独立测试**：编写 `src/__tests__/unit/m52_face_attendance.test.ts`。传入合法活体特征与伪造翻拍照片，断言虚假考勤被 100% 拦截。执行命令：`npm test -- -t "M52"`。
 
 ---
 
-### M53: 后勤宏观数据大盘与内嵌地图二维码 Excel 导出模块 (Cockpit & Map Excel)
-- **定位**：全校后勤能效 ECharts 大盘展示，以及 Excel 导出内嵌高德地图导航二维码。
+### M53: 全校后勤宏观运维决策大盘与内嵌地图 Excel 导出模块 (Macro Operational Cockpit & Map Excel)
+- **定位**：全系统 53 模块大圆满终极收官之作 · 后勤数字化治理天顶星驾驶舱，兼备数字孪生指挥巨幕与离线扫码审计报表双核能力。
 - **物理映射**：
-  - 前端：`miniprogram/packages/apps/app-cockpit/pages/overview/`, `pages/export/`
-  - 后端：`/api/statistics/overview`, `/api/patrol/export` (`v_tenant_overview` 视图)
+  - 前端：`miniprogram/packages/apps/dashboard/pages/macro-cockpit/`, `pages/export/`
+  - 后端：`src/services/macroDashboardService.ts`, `src/services/patrolExcelExportService.ts` (`v_tenant_overview` 与 `v_patrol_details` 视图)
 - **逻辑运算与算法**：
-  1. 走 `v_tenant_overview` 视图毫秒级输出办结率趋势与高发故障分类占比；
-  2. Excel 二维码生成算法：利用后台生成算法将工单的真实经纬度转为高德定位二维码图片，直接内嵌至 Excel 单元格中，供审计人员现场扫码验签。
-- **依赖与流转**：聚合 M01~M52 全量业务数据。
-- **即时独立测试**：导出本月工单 Excel，打开表格手机扫码单元格中的图片，验证手机成功拉起高德地图精准导航。执行命令：`npm test -- -t "M53"`。
+  1. **核心一：全息数字孪生决策大屏**：
+     - 2.5D 高斯核密度 (KDE) 空间隐患热力图，空间矩阵实时投射；
+     - 全校综合设施健康指数 (CFHI) 综合评分模型；
+     - WebSocket 3秒增量差分推送 (Tree-Diff Delta)，带宽极致压缩；
+  2. **核心二：内嵌高德地图经纬度导航二维码的工单全量 Excel 导出引擎**：
+     - 单次批量拉取历史工单经纬度与图片，将高德导航静态 URI 编码为 PNG 二维码流；
+     - 通过二进制流物理内嵌至 Excel 单元格中，供督察审计领导在离线纸质或电脑表格中直接用手机扫码，一键调起高德地图现场复核导航。
+- **依赖与流转**：聚合 M01~M52 全量业务数据，统揽全局。
+- **即时独立测试**：编写 `src/__tests__/unit/m53_dashboard.test.ts`。断言大盘快照汇聚、KDE 热力矩阵推导、3秒差分压缩以及 Excel 二维码导出完整可用。执行命令：`npm test -- -t "M53"`。
 
 ---
 
@@ -977,12 +977,12 @@ flowchart TD
         M22["M22 水印相机"] --> M21
         M21 --> M23["M23 智能派单"]
         M23 --> M24["M24 师傅接单/改派"]
-        M24 --> M25["M25 延期审批"]
-        M24 --> M26["M26 完工交卷"]
-        M26 --> M27["M27 质检验收"]
-        M27 --> M28["M28 师生评价"]
-        M24 --> M29["M29 SLA预警"]
-        M27 --> M30["M30 工单详情轴/废单"]
+        M24 --> M25["M25 责任人主动沟通"]
+        M24 --> M26["M26 多次动态延期"]
+        M26 --> M27["M27 完工交卷(Saga)"]
+        M27 --> M28["M28 质检验收复核"]
+        M28 --> M29["M29 五星评价结案"]
+        M28 & M29 --> M30["M30 宽表与SLA预警引擎"]
     end
 
     subgraph S3["诉求与空间 (M31~M35)"]
@@ -1011,8 +1011,8 @@ flowchart TD
     subgraph S6["工作台与大盘 (M50~M53)"]
         M50["M50 飞书工作台"]
         M51["M51 全景日历"]
-        M52["M52 电子巡更"]
-        M53["M53 决策大屏"]
+        M52["M52 考勤人脸防作弊"]
+        M53["M53 宏观决策大盘与Excel"]
     end
 
     S0 ==> S1 ==> S2

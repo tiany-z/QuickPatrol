@@ -1,0 +1,74 @@
+/* 胶囊基底 */
+.qp-badge-capsule {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rpx 16rpx;
+  border-radius: var(--qp-radius-full);
+  font-size: 22rpx;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.qp-badge--glow {
+  box-shadow: 0 0 12rpx currentColor;
+}
+
+/* 各状态语义配色 */
+.qp-badge--primary {
+  background-color: var(--qp-primary-50);
+  color: var(--qp-primary);
+}
+
+.qp-badge--aurora {
+  background-color: rgba(0, 210, 180, 0.12);
+  color: #00B89C;
+}
+
+.qp-badge--success {
+  background-color: var(--qp-success-bg);
+  color: var(--qp-success);
+}
+
+.qp-badge--warning {
+  background-color: var(--qp-warning-bg);
+  color: var(--qp-warning);
+}
+
+.qp-badge--purple {
+  background-color: var(--qp-purple-bg);
+  color: var(--qp-purple);
+}
+
+.qp-badge--danger {
+  background-color: var(--qp-danger-bg);
+  color: var(--qp-danger);
+}
+
+.qp-badge--neutral {
+  background-color: var(--qp-gray-100);
+  color: var(--qp-gray-600);
+}
+
+/* 未读计数角标 */
+.qp-badge-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32rpx;
+  height: 32rpx;
+  padding: 0 8rpx;
+  background-color: var(--qp-danger);
+  color: #FFFFFF;
+  border-radius: var(--qp-radius-full);
+  font-size: 20rpx;
+  font-weight: bold;
+}
+
+/* 纯微红点 */
+.qp-badge-dot {
+  width: 14rpx;
+  height: 14rpx;
+  background-color: var(--qp-danger);
+  border-radius: var(--qp-radius-full);
+}

@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "工单现场协同聊天室",
+  "usingComponents": {
+    "chat-bubble-item": "../../components/chat-bubble-item/index",
+    "media-action-panel": "../../components/media-action-panel/index",
+    "sticky-patrol-bar": "../../components/sticky-patrol-bar/index",
+    "quote-input-bar": "../../components/quote-input-bar/index"
+  }
+}

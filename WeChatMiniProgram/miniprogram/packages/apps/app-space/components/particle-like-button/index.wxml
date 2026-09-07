@@ -1,0 +1,27 @@
+<view class="particle-like-wrapper" bindtap="onToggleTap">
+  <view class="heart-box {{isLiked ? 'is-liked' : ''}} {{isAnimating ? 'is-bouncing' : ''}}">
+    <!-- 心形矢量图标 (遵循微信小程序原生 Image 规范) -->
+    <image 
+      class="heart-icon" 
+      src="{{isLiked ? likedIcon : unlikedIcon}}" 
+      mode="aspectFit"
+    />
+
+    <!-- 粒子爆发展开层 (当点赞激活时渲染) -->
+    <block wx:if="{{isAnimating}}">
+      <view class="sparkles-container">
+        <view class="sparkle sp-1"></view>
+        <view class="sparkle sp-2"></view>
+        <view class="sparkle sp-3"></view>
+        <view class="sparkle sp-4"></view>
+        <view class="sparkle sp-5"></view>
+        <view class="sparkle sp-6"></view>
+        <view class="sparkle sp-7"></view>
+        <view class="sparkle sp-8"></view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 点赞数字 -->
+  <text class="count-text {{isLiked ? 'count-liked' : ''}}">{{likeCount > 0 ? likeCount : '赞'}}</text>
+</view>

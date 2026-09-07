@@ -1,0 +1,57 @@
+<view wx:if="{{show}}" class="sheet-mask" bindtap="onClose">
+  <view class="sheet-container" catchtap="stopProp">
+    <view class="sheet-header">
+      <view class="sheet-title-box">
+        <text class="sheet-title">发表阳光微留言</text>
+        <text class="sheet-subtitle">（支持访客微信临时身份免密发表）</text>
+      </view>
+      <view class="close-btn" bindtap="onClose">
+        <text class="close-icon">✕</text>
+      </view>
+    </view>
+
+    <!-- 微信临时头像与昵称快捷选择区 -->
+    <view class="auth-bar">
+      <button class="avatar-choose-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image class="guest-avatar" src="{{guestAvatarUrl || '/assets/avatar_guest.png'}}" mode="aspectFill" />
+        <text class="avatar-hint">点击选头像</text>
+      </button>
+      <view class="nick-input-box">
+        <text class="nick-label">互动昵称：</text>
+        <input
+          class="nick-input"
+          type="nickname"
+          placeholder="请输入或微信一键填入昵称"
+          value="{{guestNick}}"
+          bindinput="onInputNick"
+        />
+      </view>
+    </view>
+
+    <!-- 留言输入框 -->
+    <view class="content-box">
+      <textarea
+        class="comment-textarea"
+        placeholder="写下对维修整改师傅的鼓励，或对校园治理的温暖寄语吧 (2~300字)..."
+        maxlength="300"
+        value="{{commentContent}}"
+        bindinput="onInputContent"
+      />
+      <view class="word-counter">
+        <text>{{commentContent.length}}/300</text>
+      </view>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="sheet-actions">
+      <button class="btn-cancel" bindtap="onClose">取消</button>
+      <button
+        class="btn-submit {{isSubmitting ? 'btn-disabled' : ''}}"
+        loading="{{isSubmitting}}"
+        bindtap="onSubmit"
+      >
+        发表阳光留言
+      </button>
+    </view>
+  </view>
+</view>

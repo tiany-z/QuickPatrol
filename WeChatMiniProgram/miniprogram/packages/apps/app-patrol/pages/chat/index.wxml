@@ -1,0 +1,59 @@
+<view class="chat-page-root">
+  <qp-navbar 
+    title="{{meta.patrolSummary ? '工单 #' + meta.patrolSummary.orderNo + ' 协同' : '后勤在线协同'}}" 
+    showBack="{{true}}" 
+  />
+
+  <!-- 顶部状态与单向门禁浮动栏 -->
+  <view class="banner-wrapper">
+    <handshake-waiting-banner 
+      isWaiting="{{!canInput && !meta.isClosed}}" 
+      showHandshakeBtn="{{showHandshakeBtn}}" 
+      handlerName="{{meta.handlerName || '责任维修师傅'}}" 
+      bind:handshake="onTriggerHandshake" 
+    />
+  </view>
+
+  <!-- 消息内容主滚动视窗 -->
+  <scroll-view class="chat-message-list" scroll-y="{{true}}" scroll-into-view="{{lastMsgId}}">
+    <!-- 顶部工单卡片简要 -->
+    <view class="patrol-info-card" wx:if="{{meta.patrolSummary}}">
+      <view class="patrol-badge">{{meta.patrolSummary.statusName || '维修处置中'}}</view>
+      <text class="patrol-title">{{meta.patrolSummary.title}}</text>
+      <text class="patrol-loc">📍 {{meta.patrolSummary.locationName}}</text>
+    </view>
+
+    <!-- 居中系统通知气泡 -->
+    <view class="system-bubble-box" wx:if="{{meta.initiatedByHandler}}">
+      <text class="system-bubble-pill">🛠️ 责任维修师傅已主动开启协同通道，您可以直接发送消息或现场照片</text>
+    </view>
+
+    <view class="empty-tip" wx:if="{{!meta.initiatedByHandler}}">
+      <text>协同通道准备就绪中...</text>
+    </view>
+
+    <!-- 列表锚点 -->
+    <view id="msg-bottom" style="height: 20rpx;"></view>
+  </scroll-view>
+
+  <!-- 底部受控输入栏 -->
+  <view class="bottom-input-bar {{canInput ? 'bar-active' : 'bar-locked'}}">
+    <block wx:if="{{canInput}}">
+      <input 
+        class="input-control" 
+        value="{{inputText}}" 
+        placeholder="请输入补充说明或询问事项..." 
+        bindinput="onTextInput"
+        confirm-type="send"
+        bindconfirm="onSendMessage"
+      />
+      <button class="send-btn" bindtap="onSendMessage">发送</button>
+    </block>
+    <block wx:else>
+      <view class="locked-mask">
+        <text class="lock-icon">🔒</text>
+        <text class="lock-text">{{lockReason || '等待维修师傅主动发起后可输入...'}}</text>
+      </view>
+    </block>
+  </view>
+</view>

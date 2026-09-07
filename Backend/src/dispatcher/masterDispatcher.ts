@@ -1,142 +1,175 @@
 import http from "http";
 import {
   genUUID,
-  TerminalLogger,
   returnError,
-  RowLockManager,
-  StandardResult,
+  TerminalLogger,
   tryCatchErrorToString,
   verifyJwtToken,
 } from "../shared/index.js";
-import { extractBearerToken, parseJsonBody, sendJsonResponse } from "../utils/httpHelper.js";
+import {
+  extractBearerToken,
+  normalizeUrlPath,
+  parseJsonBody,
+  sendJsonResponse,
+} from "../utils/httpHelper.js";
 import { getApiRoute } from "./apiScanner.js";
+import { handleCorsPreflight } from "./corsInterceptor.js";
+import { SagaWithdrawStack } from "../shared/sql/withdrawStack.js";
+import { RowLockManager } from "../shared/lock/rowLockManager.js";
+import { LockedRowStub, RequestContext } from "./gatewayTypes.js";
 
-export interface RequestContext {
-  requestId: string;
-  withdrawStack: Array<() => Promise<void>>;
-  lockedRows: Array<{ tableName: string; targetId: string | number; requestId: string }>;
-  userPayload?: any;
-}
+export { RequestContext } from "./gatewayTypes.js";
 
-export async function dispatchHttpRequest(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
+/**
+ * 全系统核心网关主分发器 (MasterDispatcher Gateway Engine)
+ * 承接全量 HTTP 流量，执行 URL 规范化、0ms 预检短路、双通道鉴权、50MB 流式防护与 Saga/行锁自愈闭环
+ */
+export async function dispatchHttpRequest(
+  req: http.IncomingMessage,
+  res: http.ServerResponse
+): Promise<void> {
   const startTime = Date.now();
-  const requestId = genUUID();
-  const lockedRows: Array<{ tableName: string; targetId: string | number; requestId: string }> = [];
-  const withdrawStack: Array<() => Promise<void>> = [];
+  const clientIp =
+    (req.headers["x-forwarded-for"] as string) ||
+    req.socket.remoteAddress ||
+    "127.0.0.1";
 
-  const clientIp = (req.headers["x-forwarded-for"] as string) || req.socket.remoteAddress || "127.0.0.1";
-  let pathname = "/";
+  // 1. 0ms OPTIONS 跨域预检短路 (算法 4)
+  if (req.method === "OPTIONS") {
+    handleCorsPreflight(req, res);
+    TerminalLogger.logAccess("OPTIONS", req.url || "/", 200, clientIp, Date.now() - startTime, null);
+    return;
+  }
+
+  // 2. URL 规范化管道 (算法 1: 消除末尾多余斜杠、剥离 QueryString)
+  const cleanPath = normalizeUrlPath(req.url || "/");
+  let urlObj: URL;
+  try {
+    urlObj = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
+  } catch {
+    urlObj = new URL("http://localhost/");
+  }
+
   let currentUserId: string | null = null;
 
-  try {
-    const urlObj = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
-    pathname = urlObj.pathname;
+  // 3. API 契约路由匹配 (O(1) 常数级哈希查找与通配扫描)
+  const route = getApiRoute(cleanPath);
+  if (!route) {
+    // 微信小程序 No-Fail Envelope: 统一返回 HTTP 200 包裹 status=0 报文，防止底层网络断开
+    sendJsonResponse(res, returnError(`API 404 Not Found: ${cleanPath}`), 200);
+    TerminalLogger.logAccess(req.method || "GET", cleanPath, 404, clientIp, Date.now() - startTime, null);
+    return;
+  }
 
-    // OPTIONS 跨域预检
-    if (req.method === "OPTIONS") {
-      sendJsonResponse(res, { status: 1, content: "OK" }, 200);
-      TerminalLogger.logAccess(req.method || "OPTIONS", pathname, 200, clientIp, Date.now() - startTime, null);
+  // 4. 双通道 Token 提取与鉴权验证 (算法 3)
+  let userPayload: any = null;
+  const token = extractBearerToken(req);
+
+  if (route.authRequired !== false) {
+    // 受限业务接口：必须持有有效 Token
+    if (!token) {
+      sendJsonResponse(res, returnError("未登录或缺少身份凭证 (Missing Authorization Token)"), 200);
+      TerminalLogger.logAccess(req.method || "GET", cleanPath, 401, clientIp, Date.now() - startTime, null);
       return;
     }
-
-    const route = getApiRoute(pathname);
-    if (!route) {
-      // 兼容微信小程序，返回 status: 0 的 200 报文，避免小程序底层触发网络断开 fail
-      sendJsonResponse(res, returnError(`API 404 Not Found: ${pathname}`), 200);
-      TerminalLogger.logAccess(req.method || "GET", pathname, 404, clientIp, Date.now() - startTime, null);
+    const jwtRes = verifyJwtToken(token);
+    if (jwtRes.status === 0) {
+      sendJsonResponse(res, returnError(`Token 无效或已过期: ${jwtRes.content}`), 200);
+      TerminalLogger.logAccess(req.method || "GET", cleanPath, 401, clientIp, Date.now() - startTime, null);
       return;
     }
-
-    let userPayload: any = null;
-    const token = extractBearerToken(req);
-
-    if (route.authRequired !== false) {
-      if (!token) {
-        // 需鉴权接口缺少 Token
-        sendJsonResponse(res, returnError("未登录或缺少身份凭证 (Missing Authorization Token)"), 200);
-        TerminalLogger.logAccess(req.method || "GET", pathname, 401, clientIp, Date.now() - startTime, null);
-        return;
-      }
-      const jwtRes = verifyJwtToken(token);
-      if (jwtRes.status === 0) {
-        sendJsonResponse(res, returnError(`Token 无效或已过期: ${jwtRes.content}`), 200);
-        TerminalLogger.logAccess(req.method || "GET", pathname, 401, clientIp, Date.now() - startTime, null);
-        return;
-      }
+    userPayload = jwtRes.data;
+    currentUserId = String(userPayload?.userId || userPayload?.openId || "auth-user");
+  } else if (token) {
+    // 公开免密接口：客户端附带 Token 时尝试静默解密，成功则注入用户上下文，失败则静默降级为访客
+    const jwtRes = verifyJwtToken(token);
+    if (jwtRes.status === 1) {
       userPayload = jwtRes.data;
-      currentUserId = userPayload?.openId || userPayload?.username || String(userPayload?.userId || "auth-user");
-    } else if (token) {
-      // 免鉴权公共接口，但客户端主动附带了 Token（尝试解析填充身份上下文，失败则静默降级为访客）
-      const jwtRes = verifyJwtToken(token);
-      if (jwtRes.status === 1) {
-        userPayload = jwtRes.data;
-        currentUserId = userPayload?.openId || userPayload?.username || String(userPayload?.userId || "auth-user");
-      }
+      currentUserId = String(userPayload?.userId || userPayload?.openId || "auth-user");
     }
+  }
 
-    const bodyRes = await parseJsonBody(req);
-    const body = bodyRes.status === 1 ? bodyRes.data : {};
+  // 5. 50MB 流式防护与 Body 解析 (算法 5)
+  const bodyRes = await parseJsonBody(req);
+  if (bodyRes.status === 0) {
+    sendJsonResponse(res, returnError(bodyRes.content), 200);
+    TerminalLogger.logAccess(req.method || "POST", cleanPath, 400, clientIp, Date.now() - startTime, currentUserId);
+    return;
+  }
 
-    const ctx: RequestContext = {
-      requestId,
-      withdrawStack,
-      lockedRows,
-      userPayload,
-    };
+  // 6. 构造本次请求绑定的 RequestContext 独立上下文
+  const requestId = genUUID();
+  const withdrawStack = new SagaWithdrawStack();
+  const lockedRows: LockedRowStub[] = [];
 
-    // 执行接口 Handlers (无显式 DB 事务，由池化连接与 AST 闭包保障)
+  const ctx: RequestContext = {
+    requestId,
+    withdrawStack,
+    lockedRows,
+    userPayload,
+  };
+
+  try {
+    // 7. 精准调度至目标微应用业务控制器
     const handlerRes = await route.handler(
       {
         req,
+        res,
+        body: bodyRes.data,
         query: Object.fromEntries(urlObj.searchParams),
-        body,
         run: route.run,
       },
       ctx
     );
 
-    if (handlerRes.status === 1) {
-      // 成功响应：释放分布式行锁，并提交广播
-      await releaseMemoryLocks(lockedRows, true);
+    // 针对 SSE 长连接或由 Handler 自主写入发送响应的场景，直通放行
+    if (res.writableEnded || res.headersSent) {
+      await releaseAllLockedRows(lockedRows, true);
+      withdrawStack.clear();
+      TerminalLogger.logAccess(req.method || "POST", cleanPath, res.statusCode || 200, clientIp, Date.now() - startTime, currentUserId);
+      return;
+    }
+
+    if (handlerRes && handlerRes.status === 1) {
+      // 业务成功：提交释放所有持有的行锁，清空撤销栈
+      await releaseAllLockedRows(lockedRows, true);
+      withdrawStack.clear();
       sendJsonResponse(res, handlerRes, 200);
-      TerminalLogger.logAccess(req.method || "GET", pathname, 200, clientIp, Date.now() - startTime, currentUserId);
+      TerminalLogger.logAccess(req.method || "POST", cleanPath, 200, clientIp, Date.now() - startTime, currentUserId);
     } else {
-      // 业务失败：逆序 (LIFO) 执行 withdrawStack 撤回闭包，自愈回滚数据与 Redis
-      await handleDispatchFailure(withdrawStack, lockedRows, handlerRes.content);
-      sendJsonResponse(res, handlerRes, 200);
-      TerminalLogger.logAccess(req.method || "GET", pathname, 200, clientIp, Date.now() - startTime, currentUserId);
+      // 业务逻辑失败：触发 Saga 逆序补偿回滚自愈，释放行锁
+      await withdrawStack.withdrawAll();
+      await releaseAllLockedRows(lockedRows, false);
+      sendJsonResponse(res, handlerRes || returnError("未知响应错误"), 200);
+      TerminalLogger.logAccess(req.method || "POST", cleanPath, 200, clientIp, Date.now() - startTime, currentUserId);
     }
   } catch (error) {
+    // 运行时未捕获崩溃：强力触发 Saga 逆序回滚自愈，释放行锁，输出脱敏安全提示
     const errMsg = tryCatchErrorToString(error);
-    await handleDispatchFailure(withdrawStack, lockedRows, errMsg);
+    await withdrawStack.withdrawAll();
+    await releaseAllLockedRows(lockedRows, false);
     sendJsonResponse(res, returnError(`Server Internal Dispatch Error: ${errMsg}`), 200);
-    TerminalLogger.logAccess(req.method || "GET", pathname, 500, clientIp, Date.now() - startTime, currentUserId);
+    TerminalLogger.logAccess(req.method || "POST", cleanPath, 500, clientIp, Date.now() - startTime, currentUserId);
   }
 }
 
-async function handleDispatchFailure(
-  withdrawStack: Array<() => Promise<void>>,
-  lockedRows: Array<{ tableName: string; targetId: string | number; requestId: string }>,
-  _errorMsg: string
-) {
-  // 逆序 (LIFO) 执行收集到的全部 Undo 闭包，还原 MySQL 数据库与 Redis 缓存
-  for (let i = withdrawStack.length - 1; i >= 0; i--) {
-    try {
-      await withdrawStack[i]();
-    } catch (e) {
-      TerminalLogger.error(`Undo operation error: ${tryCatchErrorToString(e)}`, "DispatcherRollback");
+async function releaseAllLockedRows(lockedRows: LockedRowStub[], isCommitted: boolean): Promise<void> {
+  for (const row of lockedRows) {
+    if (row.schoolId !== undefined) {
+      await RowLockManager.releaseRowLock(
+        row.schoolId,
+        row.tableName,
+        row.targetId,
+        row.requestId,
+        isCommitted
+      );
+    } else {
+      await RowLockManager.releaseRowLock(
+        row.tableName,
+        row.targetId,
+        row.requestId,
+        isCommitted
+      );
     }
-  }
-
-  // 撤回自愈完成后释放分布式行锁
-  await releaseMemoryLocks(lockedRows, false);
-}
-
-async function releaseMemoryLocks(
-  lockedRows: Array<{ tableName: string; targetId: string | number; requestId: string }>,
-  isCommitted: boolean
-) {
-  for (const item of lockedRows) {
-    await RowLockManager.releaseRowLock(item.tableName, item.targetId, item.requestId, isCommitted);
   }
 }

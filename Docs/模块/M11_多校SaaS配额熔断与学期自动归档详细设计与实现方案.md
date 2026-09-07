@@ -5,7 +5,7 @@
 > **文档定位**：全系统高校租户准入与全生命周期状态机、SaaS 三级付费配额管控（免费体验版/基础专业版/旗舰尊享版）、写操作月度配额 Redis 原子累加熔断器 (`tenantPlanInterceptor`)、高校专属学期冷热数据自动归档流水线 (`semesterArchiveService`) 的全栈工业级专项技术实现方案  
 > **归档路径**：[v4.0/Docs/模块/M11_多校SaaS配额熔断与学期自动归档详细设计与实现方案.md](file:///e:/Projects/University/后勤巡查e速办%20大二下学期%20大学身份上线项目/v4.0/Docs/模块/M11_多校SaaS配额熔断与学期自动归档详细设计与实现方案.md)  
 > **前置依赖**：M01 (27表7视图DDL基座), M02 (AST租户自动注入), M04 (MasterDispatcher路由调度), M05 (Redis多租户命名空间缓存), M10 (TestHarness测试中枢)  
-> **驱动下游**：M12 (学校个性化设置), M13 (用户体系), M14 (多校穿梭), M21 (工单提报前置熔断门禁), M44 (宏观驾驶舱配额看板)  
+> **驱动下游**：M12 (学校个性化设置), M13 (用户体系), M14 (多校穿梭), M21 (工单提报前置熔断门禁), M53 (全校后勤宏观运维决策大盘配额看板)  
 > **版本日期**：2026-09-05  
 
 ---
@@ -1079,7 +1079,7 @@ M11 模块完工后，为全系统输出的核心租户生命周期服务与调�
 | **`AtomicQuotaManager.tryConsumeQuota()`** | M21 (巡查上报), M31 (维保工单) | 工单创建时的原子配额扣减与超额保护 |
 | **`AtomicQuotaManager.refundQuota()`** | M03 (Saga事务撤回) | 提单事务失败时的配额原子补偿返还 |
 | **`SchoolService.getSchoolById()`** | M12 (设置), M13 (用户), M14 (穿梭) | 带有二级 Redis 极速缓存的学校信息查询 |
-| **`SchoolService.getTenantQuotaHealth()`** | M44 (宏观驾驶舱), 小程序配额看板 | 租户当前月份工单消耗比例与健康水位大盘 |
+| **`SchoolService.getTenantQuotaHealth()`** | M53 (全校后勤宏观决策大盘), 小程序配额看板 | 租户当前月份工单消耗比例与健康水位大盘 |
 | **`SemesterArchiveService.archiveSemesterData()`** | 定时维护作业 (Cron Job) | 高校自然学期历史工单冷数据分片平滑归档 |
 
 ---

@@ -1,0 +1,124 @@
+<view class="container">
+  <qp-navbar title="巡查服务评价" showBack="{{true}}" />
+  <!-- 工单基本信息卡片 -->
+  <view class="card header-card">
+    <view class="order-no">{{orderNo}}</view>
+    <view class="order-title">{{title}}</view>
+    <view class="order-meta">
+      <text class="meta-item">📍 {{location}}</text>
+      <text class="meta-item">🔧 责任师傅：{{handlerName}}</text>
+    </view>
+  </view>
+
+  <!-- 综合五星评分卡片 -->
+  <view class="card rating-card">
+    <view class="rating-header">
+      <view class="rating-title">整体服务满意度</view>
+      <view class="score-desc">{{score >= 5 ? '非常满意' : (score === 4 ? '满意' : (score === 3 ? '一般' : (score === 2 ? '不满意' : '非常差')))}}</view>
+    </view>
+    <view class="stars-row">
+      <block wx:for="{{[1, 2, 3, 4, 5]}}" wx:key="*this">
+        <text 
+          class="star-item {{item <= score ? 'star-active' : ''}}" 
+          bindtap="onScoreChange" 
+          data-val="{{item}}"
+        >★</text>
+      </block>
+    </view>
+
+    <!-- 三维细分维度评分 -->
+    <view class="sub-dimensions">
+      <!-- 响应时效 -->
+      <view class="sub-item">
+        <text class="sub-name">响应时效</text>
+        <view class="sub-stars">
+          <block wx:for="{{[1, 2, 3, 4, 5]}}" wx:for-item="s" wx:key="*this">
+            <text 
+              class="sub-star {{s <= speedScore ? 'active' : ''}}" 
+              bindtap="onSubScoreChange" 
+              data-field="speedScore" 
+              data-val="{{s}}"
+            >★</text>
+          </block>
+        </view>
+      </view>
+
+      <!-- 维修质量 -->
+      <view class="sub-item">
+        <text class="sub-name">工艺质量</text>
+        <view class="sub-stars">
+          <block wx:for="{{[1, 2, 3, 4, 5]}}" wx:for-item="s" wx:key="*this">
+            <text 
+              class="sub-star {{s <= qualityScore ? 'active' : ''}}" 
+              bindtap="onSubScoreChange" 
+              data-field="qualityScore" 
+              data-val="{{s}}"
+            >★</text>
+          </block>
+        </view>
+      </view>
+
+      <!-- 服务态度 -->
+      <view class="sub-item">
+        <text class="sub-name">服务态度</text>
+        <view class="sub-stars">
+          <block wx:for="{{[1, 2, 3, 4, 5]}}" wx:for-item="s" wx:key="*this">
+            <text 
+              class="sub-star {{s <= attitudeScore ? 'active' : ''}}" 
+              bindtap="onSubScoreChange" 
+              data-field="attitudeScore" 
+              data-val="{{s}}"
+            >★</text>
+          </block>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷评价标签云 -->
+  <view class="card tags-card">
+    <view class="section-title">服务亮点与体会 (可多选)</view>
+    <view class="tag-cloud">
+      <block wx:for="{{presetTags}}" wx:key="text">
+        <view 
+          class="tag-chip {{item.selected ? 'chip-active' : ''}}" 
+          bindtap="onToggleTag" 
+          data-index="{{index}}"
+        >
+          {{item.text}}
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 心得评语输入框 -->
+  <view class="card comment-card">
+    <view class="section-title">详细心得评语 (选填)</view>
+    <textarea 
+      class="comment-textarea" 
+      placeholder="感谢师傅的辛勤付出，写几句想对师傅说的话吧..." 
+      value="{{comment}}"
+      maxlength="500"
+      bindinput="onCommentInput"
+    />
+    <view class="word-counter">{{comment.length}}/500</view>
+  </view>
+
+  <!-- 低星差评提醒横幅 -->
+  <view wx:if="{{score <= 2}}" class="alert-banner">
+    <text class="alert-icon">⚠️</text>
+    <text class="alert-text">很抱歉本次服务未达您的预期。后勤科室主管将在 24 小时内向您回访沟通，切实为您解决遗留问题。</text>
+  </view>
+
+  <!-- 底部固定提交按钮 -->
+  <view class="bottom-bar">
+    <button 
+      class="submit-btn" 
+      loading="{{submitting}}" 
+      disabled="{{submitting}}"
+      bindtap="onSubmitFeedback"
+    >
+      提交评价并封存工单
+    </button>
+  </view>
+</view>

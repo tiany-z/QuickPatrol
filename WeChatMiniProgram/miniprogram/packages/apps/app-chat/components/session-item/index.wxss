@@ -1,0 +1,191 @@
+/* M40: 会话大盘条目与左滑抽屉样式 (session-item) */
+
+.session-item-movable-area {
+  width: 100vw;
+  height: 148rpx;
+  background-color: #F7FAFC;
+  margin-bottom: 2rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.session-item-movable-view {
+  width: calc(100vw + 160rpx);
+  height: 148rpx;
+  display: flex;
+  flex-direction: row;
+  background-color: #FFFFFF;
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+/* 置顶会话背景微蓝高雅灰 */
+.session-pinned-bg {
+  background-color: #F0F7FF !important;
+}
+
+/* 左上角深蓝置顶小三角标 */
+.pinned-triangle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-top: 24rpx solid #3182CE;
+  border-right: 24rpx solid transparent;
+  z-index: 5;
+}
+
+.session-main-content {
+  width: 100vw;
+  height: 148rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 28rpx;
+  box-sizing: border-box;
+}
+
+.session-main-content:active {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.avatar-wrapper {
+  position: relative;
+  width: 96rpx;
+  height: 96rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.peer-avatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 48rpx;
+  background-color: #E2E8F0;
+  display: block;
+}
+
+/* 未读红点角标 */
+.unread-badge {
+  position: absolute;
+  top: -8rpx;
+  right: -8rpx;
+  background: linear-gradient(135deg, #FF4D4F 0%, #F5222D 100%);
+  color: #FFFFFF;
+  font-size: 20rpx;
+  font-weight: 700;
+  padding: 2rpx 10rpx;
+  border-radius: 20rpx;
+  border: 2rpx solid #FFFFFF;
+  box-shadow: 0 2rpx 6rpx rgba(245, 34, 45, 0.35);
+  line-height: normal;
+}
+
+.info-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.first-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.peer-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #2D3748;
+  margin-right: 12rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 320rpx;
+}
+
+.role-tag {
+  font-size: 20rpx;
+  padding: 2rpx 8rpx;
+  border-radius: 6rpx;
+  margin-right: auto;
+  font-weight: 500;
+}
+
+.role-tag-master {
+  color: #2B6CB0;
+  background-color: #EBF8FF;
+}
+
+.role-tag-user {
+  color: #2F855A;
+  background-color: #F0FFF4;
+}
+
+.time-text {
+  font-size: 22rpx;
+  color: #A0AEC0;
+  flex-shrink: 0;
+  margin-left: 12rpx;
+}
+
+.second-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.location-pill {
+  font-size: 22rpx;
+  color: #4A5568;
+  background-color: #EDF2F7;
+  padding: 2rpx 8rpx;
+  border-radius: 4rpx;
+  margin-right: 12rpx;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.last-msg-text {
+  font-size: 24rpx;
+  color: #718096;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+/* 右侧置顶抽屉按钮 */
+.drawer-action-btn {
+  width: 160rpx;
+  height: 148rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: opacity 0.2s;
+}
+
+.drawer-action-btn:active {
+  opacity: 0.8;
+}
+
+.pin-btn {
+  background: linear-gradient(135deg, #3182CE 0%, #2B6CB0 100%);
+  color: #FFFFFF;
+}
+
+.pin-icon {
+  font-size: 32rpx;
+  margin-bottom: 4rpx;
+}
+
+.pin-label {
+  font-size: 24rpx;
+  font-weight: 500;
+}

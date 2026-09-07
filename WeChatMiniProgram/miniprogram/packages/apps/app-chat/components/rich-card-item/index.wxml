@@ -1,0 +1,47 @@
+<view class="rich-card-box {{card.isRead ? '' : 'unread-glow'}} {{card.isMutatingAnim ? 'card-mutating-active' : ''}}">
+  <!-- Layer 1: Header 状态胶囊层 -->
+  <view class="card-header">
+    <view class="badge-title">{{card.cardPayload.header.badgeTitle}}</view>
+    <view class="status-pill status-{{card.cardPayload.header.statusColor}}">
+      {{card.cardPayload.header.statusPill}}
+    </view>
+    <view class="card-time">{{card.formattedTimeText}}</view>
+  </view>
+
+  <!-- Layer 2: Key-Value Body 核心键值对层 -->
+  <view class="card-body">
+    <block wx:for="{{card.cardPayload.fields}}" wx:key="label">
+      <view class="field-row">
+        <text class="field-label">{{item.label}}：</text>
+        <text class="field-value {{item.highlight ? 'text-highlight' : ''}}">{{item.value}}</text>
+      </view>
+    </block>
+
+    <!-- SLA 动态倒计时 (算法 1) -->
+    <view class="sla-row" wx:if="{{card.slaInfo}}">
+      <text class="sla-label">履约时效：</text>
+      <text class="sla-value {{card.slaInfo.isUrgent ? 'sla-flash-red' : 'sla-normal'}}">
+        {{card.slaInfo.text}}
+      </text>
+    </view>
+  </view>
+
+  <!-- Layer 3: Media 现场取证缩略图层 (算法 4) -->
+  <view class="card-media" wx:if="{{card.cardPayload.thumbnailUrl}}" bindtap="onTapThumbnail">
+    <image class="media-thumb" src="{{card.cardPayload.thumbnailUrl}}" mode="aspectFill" lazy-load="{{true}}" />
+    <view class="media-hint">点击全屏放大看细节 🔍</view>
+  </view>
+
+  <!-- Layer 4: Action Footer 动作按钮组层 -->
+  <view class="card-footer" wx:if="{{card.cardPayload.actions && card.cardPayload.actions.length > 0}}">
+    <block wx:for="{{card.cardPayload.actions}}" wx:key="actionId">
+      <button 
+        class="card-btn btn-{{item.type}} {{item.disabled ? 'btn-disabled' : ''}}" 
+        data-action="{{item}}" 
+        bindtap="onTapActionButton"
+      >
+        {{item.text}}
+      </button>
+    </block>
+  </view>
+</view>

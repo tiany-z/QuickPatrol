@@ -1,0 +1,17 @@
+<!-- M37: 顶部工单微状态吸顶药丸组件 (sticky-patrol-bar) -->
+<view class="sticky-bar-wrap" bindtap="onTapPill">
+  <view class="sticky-pill">
+    <view class="pill-left">
+      <text class="pill-icon">🛠️</text>
+      <text class="pill-order">#{{orderNo || patrolId}}</text>
+      <view class="status-badge {{isUrgent ? 'badge-urgent' : 'badge-normal'}}">
+        <view class="dot {{isUrgent ? 'dot-pulse' : ''}}"></view>
+        <text class="badge-text">{{statusText || '维修协同中'}}</text>
+      </view>
+    </view>
+    <view class="pill-right">
+      <text class="pill-location">{{locationName || '现场'}}</text>
+      <text class="pill-arrow">▼</text>
+    </view>
+  </view>
+</view>

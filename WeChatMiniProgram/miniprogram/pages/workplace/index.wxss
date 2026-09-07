@@ -1,0 +1,418 @@
+/* 高校后勤巡查e速办 v4.0 - M50 飞书工作台页面样式 */
+
+page {
+  background-color: #F8FAFC;
+  color: #0F172A;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  box-sizing: border-box;
+}
+
+.workplace-container {
+  padding: 0 24rpx 80rpx 24rpx;
+  box-sizing: border-box;
+}
+
+/* 顶部高校租户态沉浸式导航条 */
+.school-header-bar.fixed-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  background: rgba(248, 250, 252, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1rpx solid rgba(226, 232, 240, 0.8);
+  box-sizing: border-box;
+  padding-left: 24rpx;
+}
+
+.school-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.school-brand {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.school-badge-icon {
+  font-size: 36rpx;
+}
+
+.school-name-text {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1E293B;
+  letter-spacing: -0.3rpx;
+}
+
+.identity-tag {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 20rpx;
+  font-weight: 600;
+}
+
+.identity-tag.auth-tag {
+  background: #ECFDF5;
+  color: #059669;
+  border: 1rpx solid rgba(16, 185, 129, 0.2);
+}
+
+.identity-tag.guest-tag {
+  background: #FEF3C7;
+  color: #D97706;
+  border: 1rpx solid rgba(245, 158, 11, 0.2);
+}
+
+.tag-dot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* 顶部 AI Copilot 战略大卡片 */
+.ai-copilot-banner-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1E1B4B 0%, #312E81 50%, #4338CA 100%);
+  border-radius: 28rpx;
+  padding: 32rpx 28rpx 24rpx 28rpx;
+  box-shadow: 0 16rpx 36rpx rgba(49, 46, 129, 0.25);
+  margin-bottom: 28rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.15);
+}
+
+.copilot-banner-glow {
+  position: absolute;
+  top: -60rpx;
+  right: -40rpx;
+  width: 240rpx;
+  height: 240rpx;
+  background: radial-gradient(circle, rgba(129, 140, 248, 0.45) 0%, rgba(67, 56, 202, 0) 70%);
+  pointer-events: none;
+}
+
+.copilot-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+}
+
+.copilot-title-group {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.copilot-avatar {
+  font-size: 40rpx;
+  background: rgba(255, 255, 255, 0.12);
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1rpx solid rgba(255, 255, 255, 0.25);
+}
+
+.copilot-text-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.copilot-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.3;
+}
+
+.copilot-greeting {
+  font-size: 22rpx;
+  color: #C7D2FE;
+  margin-top: 4rpx;
+}
+
+.copilot-arrow-btn {
+  padding: 8rpx 20rpx;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 30rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.2);
+}
+
+.arrow-text {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+/* 伪输入框 */
+.copilot-search-box {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1rpx solid rgba(255, 255, 255, 0.2);
+  border-radius: 20rpx;
+  padding: 16rpx 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.copilot-search-box .search-icon {
+  font-size: 26rpx;
+  margin-right: 12rpx;
+  opacity: 0.8;
+}
+
+.copilot-search-box .placeholder-text {
+  flex: 1;
+  font-size: 24rpx;
+  color: #E0E7FF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sparkle-badge {
+  font-size: 18rpx;
+  font-weight: 700;
+  background: linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%);
+  color: #FFFFFF;
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+}
+
+/* 快捷提问气泡列表 */
+.quick-prompts-scroll {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.prompts-list {
+  display: inline-flex;
+  gap: 16rpx;
+  padding-bottom: 4rpx;
+}
+
+.prompt-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1rpx solid rgba(255, 255, 255, 0.22);
+  border-radius: 24rpx;
+  padding: 8rpx 18rpx;
+  transition: all 0.15s ease;
+}
+
+.prompt-hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.prompt-icon {
+  font-size: 20rpx;
+}
+
+.prompt-text {
+  font-size: 22rpx;
+  color: #FFFFFF;
+}
+
+/* 搜索栏 */
+.app-search-bar {
+  margin-bottom: 24rpx;
+}
+
+.search-input-box {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 16rpx 24rpx;
+  border: 1rpx solid #E2E8F0;
+  box-shadow: 0 2rpx 8rpx rgba(15, 23, 42, 0.03);
+}
+
+.search-lens {
+  font-size: 28rpx;
+  margin-right: 12rpx;
+  opacity: 0.6;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 26rpx;
+  color: #1E293B;
+}
+
+.clear-lens {
+  font-size: 26rpx;
+  color: #94A3B8;
+  padding: 0 8rpx;
+}
+
+/* 四象限过滤器选项卡 */
+.category-tabs-bar {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 16rpx;
+  margin-bottom: 12rpx;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tab-item {
+  padding: 10rpx 20rpx;
+  background: #FFFFFF;
+  border: 1rpx solid #E2E8F0;
+  border-radius: 24rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+  color: #475569;
+  transition: all 0.2s ease;
+}
+
+.tab-item.active {
+  background: #2563EB;
+  color: #FFFFFF;
+  border-color: #2563EB;
+  box-shadow: 0 4rpx 12rpx rgba(37, 99, 235, 0.25);
+  font-weight: 600;
+}
+
+/* 象限群组卡片与置顶卡片 */
+.section-card {
+  background: #FFFFFF;
+  border-radius: 28rpx;
+  padding: 24rpx 20rpx 24rpx 20rpx;
+  margin-bottom: 24rpx;
+  border: 1rpx solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 6rpx 20rpx rgba(15, 23, 42, 0.03);
+}
+
+.pinned-section {
+  border-left: 8rpx solid #F59E0B;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+  padding: 0 8rpx;
+}
+
+.section-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.section-icon {
+  font-size: 32rpx;
+}
+
+.title-sub-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #1E293B;
+}
+
+.section-subtitle {
+  font-size: 20rpx;
+  color: #64748B;
+  margin-top: 2rpx;
+}
+
+.section-count-badge {
+  font-size: 20rpx;
+  background: #FEF3C7;
+  color: #B45309;
+  font-weight: 700;
+  padding: 2rpx 12rpx;
+  border-radius: 12rpx;
+}
+
+.section-count-tag {
+  font-size: 20rpx;
+  color: #94A3B8;
+  background: #F8FAFC;
+  padding: 4rpx 14rpx;
+  border-radius: 16rpx;
+}
+
+.section-action-btn {
+  font-size: 22rpx;
+  color: #2563EB;
+  font-weight: 600;
+  padding: 6rpx 16rpx;
+  border-radius: 16rpx;
+  background: #EFF6FF;
+}
+
+.section-action-btn.active {
+  background: #2563EB;
+  color: #FFFFFF;
+}
+
+.empty-pinned-hint {
+  text-align: center;
+  padding: 28rpx 16rpx;
+  font-size: 22rpx;
+  color: #94A3B8;
+}
+
+/* 微应用网格布局: 4 列 */
+.apps-grid-layout {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16rpx;
+}
+
+/* 搜索无果缺省 */
+.empty-search-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 0;
+}
+
+.empty-icon {
+  font-size: 64rpx;
+  margin-bottom: 16rpx;
+  opacity: 0.6;
+}
+
+.empty-text {
+  font-size: 24rpx;
+  color: #94A3B8;
+}
+
+/* 底部版权信息 */
+.workplace-footer {
+  text-align: center;
+  padding: 32rpx 0 16rpx 0;
+}
+
+.footer-text {
+  font-size: 20rpx;
+  color: #94A3B8;
+}

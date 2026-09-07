@@ -1,0 +1,103 @@
+<!-- M26: 师傅端动态工期延期申报页面 -->
+<view class="delay-page-container">
+  <qp-navbar title="工期延期申报" showBack="{{true}}" />
+  <!-- 顶部工单基本信息卡片 -->
+  <view class="order-info-card">
+    <view class="card-header-row">
+      <text class="order-no-label">工单单号：{{orderNo || ('#' + patrolId)}}</text>
+      <text class="status-badge">施工中</text>
+    </view>
+    <view class="deadline-row">
+      <text class="deadline-label">当前完工截止时间：</text>
+      <text class="deadline-val">{{currentDeadline || '未设定'}}</text>
+    </view>
+  </view>
+
+  <!-- 顺延时长选择区域 -->
+  <view class="section-card">
+    <view class="section-title">
+      <text class="title-text">申请顺延工期时长</text>
+      <text class="title-hint">(以批准时刻为基准计算)</text>
+    </view>
+    <view class="hours-grid">
+      <view 
+        wx:for="{{hoursOptions}}" 
+        wx:key="value" 
+        class="hour-chip {{delayHours === item.value ? 'hour-chip-active' : ''}}"
+        bindtap="onSelectHour"
+        data-value="{{item.value}}"
+      >
+        <text class="chip-label">{{item.label}}</text>
+      </view>
+    </view>
+
+    <!-- 自定义时长输入 -->
+    <view wx:if="{{delayHours === -1 || isCustomInput}}" class="custom-hours-box">
+      <input 
+        class="custom-input" 
+        type="number" 
+        placeholder="输入自定义小时 (1~168)" 
+        value="{{customHours}}" 
+        bindinput="onCustomInput"
+      />
+      <text class="unit-text">小时</text>
+    </view>
+
+    <!-- 动态测算最新截止时间通告 -->
+    <view class="predicted-deadline-banner">
+      <text class="banner-icon">⏳</text>
+      <text class="banner-text">预计顺延后最新截止时限：{{predictedDeadline}}</text>
+    </view>
+  </view>
+
+  <!-- 客观延期原因陈述 -->
+  <view class="section-card">
+    <view class="section-title">
+      <text class="title-text">客观延期原因陈述</text>
+      <text class="title-required">*</text>
+    </view>
+    <textarea 
+      class="reason-textarea" 
+      placeholder="请详实填写缺料备件型号、恶劣天气或市政管网协同等客观原因（至少5字）..." 
+      maxlength="250" 
+      value="{{reason}}" 
+      bindinput="onReasonInput"
+    />
+    <view class="char-counter">
+      <text>{{reason.length}}/250</text>
+    </view>
+  </view>
+
+  <!-- 现场客观证据照片上传 -->
+  <view class="section-card">
+    <view class="section-title">
+      <text class="title-text">现场客观佐证照片</text>
+      <text class="title-hint">(缺料调拨单/特殊破损，最多6张)</text>
+    </view>
+    <view class="images-grid">
+      <view wx:for="{{evidenceImages}}" wx:key="*this" class="image-item-wrapper">
+        <image class="evidence-image" src="{{item}}" mode="aspectFill" />
+        <view class="delete-badge" bindtap="onDeleteImage" data-index="{{index}}">
+          <text>✕</text>
+        </view>
+      </view>
+
+      <view wx:if="{{evidenceImages.length < 6}}" class="upload-trigger" bindtap="onChooseImage">
+        <text class="plus-icon">+</text>
+        <text class="upload-tip">添加照片</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部固定提交按钮 -->
+  <view class="footer-action-bar">
+    <button 
+      class="submit-btn" 
+      bindtap="onSubmit" 
+      loading="{{submitting}}" 
+      disabled="{{submitting || reason.length < 5 || delayHours <= 0}}"
+    >
+      提交延期申请
+    </button>
+  </view>
+</view>

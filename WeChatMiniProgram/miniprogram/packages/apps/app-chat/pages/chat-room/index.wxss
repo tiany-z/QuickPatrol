@@ -1,0 +1,267 @@
+/* M37: 微信小程序类 QQ 即时协同聊天室样式 */
+
+page {
+  height: 100%;
+  background-color: #EDEDED;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 激活横幅 */
+.initiate-banner {
+  background: linear-gradient(135deg, #FFFDF5 0%, #FEF3C7 100%);
+  border-bottom: 1rpx solid #FDE68A;
+  padding: 16rpx 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.banner-text {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin-right: 16rpx;
+}
+
+.banner-icon {
+  font-size: 28rpx;
+  margin-right: 8rpx;
+}
+
+.banner-desc {
+  font-size: 24rpx;
+  color: #92400E;
+  line-height: 32rpx;
+}
+
+.initiate-btn {
+  background: #D97706;
+  color: #FFFFFF;
+  font-size: 24rpx;
+  font-weight: 500;
+  padding: 10rpx 24rpx;
+  border-radius: 24rpx;
+  line-height: normal;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.silent-banner {
+  background: #F3F4F6;
+  border-bottom: 1rpx solid #E5E7EB;
+  padding: 14rpx 24rpx;
+  display: flex;
+  align-items: center;
+}
+
+.silent-icon {
+  font-size: 26rpx;
+  margin-right: 10rpx;
+}
+
+.silent-desc {
+  font-size: 22rpx;
+  color: #6B7280;
+  line-height: 30rpx;
+}
+
+/* 消息滚动区 */
+.messages-scroll-area {
+  flex: 1;
+  height: 100%;
+  padding-top: 16rpx;
+  box-sizing: border-box;
+}
+
+.loading-more {
+  text-align: center;
+  padding: 16rpx 0;
+  font-size: 22rpx;
+  color: #9CA3AF;
+}
+
+.scroll-bottom-anchor {
+  height: 16rpx;
+}
+
+/* 引用回复条 */
+.quote-bar {
+  background: #F9FAFB;
+  border-top: 1rpx solid #E5E7EB;
+  padding: 12rpx 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.quote-info {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  overflow: hidden;
+}
+
+.quote-label {
+  font-size: 22rpx;
+  color: #4B5563;
+  flex-shrink: 0;
+}
+
+.quote-text {
+  font-size: 22rpx;
+  color: #6B7280;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quote-close {
+  font-size: 24rpx;
+  color: #9CA3AF;
+  padding: 4rpx 12rpx;
+}
+
+/* 底部输入工具条 */
+.input-toolbar-wrap {
+  background: #F7F7F7;
+  border-top: 1rpx solid #DCDCDC;
+  padding: 16rpx 20rpx;
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+}
+
+.toolbar-disabled {
+  background: #E5E7EB;
+}
+
+.closed-tip {
+  text-align: center;
+  padding: 16rpx 0;
+  font-size: 24rpx;
+  color: #6B7280;
+}
+
+.input-toolbar {
+  display: flex;
+  align-items: center;
+}
+
+.tool-btn {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-text {
+  font-size: 40rpx;
+}
+
+.input-box-wrap {
+  flex: 1;
+  margin: 0 16rpx;
+}
+
+.chat-input {
+  background: #FFFFFF;
+  border-radius: 12rpx;
+  height: 72rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  color: #1F2937;
+}
+
+.send-btn {
+  background: #07C160;
+  border-radius: 10rpx;
+  padding: 14rpx 24rpx;
+  flex-shrink: 0;
+  margin-left: 8rpx;
+}
+
+.send-text {
+  font-size: 26rpx;
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
+/* 长按操作浮层 */
+.action-menu-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-menu-card {
+  background: #1F2937;
+  border-radius: 16rpx;
+  display: flex;
+  padding: 16rpx 24rpx;
+  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.3);
+}
+
+.menu-action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8rpx 24rpx;
+}
+
+.menu-action-item:active {
+  opacity: 0.7;
+}
+
+.menu-action-icon {
+  font-size: 36rpx;
+  margin-bottom: 6rpx;
+}
+
+.menu-action-text {
+  font-size: 20rpx;
+  color: #F3F4F6;
+}
+
+/* M39: 历史切片浏览浮动横幅 */
+.historical-slice-banner {
+  background: #EBF8FF;
+  border-bottom: 1rpx solid #BEE3F8;
+  padding: 12rpx 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2rpx 8rpx rgba(49, 130, 206, 0.1);
+  z-index: 10;
+}
+
+.historical-slice-banner:active {
+  background: #BEE3F8;
+}
+
+.slice-banner-icon {
+  font-size: 26rpx;
+  margin-right: 10rpx;
+}
+
+.slice-banner-text {
+  font-size: 24rpx;
+  color: #2B6CB0;
+  flex: 1;
+}
+
+.slice-banner-btn {
+  font-size: 24rpx;
+  color: #3182CE;
+  font-weight: 500;
+  flex-shrink: 0;
+}

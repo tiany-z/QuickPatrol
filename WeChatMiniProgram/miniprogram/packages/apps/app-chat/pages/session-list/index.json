@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "工单现场协同大盘",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "session-item": "../../components/session-item/index"
+  }
+}

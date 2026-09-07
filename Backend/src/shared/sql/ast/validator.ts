@@ -1,4 +1,9 @@
-import { returnError, returnSuccess, StandardResult, tryCatchErrorToString } from "../../flow/result.js";
+import {
+  returnError,
+  returnSuccess,
+  StandardResult,
+  tryCatchErrorToString,
+} from "../../flow/result.js";
 import type {
   ColumnNode,
   LimitNode,
@@ -17,6 +22,9 @@ export function getTableName(
   tableNode: TableNode,
   forceOriginName: boolean = false
 ): NonEmptyString {
+  if (!tableNode || !tableNode.table) {
+    return "" as NonEmptyString;
+  }
   if (tableNode.as === undefined || forceOriginName) {
     return `\`${tableNode.table}\`` as NonEmptyString;
   }
@@ -27,7 +35,9 @@ export function getColumnName(
   columnNode: ColumnNode,
   forceOriginName: boolean = false
 ): NonEmptyString {
-  const originName = `${getTableName(columnNode.tableNode)}.\`${columnNode.column}\``;
+  const tablePart = getTableName(columnNode.tableNode, forceOriginName);
+  const colPart = `\`${columnNode.column}\``;
+  const originName = tablePart ? `${tablePart}.${colPart}` : colPart;
   const asName = columnNode.as;
   if (asName === undefined || forceOriginName) {
     return originName as NonEmptyString;
@@ -82,7 +92,17 @@ export function validateSQLFragment(fragment: string): StandardResult<{ isValid:
 
     const trimmed = fragment.trim();
 
-    if (trimmed.includes("--") || trimmed.includes("/*") || trimmed.includes("*/")) {
+    // 剔除 -!!value!!- 模板占位符后，再进行严格的 SQL 注入与注释特征检测
+    const sanitizedWithoutPlaceholders = trimmed.replace(
+      /-!!value!!-[\s\S]*?-!!value!!-|-!!value!!-/g,
+      ""
+    );
+
+    if (
+      sanitizedWithoutPlaceholders.includes("--") ||
+      sanitizedWithoutPlaceholders.includes("/*") ||
+      sanitizedWithoutPlaceholders.includes("*/")
+    ) {
       return returnError("检测到SQL注释标记，已拦截");
     }
 
@@ -104,7 +124,7 @@ export function validateSQLFragment(fragment: string): StandardResult<{ isValid:
       return returnError("检测到盲注函数(SLEEP)，已拦截");
     }
 
-    const dangerousKeywordResult = containsDangerousKeyword(trimmed);
+    const dangerousKeywordResult = containsDangerousKeyword(sanitizedWithoutPlaceholders);
     if (dangerousKeywordResult.status === 0) {
       return returnError(dangerousKeywordResult.content);
     }
@@ -113,8 +133,8 @@ export function validateSQLFragment(fragment: string): StandardResult<{ isValid:
       return returnError(`检测到危险SQL关键字，已拦截: ${keywordData.keyword}`);
     }
 
-    if (trimmed.length > 1000) {
-      return returnError("SQL片段超出最大长度限制（1000个字符）");
+    if (trimmed.length > 2000) {
+      return returnError("SQL片段超出最大长度限制");
     }
 
     return returnSuccess({ isValid: true });
@@ -123,7 +143,16 @@ export function validateSQLFragment(fragment: string): StandardResult<{ isValid:
   }
 }
 
-export function parseColumns(...columns: Array<ColumnNode>): StandardResult<ParseColumnsResult> {
+export function parseColumns(
+  ...columns: Array<ColumnNode>
+): StandardResult<ParseColumnsResult> {
+  return parseColumnsInternal(columns, false);
+}
+
+export function parseColumnsInternal(
+  columns: Array<ColumnNode>,
+  allowMultiTable: boolean = false
+): StandardResult<ParseColumnsResult> {
   try {
     const tableNames: Array<NonEmptyString> = [];
     const sqlParts = columns.map((item) => {
@@ -131,10 +160,13 @@ export function parseColumns(...columns: Array<ColumnNode>): StandardResult<Pars
       const alias = item.as;
       const wrapper = item.functionWrapper;
 
-      let columnPart = getColumnName(item, true);
-      tableNames.push(
-        `${getTableName(tableNode, true)}${tableNode.as === undefined ? "" : ` \`${tableNode.as}\``}` as NonEmptyString
-      );
+      // 在多表/有别名场景下，列名前缀应优先使用表的别名 (如 `p`.`id`)
+      let columnPart = getColumnName(item, false);
+      if (tableNode && tableNode.table) {
+        tableNames.push(
+          `${getTableName(tableNode, true)}${tableNode.as === undefined ? "" : ` AS \`${tableNode.as}\``}` as NonEmptyString
+        );
+      }
 
       if (wrapper !== undefined) {
         columnPart = wrapper.replace("?", columnPart) as NonEmptyString;
@@ -148,7 +180,7 @@ export function parseColumns(...columns: Array<ColumnNode>): StandardResult<Pars
     });
 
     const uniqueTables = [...new Set(tableNames)];
-    if (uniqueTables.length > 1) {
+    if (!allowMultiTable && uniqueTables.length > 1) {
       return returnError("为保证高并发与缓存击穿防护性能，只能进行单表查询");
     }
 
@@ -169,7 +201,11 @@ export function parseWhereGroup(
   try {
     for (let i = 0; i < whereGroup.length; i++) {
       const currentItem = whereGroup[i];
-      if (i % 2 === 0 && currentItem._type !== "whereCompareNode" && currentItem._type !== "whereGroupNode") {
+      if (
+        i % 2 === 0 &&
+        currentItem._type !== "whereCompareNode" &&
+        currentItem._type !== "whereGroupNode"
+      ) {
         return returnError("whereGroup 中的比较运算符(组)位置错误");
       }
       if (i % 2 === 1 && currentItem._type !== "whereLogicalLinkNode") {
@@ -185,37 +221,63 @@ export function parseWhereGroup(
 
       if (isEvenIndex) {
         if (currentItem?._type === "whereGroupNode") {
-          const groupResult = parseWhereGroup(currentItem.children, isHaving, recordNeedInputValues);
+          const groupResult = parseWhereGroup(
+            currentItem.children,
+            isHaving,
+            recordNeedInputValues
+          );
           if (groupResult.status === 0) return groupResult;
           sqlParts.push(`(${groupResult.data})`);
         } else if (currentItem?._type === "whereCompareNode") {
-          if (currentItem.column?._type === "customValue" && !validateSQLFragment(currentItem.column.string).status) {
-            return returnError("whereGroup 中的比较运算符(组)中的自定义值包含危险字符");
+          if (
+            currentItem.column?._type === "customValue" &&
+            !validateSQLFragment(currentItem.column.string).status
+          ) {
+            return returnError(
+              "whereGroup 中的比较运算符(组)中的自定义值包含危险字符"
+            );
           }
-          if (currentItem.compareColumn?._type === "customValue" && !validateSQLFragment(currentItem.compareColumn.string).status) {
-            return returnError("whereGroup 中的比较运算符(组)中的自定义值包含危险字符");
+          if (
+            currentItem.compareColumn?._type === "customValue" &&
+            !validateSQLFragment(currentItem.compareColumn.string).status
+          ) {
+            return returnError(
+              "whereGroup 中的比较运算符(组)中的自定义值包含危险字符"
+            );
           }
           const comparePartLeft = (() => {
             if (currentItem.column === undefined) return "";
-            if (currentItem.column._type === "customValue") return currentItem.column.string;
-            const originName = getColumnName(currentItem.column, true);
+            if (currentItem.column._type === "customValue")
+              return currentItem.column.string;
+            // 优先使用表别名
+            const originName = getColumnName(currentItem.column, false);
             if (isHaving && currentItem.column.functionWrapper !== undefined) {
-              return currentItem.column.functionWrapper.replace("?", originName) as NonEmptyString;
+              return currentItem.column.functionWrapper.replace(
+                "?",
+                originName
+              ) as NonEmptyString;
             }
             return originName;
           })();
           const comparePartRight = (() => {
             if (currentItem.compareColumn === undefined) return "-!!value!!-";
-            if (currentItem.compareColumn._type === "customValue") return currentItem.compareColumn.string;
-            const originName = getColumnName(currentItem.compareColumn, true);
-            if (isHaving && currentItem.compareColumn.functionWrapper !== undefined) {
-              return currentItem.compareColumn.functionWrapper.replace("?", originName) as NonEmptyString;
+            if (currentItem.compareColumn._type === "customValue")
+              return currentItem.compareColumn.string;
+            // 优先使用表别名
+            const originName = getColumnName(currentItem.compareColumn, false);
+            if (
+              isHaving &&
+              currentItem.compareColumn.functionWrapper !== undefined
+            ) {
+              return currentItem.compareColumn.functionWrapper.replace(
+                "?",
+                originName
+              ) as NonEmptyString;
             }
             return originName;
           })();
           const isSetOperator =
-            currentItem.operator === "IN" ||
-            currentItem.operator === "NOT IN";
+            currentItem.operator === "IN" || currentItem.operator === "NOT IN";
           const formattedRight =
             isSetOperator && !comparePartRight.trim().startsWith("(")
               ? `(${comparePartRight})`
@@ -242,7 +304,9 @@ export function parseWhereGroup(
   }
 }
 
-export function parseWhere(...whereConditions: Array<WhereConditionNode>): StandardResult<ParseWhereResult> {
+export function parseWhere(
+  ...whereConditions: Array<WhereConditionNode>
+): StandardResult<ParseWhereResult> {
   try {
     const needInputValues: Array<NeedInputValue> = [];
     const parseResult = parseWhereGroup(whereConditions, false, needInputValues);
@@ -257,11 +321,13 @@ export function parseWhere(...whereConditions: Array<WhereConditionNode>): Stand
   }
 }
 
-export function parseOrderBy(...orderByNodes: Array<OrderByNode>): StandardResult<ParseOrderByResult> {
+export function parseOrderBy(
+  ...orderByNodes: Array<OrderByNode>
+): StandardResult<ParseOrderByResult> {
   try {
     const sqlParts: Array<string> = [];
     for (const item of orderByNodes) {
-      sqlParts.push(`${getColumnName(item.column, true)} ${item.direction}`);
+      sqlParts.push(`${getColumnName(item.column, false)} ${item.direction}`);
     }
     return returnSuccess({
       orderBySQL: sqlParts.join(", "),
@@ -271,7 +337,9 @@ export function parseOrderBy(...orderByNodes: Array<OrderByNode>): StandardResul
   }
 }
 
-export function parseLimit(limitNode: LimitNode): StandardResult<ParseLimitResult> {
+export function parseLimit(
+  limitNode: LimitNode
+): StandardResult<ParseLimitResult> {
   try {
     if (limitNode._limitType === "indexSize") {
       return returnSuccess({

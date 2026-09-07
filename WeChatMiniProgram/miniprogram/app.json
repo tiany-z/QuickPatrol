@@ -1,11 +1,90 @@
 {
   "pages": [
+    "pages/workplace/index",
+    "pages/ai-copilot/index",
     "pages/index/index",
     "pages/logs/logs"
+  ],
+  "subpackages": [
+    {
+      "root": "packages/apps/app-patrol",
+      "pages": [
+        "pages/create/index",
+        "pages/camera/index",
+        "pages/delay-apply/index",
+        "pages/feedback/index",
+        "pages/detail/index",
+        "pages/chat/index"
+      ]
+    },
+    {
+      "root": "packages/apps/app-inspection",
+      "pages": [
+        "pages/scan-point/index"
+      ]
+    },
+    {
+      "root": "packages/apps/app-master-desk",
+      "pages": [
+        "pages/task-pool/index",
+        "pages/handle-submit/index"
+      ]
+    },
+    {
+      "root": "packages/apps/app-chat",
+      "pages": [
+        "pages/chat-room/index",
+        "pages/session-list/index",
+        "pages/group-room/index",
+        "pages/group-detail/index",
+        "pages/app-session-list/index",
+        "pages/app-feed/index"
+      ]
+    },
+    {
+      "root": "packages/apps/app-admin",
+      "pages": [
+        "pages/patrol-review/index"
+      ]
+    },
+    {
+      "root": "packages/apps/app-feedback",
+      "pages": [
+        "pages/create/index",
+        "pages/detail/index"
+      ]
+    },
+    {
+      "root": "packages/apps/app-space",
+      "pages": [
+        "pages/feed-stream/index"
+      ]
+    },
+    {
+      "root": "packages/apps/calendar",
+      "pages": [
+        "pages/calendar-view/index"
+      ]
+    },
+    {
+      "root": "packages/apps/attendance",
+      "pages": [
+        "pages/punch/index"
+      ]
+    },
+    {
+      "root": "packages/apps/dashboard",
+      "pages": [
+        "pages/macro-cockpit/index"
+      ]
+    }
   ],
   "window": {
     "navigationBarTextStyle": "black",
     "navigationStyle": "custom"
+  },
+  "usingComponents": {
+    "qp-navbar": "/components/qp-navbar/qp-navbar"
   },
   "style": "v2",
   "rendererOptions": {

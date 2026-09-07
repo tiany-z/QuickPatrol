@@ -1,0 +1,149 @@
+.qp-navbar-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+.qp-navbar--translucent {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1rpx solid rgba(226, 232, 240, 0.8);
+}
+
+.qp-navbar--solid {
+  background: #FFFFFF;
+  border-bottom: 1rpx solid #E2E8F0;
+}
+
+.qp-navbar--transparent {
+  background: transparent;
+  border-bottom: none;
+}
+
+/* 深色主题 (Dark Mode) */
+.qp-navbar--dark.qp-navbar--translucent {
+  background: rgba(10, 15, 29, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.08);
+}
+
+.qp-navbar--dark.qp-navbar--solid {
+  background: #0A0F1D;
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.1);
+}
+
+.qp-navbar-content {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0 24rpx;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* 左侧操作区 */
+.qp-navbar-left {
+  display: flex;
+  align-items: center;
+  z-index: 10;
+  min-width: 68rpx;
+}
+
+.qp-navbar-back-btn {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.08);
+  border: 1rpx solid rgba(226, 232, 240, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.qp-navbar--dark .qp-navbar-back-btn {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1rpx solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.3);
+}
+
+.qp-navbar-back-btn:active {
+  transform: scale(0.92);
+}
+
+.qp-back-arrow {
+  font-size: 48rpx;
+  font-weight: 300;
+  color: #0F172A;
+  line-height: 1;
+  margin-top: -6rpx;
+}
+
+.qp-navbar--dark .qp-back-arrow {
+  color: #FFFFFF;
+}
+
+.qp-navbar-avatar-box {
+  width: 68rpx;
+  height: 68rpx;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qp-navbar-avatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  border: 3rpx solid #0066FF;
+}
+
+.qp-navbar-avatar-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 12rpx rgba(0, 102, 255, 0.35);
+}
+
+/* 居中标题 */
+.qp-navbar-title {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.qp-title-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #0F172A;
+  letter-spacing: -0.2rpx;
+}
+
+.qp-navbar--dark .qp-title-text {
+  color: #FFFFFF;
+}
+
+.qp-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.qp-navbar-right {
+  display: flex;
+  align-items: center;
+  z-index: 10;
+}

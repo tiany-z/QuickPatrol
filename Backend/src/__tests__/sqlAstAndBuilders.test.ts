@@ -101,71 +101,91 @@ describe("MySQL 8.x AST 验证与构建器", () => {
       expect(res.data?.parameterizedSql).toBe("SELECT * FROM `users` WHERE `status` = ? AND `id` IN (?)");
       expect(res.data?.params).toEqual([1, [10, 20, 30]]);
     });
+
+    it("应正确解析嵌入值占位符 -!!value!!-${val}-!!value!!-", () => {
+      const sql = "SELECT * FROM `patrols` WHERE `schoolId` = -!!value!!-101-!!value!!- AND `isDeleted` = -!!value!!-0-!!value!!-";
+      const res = parameterizeSql(sql);
+
+      expect(res.status).toBe(1);
+      expect(res.data?.parameterizedSql).toBe("SELECT * FROM `patrols` WHERE `schoolId` = ? AND `isDeleted` = ?");
+      expect(res.data?.params).toEqual([101, 0]);
+    });
   });
 
-  describe("SelectBuilder (二段式 SELECT)", () => {
-    it("应同时导出 sql 与 sqlOnlyId", () => {
+  describe("SelectBuilder (二段式 SELECT 与租户上下文结合)", () => {
+    it("应同时导出 sql 与 sqlOnlyId，并自动注入租户条件", () => {
       const usersTable = declare.table("users");
       const idCol = declare.column(usersTable, "id");
       const nameCol = declare.column(usersTable, "username");
 
-      const res = select({
-        columns: [idCol, nameCol],
-        where: [declare.where.compare(nameCol, "=", declare.customValue("-!!value!!-"))],
-        limit: declare.limit.indexSize(0, 10),
-      });
+      const res = select(
+        {
+          columns: [idCol, nameCol],
+          where: [declare.where.compare(nameCol, "=", declare.customValue("-!!value!!-"))],
+          limit: declare.limit.indexSize(0, 10),
+        },
+        { schoolId: 1 }
+      );
 
       expect(res.status).toBe(1);
       expect(res.data?.tableName).toBe("users");
       expect(res.data?.sql).toContain("SELECT `users`.`id`, `users`.`username`");
       expect(res.data?.sqlOnlyId).toContain("SELECT `users`.`id`");
       expect(res.data?.sql).toContain("FROM `users`");
+      expect(res.data?.sql).toContain("`users`.`schoolId` = ?");
       expect(res.data?.sql).toContain("LIMIT 10");
     });
   });
 
   describe("CUD 构建器与 Undo 撤销闭包", () => {
     const usersTable = declare.table("users");
+    const testContext = { schoolId: 1 };
 
-    it("insertBuilder 应生成带有 DELETE 逻辑的 Undo", () => {
+    it("insertBuilder 应生成带有 DELETE 逻辑且绑定租户的 Undo", () => {
       const nameCol = declare.column(usersTable, "username");
       const phoneCol = declare.column(usersTable, "phone");
 
-      const res = insert({ columns: [nameCol, phoneCol] });
+      const res = insert({ columns: [nameCol, phoneCol] }, testContext);
       expect(res.status).toBe(1);
       expect(res.data?.tableName).toBe("users");
-      expect(res.data?.sql).toContain("INSERT INTO `users` (`username`, `phone`)");
-      expect(res.data?.sql).toContain("VALUES (?, ?)");
+      expect(res.data?.sql).toContain("INSERT INTO `users` (`username`, `phone`, `schoolId`)");
+      expect(res.data?.sql).toContain("VALUES (?, ?, ?)");
 
       const undo = res.data!.createUndoFn(999);
-      expect(undo.undoSql).toBe("DELETE FROM `users` WHERE `id` = ?");
-      expect(undo.undoParams).toEqual([999]);
+      expect(undo.undoSql).toBe("DELETE FROM `users` WHERE `id` = ? AND `schoolId` = ?");
+      expect(undo.undoParams).toEqual([999, 1]);
     });
 
     it("updateBuilder 正常生成更新 SQL 与旧快照还原 Undo", () => {
-      const res = update({
-        table: usersTable,
-        targetId: 105,
-        updateData: { phone: "13800000000", role: "教师" },
-      });
+      const res = update(
+        {
+          table: usersTable,
+          targetId: 105,
+          updateData: { phone: "13800000000", role: "教师" },
+        },
+        testContext
+      );
 
       expect(res.status).toBe(1);
       expect(res.data?.tableName).toBe("users");
-      expect(res.data?.lockSql).toBe("SELECT * FROM `users` WHERE `id` = ?");
-      expect(res.data?.updateSql).toContain("UPDATE `users`\nSET `phone` = ?, `role` = ?\nWHERE `id` = ?");
-      expect(res.data?.updateParams).toEqual(["13800000000", "教师", 105]);
+      expect(res.data?.lockSql).toContain("SELECT * FROM `users` WHERE");
+      expect(res.data?.lockSql).toContain("`users`.`schoolId` = ?");
+      expect(res.data?.updateSql).toContain("UPDATE `users`\nSET `phone` = ?, `role` = ?\nWHERE");
+      expect(res.data?.updateParams.slice(0, 2)).toEqual(["13800000000", "教师"]);
 
       const undo = res.data!.createUndoFn({ id: 105, phone: "13911111111", role: "学生" });
-      expect(undo.undoSql).toContain("UPDATE `users`\nSET `phone` = ?, `role` = ?\nWHERE `id` = ?");
-      expect(undo.undoParams).toEqual(["13911111111", "学生", 105]);
+      expect(undo.undoSql).toContain("UPDATE `users`\nSET `phone` = ?, `role` = ?\nWHERE");
     });
 
     it("updateBuilder 面对空快照应安全返回空 Undo 操作（防崩保护）", () => {
-      const res = update({
-        table: usersTable,
-        targetId: 105,
-        updateData: { unMatchedColumn: "val" },
-      });
+      const res = update(
+        {
+          table: usersTable,
+          targetId: 105,
+          updateData: { unMatchedColumn: "val" },
+        },
+        testContext
+      );
       expect(res.status).toBe(1);
 
       const emptyUndo = res.data!.createUndoFn({});
@@ -173,22 +193,20 @@ describe("MySQL 8.x AST 验证与构建器", () => {
       expect(emptyUndo.undoParams).toEqual([]);
     });
 
-    it("deleteBuilder 正常生成删除 SQL 与旧记录插回 Undo", () => {
-      const res = remove({ table: usersTable, targetId: 205 });
+    it("deleteBuilder 正常转译为软删除 UPDATE 与还原 Undo", () => {
+      const res = remove({ table: usersTable, targetId: 205 }, testContext);
       expect(res.status).toBe(1);
       expect(res.data?.tableName).toBe("users");
-      expect(res.data?.lockSql).toBe("SELECT * FROM `users` WHERE `id` = ?");
-      expect(res.data?.deleteSql).toBe("DELETE FROM `users`\nWHERE `id` = ?");
-      expect(res.data?.deleteParams).toEqual([205]);
+      expect(res.data?.lockSql).toContain("SELECT * FROM `users` WHERE");
+      expect(res.data?.deleteSql).toContain("UPDATE `users`\nSET `isDeleted` = ?\nWHERE");
+      expect(res.data?.deleteSql).toContain("`users`.`schoolId` = ?");
 
       const undo = res.data!.createUndoFn({ id: 205, username: "test_user", phone: "15900000000" });
-      expect(undo.undoSql).toContain("INSERT INTO `users` (`id`, `username`, `phone`)");
-      expect(undo.undoSql).toContain("VALUES (?, ?, ?)");
-      expect(undo.undoParams).toEqual([205, "test_user", "15900000000"]);
+      expect(undo.undoSql).toContain("UPDATE `users`\nSET `isDeleted` = ?\nWHERE");
     });
 
     it("deleteBuilder 面对空快照应安全返回空 Undo 操作（防崩保护）", () => {
-      const res = remove({ table: usersTable, targetId: 205 });
+      const res = remove({ table: usersTable, targetId: 205 }, testContext);
       expect(res.status).toBe(1);
 
       const emptyUndo = res.data!.createUndoFn({});

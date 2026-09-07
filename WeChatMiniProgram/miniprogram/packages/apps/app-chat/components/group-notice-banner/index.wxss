@@ -1,0 +1,50 @@
+.group-notice-banner {
+  width: 100vw;
+  background-color: #FFFBE6;
+  border-bottom: 1rpx solid #FFE58F;
+  padding: 14rpx 24rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  box-shadow: 0 2rpx 6rpx rgba(212, 107, 8, 0.08);
+}
+
+.banner-left-icon {
+  font-size: 26rpx;
+  margin-right: 12rpx;
+  line-height: 36rpx;
+}
+
+.banner-text-content {
+  flex: 1;
+  font-size: 24rpx;
+  color: #D46B08;
+  line-height: 36rpx;
+}
+
+.banner-text-content.collapsed {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.banner-text-content.expanded {
+  white-space: normal;
+  word-break: break-all;
+}
+
+.notice-prefix {
+  font-weight: 700;
+  margin-right: 4rpx;
+}
+
+.banner-close {
+  padding: 0 12rpx;
+  font-size: 24rpx;
+  color: #8C8C8C;
+  line-height: 36rpx;
+}

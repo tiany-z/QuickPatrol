@@ -1,0 +1,22 @@
+<view class="app-session-container">
+  <qp-navbar title="微应用服务号通知" showBack="{{true}}" />
+  <!-- 头部汇总指示 -->
+  <view class="header-banner" wx:if="{{totalUnread > 0}}">
+    <text class="banner-icon">🔔</text>
+    <text class="banner-text">您有 {{totalUnread}} 条未读微应用通知待处理</text>
+  </view>
+
+  <!-- 会话列表 -->
+  <view class="session-list" wx:if="{{sessions.length > 0}}">
+    <block wx:for="{{sessions}}" wx:key="appCode">
+      <app-session-item session="{{item}}" bind:tapSession="onTapAppSession" />
+    </block>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:elif="{{!isLoading}}">
+    <image class="empty-icon" src="/assets/icons/empty_notifications.png" mode="aspectFit" />
+    <text class="empty-title">暂无服务号通知</text>
+    <text class="empty-desc">微应用的工单、诉求与日常动态将汇聚在此</text>
+  </view>
+</view>

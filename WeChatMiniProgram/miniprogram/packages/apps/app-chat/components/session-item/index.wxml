@@ -1,0 +1,44 @@
+<!-- M40: 会话大盘条目组件 (带左滑置顶手势) -->
+<movable-area class="session-item-movable-area">
+  <movable-view 
+    class="session-item-movable-view {{session.isPinned ? 'session-pinned-bg' : ''}}" 
+    direction="horizontal" 
+    x="{{offsetX}}" 
+    damping="40" 
+    friction="2"
+    bindchange="onChange"
+  >
+    <!-- 左侧主条目内容 -->
+    <view class="session-main-content" bindtap="onTapItem">
+      <!-- 置顶三角标 -->
+      <view class="pinned-triangle" wx:if="{{session.isPinned}}"></view>
+
+      <!-- 头像与未读红点角标 -->
+      <view class="avatar-wrapper">
+        <image class="peer-avatar" src="{{session.targetPeerAvatar || '/assets/avatar_default.png'}}" mode="aspectFill" />
+        <view class="unread-badge" wx:if="{{session.unreadCount > 0}}">
+          {{session.unreadCount > 99 ? '99+' : session.unreadCount}}
+        </view>
+      </view>
+
+      <!-- 中间信息流 -->
+      <view class="info-wrapper">
+        <view class="first-row">
+          <text class="peer-name">{{session.targetPeerName}}</text>
+          <text class="role-tag {{session.targetPeerRoleTag === '主责师傅' ? 'role-tag-master' : 'role-tag-user'}}">{{session.targetPeerRoleTag}}</text>
+          <text class="time-text">{{session.formattedTimeText}}</text>
+        </view>
+        <view class="second-row">
+          <text class="location-pill">{{session.locationName}}</text>
+          <text class="last-msg-text">{{session.lastMessage}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 右侧左滑抽屉操作按钮 (算法 4) -->
+    <view class="drawer-action-btn pin-btn" catchtap="onTapPinAction">
+      <text class="pin-icon">{{session.isPinned ? '📌' : '⭐'}}</text>
+      <text class="pin-label">{{session.isPinned ? '取消置顶' : '置顶'}}</text>
+    </view>
+  </movable-view>
+</movable-area>

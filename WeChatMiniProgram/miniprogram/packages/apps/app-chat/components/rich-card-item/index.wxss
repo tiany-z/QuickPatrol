@@ -1,0 +1,216 @@
+.rich-card-box {
+  background-color: #FFFFFF;
+  border-radius: 20rpx;
+  margin: 24rpx 28rpx;
+  padding: 28rpx 32rpx;
+  box-sizing: border-box;
+  box-shadow: 0 4rpx 16rpx rgba(31, 35, 41, 0.05);
+  border: 1rpx solid #E4E7ED;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.unread-glow {
+  border-left: 8rpx solid #1890FF;
+}
+
+/* Layer 1: Header */
+.card-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.badge-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1F2329;
+  margin-right: 14rpx;
+}
+
+.status-pill {
+  font-size: 20rpx;
+  font-weight: 600;
+  padding: 4rpx 14rpx;
+  border-radius: 8rpx;
+  margin-right: auto;
+}
+
+.status-volcano {
+  color: #FA541C;
+  background-color: #FFF2E8;
+}
+
+.status-blue {
+  color: #1890FF;
+  background-color: #E6F7FF;
+}
+
+.status-orange {
+  color: #FA8C16;
+  background-color: #FFF7E6;
+}
+
+.status-green {
+  color: #52C41A;
+  background-color: #F6FFED;
+}
+
+.status-gray {
+  color: #8C8C8C;
+  background-color: #F5F5F5;
+}
+
+.card-time {
+  font-size: 22rpx;
+  color: #8F959E;
+}
+
+/* Layer 2: Body */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20rpx;
+}
+
+.field-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-bottom: 10rpx;
+  line-height: 38rpx;
+}
+
+.field-label {
+  font-size: 26rpx;
+  color: #8F959E;
+  width: 140rpx;
+  flex-shrink: 0;
+}
+
+.field-value {
+  font-size: 26rpx;
+  color: #1F2329;
+  font-weight: 500;
+  flex: 1;
+  word-break: break-all;
+}
+
+.text-highlight {
+  color: #FA541C;
+  font-weight: 700;
+}
+
+.sla-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 6rpx;
+  padding-top: 10rpx;
+  border-top: 1rpx dashed #EBEEF5;
+}
+
+.sla-label {
+  font-size: 24rpx;
+  color: #8F959E;
+  width: 140rpx;
+  flex-shrink: 0;
+}
+
+.sla-flash-red {
+  font-size: 24rpx;
+  color: #F5222D;
+  font-weight: 700;
+}
+
+.sla-normal {
+  font-size: 24rpx;
+  color: #52C41A;
+  font-weight: 600;
+}
+
+/* Layer 3: Media */
+.card-media {
+  margin-bottom: 24rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.media-thumb {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+  border: 1rpx solid #E4E7ED;
+  background-color: #F6F8FB;
+}
+
+.media-hint {
+  font-size: 20rpx;
+  color: #8F959E;
+  margin-top: 6rpx;
+}
+
+/* Layer 4: Action Footer */
+.card-footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16rpx;
+  border-top: 1rpx solid #F0F2F5;
+  padding-top: 20rpx;
+}
+
+.card-btn {
+  margin: 0;
+  padding: 0 28rpx;
+  height: 64rpx;
+  line-height: 64rpx;
+  font-size: 26rpx;
+  border-radius: 32rpx;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background-color: #1890FF !important;
+  color: #FFFFFF !important;
+}
+
+.btn-default {
+  background-color: #F2F3F5 !important;
+  color: #1F2329 !important;
+}
+
+.btn-warn {
+  background-color: #FFF1F0 !important;
+  color: #F5222D !important;
+}
+
+.btn-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* M45: 卡片原地突变呼吸与高光动效 (算法 3) */
+@keyframes card-morph-pulse {
+  0% {
+    transform: scale(1.0);
+    box-shadow: 0 4rpx 16rpx rgba(31, 35, 41, 0.05);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 8rpx 32rpx rgba(24, 144, 255, 0.25);
+    border-color: #1890FF;
+  }
+  100% {
+    transform: scale(1.0);
+    box-shadow: 0 4rpx 16rpx rgba(31, 35, 41, 0.05);
+  }
+}
+
+.card-mutating-active {
+  animation: card-morph-pulse 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+

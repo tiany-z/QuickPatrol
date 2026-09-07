@@ -1,0 +1,366 @@
+/* M21: 隐患巡查提报页面高级视觉样式 */
+
+.patrol-create-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #F0F4F8 0%, #F8FAFC 100%);
+  padding: 24rpx 28rpx 180rpx 28rpx;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* 1. M20 扫码溯源勋章横幅 */
+.scan-provenance-banner {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #0078D4 0%, #005A9E 100%);
+  color: #FFFFFF;
+  padding: 24rpx 28rpx;
+  border-radius: 20rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 120, 212, 0.25);
+}
+
+.banner-icon {
+  font-size: 40rpx;
+  margin-right: 20rpx;
+}
+
+.banner-content {
+  flex: 1;
+}
+
+.banner-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.banner-desc {
+  font-size: 22rpx;
+  opacity: 0.85;
+  margin-top: 4rpx;
+}
+
+.banner-badge {
+  background: rgba(255, 255, 255, 0.25);
+  padding: 6rpx 16rpx;
+  border-radius: 30rpx;
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+/* 2. 通用卡片容器 */
+.form-card {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 28rpx 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid rgba(0, 0, 0, 0.03);
+}
+
+.card-title-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid #F1F5F9;
+}
+
+.card-section-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1E293B;
+}
+
+.required-tag {
+  font-size: 22rpx;
+  color: #EF4444;
+  margin-left: 12rpx;
+  font-weight: 600;
+}
+
+/* 3. 表单行 */
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #F1F5F9;
+}
+
+.form-row.no-border {
+  border-bottom: none;
+  padding-bottom: 8rpx;
+}
+
+.row-label {
+  font-size: 28rpx;
+  color: #475569;
+  font-weight: 600;
+  min-width: 150rpx;
+}
+
+.picker-value {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: #0F172A;
+  font-weight: 500;
+}
+
+.picker-value.disabled {
+  color: #94A3B8;
+}
+
+.arrow-icon {
+  color: #94A3B8;
+  font-size: 36rpx;
+  margin-left: 12rpx;
+}
+
+.row-input {
+  flex: 1;
+  text-align: right;
+  font-size: 28rpx;
+  color: #0F172A;
+}
+
+/* 地图选点组件外壳 */
+.location-input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.location-input-wrap .row-input {
+  text-align: left;
+  margin-right: 16rpx;
+}
+
+.map-snapping-btn {
+  display: flex;
+  align-items: center;
+  background: #EFF6FF;
+  border: 1rpx solid #BFDBFE;
+  padding: 10rpx 18rpx;
+  border-radius: 30rpx;
+  color: #0078D4;
+  font-size: 24rpx;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.map-icon {
+  font-size: 26rpx;
+  margin-right: 6rpx;
+}
+
+/* 文本域 */
+.textarea-wrap {
+  position: relative;
+  background: #F8FAFC;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin-top: 16rpx;
+  border: 1rpx solid #E2E8F0;
+}
+
+.form-textarea {
+  width: 100%;
+  height: 180rpx;
+  font-size: 28rpx;
+  color: #0F172A;
+  line-height: 1.5;
+}
+
+.char-counter {
+  text-align: right;
+  font-size: 22rpx;
+  color: #94A3B8;
+  margin-top: 8rpx;
+}
+
+/* 4. 九宫格图片区 */
+.media-section {
+  margin-top: 28rpx;
+}
+
+.media-title-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.media-label {
+  font-size: 28rpx;
+  color: #475569;
+  font-weight: 600;
+}
+
+.media-counter {
+  font-size: 24rpx;
+  color: #94A3B8;
+  margin-left: 12rpx;
+}
+
+.photos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.photo-item {
+  position: relative;
+  width: 196rpx;
+  height: 196rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.08);
+}
+
+.photo-img {
+  width: 100%;
+  height: 100%;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  background: rgba(0, 0, 0, 0.65);
+  color: #FFFFFF;
+  width: 38rpx;
+  height: 38rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  backdrop-filter: blur(4rpx);
+}
+
+.upload-slot {
+  width: 196rpx;
+  height: 196rpx;
+  border: 2rpx dashed #CBD5E1;
+  border-radius: 16rpx;
+  background: #F8FAFC;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.camera-icon {
+  font-size: 48rpx;
+  margin-bottom: 8rpx;
+}
+
+.upload-tip {
+  font-size: 22rpx;
+  color: #64748B;
+  font-weight: 500;
+}
+
+/* 5. 优先级胶囊组 */
+.priority-chips {
+  display: flex;
+  gap: 16rpx;
+}
+
+.chip {
+  padding: 10rpx 28rpx;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #64748B;
+  background: #F1F5F9;
+  border: 1rpx solid transparent;
+  transition: all 0.2s ease;
+}
+
+.chip.active-0 {
+  background: #ECFDF5;
+  color: #059669;
+  border-color: #A7F3D0;
+}
+
+.chip.active-1 {
+  background: #EFF6FF;
+  color: #0078D4;
+  border-color: #BFDBFE;
+}
+
+.chip.active-2 {
+  background: #FEF2F2;
+  color: #DC2626;
+  border-color: #FECACA;
+}
+
+/* 开关描述 */
+.switch-text-col {
+  display: flex;
+  flex-direction: column;
+  padding-right: 20rpx;
+}
+
+.switch-sub {
+  font-size: 22rpx;
+  color: #94A3B8;
+  margin-top: 6rpx;
+  line-height: 1.4;
+}
+
+/* 6. 底部悬浮提交栏 */
+.bottom-submit-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  padding: 20rpx 36rpx calc(24rpx + env(safe-area-inset-bottom)) 36rpx;
+  box-shadow: 0 -8rpx 32rpx rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 100;
+}
+
+.draft-status-tip {
+  display: flex;
+  align-items: center;
+  font-size: 22rpx;
+  color: #10B981;
+  margin-bottom: 16rpx;
+  font-weight: 500;
+}
+
+.tip-dot {
+  font-size: 16rpx;
+  margin-right: 8rpx;
+}
+
+.submit-action-btn {
+  width: 100% !important;
+  height: 88rpx;
+  line-height: 88rpx;
+  background: linear-gradient(135deg, #0078D4 0%, #005A9E 100%);
+  color: #FFFFFF;
+  font-size: 32rpx;
+  font-weight: 700;
+  border-radius: 44rpx;
+  box-shadow: 0 8rpx 20rpx rgba(0, 120, 212, 0.35);
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.submit-action-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 4rpx 10rpx rgba(0, 120, 212, 0.2);
+}
+
+.submit-action-btn.submitting {
+  opacity: 0.75;
+}

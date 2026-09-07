@@ -1,0 +1,99 @@
+.app-session-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 24rpx 28rpx;
+  background-color: #FFFFFF;
+  border-bottom: 1rpx solid #F0F2F5;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease;
+}
+
+.app-session-card-hover {
+  background-color: #F7F9FC;
+}
+
+.icon-wrapper {
+  position: relative;
+  width: 96rpx;
+  height: 96rpx;
+  margin-right: 22rpx;
+  flex-shrink: 0;
+}
+
+.app-icon {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 20rpx;
+  background-color: #F0F4F8;
+}
+
+.badge {
+  position: absolute;
+  top: -8rpx;
+  right: -10rpx;
+  background-color: #F5222D;
+  color: #FFFFFF;
+  font-size: 20rpx;
+  font-weight: 700;
+  padding: 2rpx 10rpx;
+  border-radius: 20rpx;
+  border: 2rpx solid #FFFFFF;
+  line-height: 24rpx;
+}
+
+.info-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.top-line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.app-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1F2329;
+  margin-right: 12rpx;
+}
+
+.official-tag {
+  font-size: 18rpx;
+  color: #1890FF;
+  background-color: rgba(24, 144, 255, 0.12);
+  padding: 2rpx 10rpx;
+  border-radius: 4rpx;
+  font-weight: 600;
+  margin-right: auto;
+}
+
+.time-text {
+  font-size: 22rpx;
+  color: #8F959E;
+  margin-left: 16rpx;
+  flex-shrink: 0;
+}
+
+.summary-line {
+  font-size: 24rpx;
+  color: #646A73;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 34rpx;
+}
+
+.title-prefix {
+  color: #1F2329;
+  font-weight: 500;
+}
+
+.snippet {
+  color: #646A73;
+}

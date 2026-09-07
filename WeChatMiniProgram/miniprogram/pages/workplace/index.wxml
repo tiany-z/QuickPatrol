@@ -1,0 +1,183 @@
+<!-- 高校后勤巡查e速办 v4.0 - M50 飞书工作台微应用矩阵大盘 -->
+<view class="workplace-container">
+  <!-- 顶部高校租户态与沉浸式导航条（自适应状态栏与微信胶囊避让） -->
+  <view 
+    class="school-header-bar fixed-nav" 
+    style="height: {{headerTotalHeight}}px; padding-top: {{statusBarHeight}}px; padding-right: {{capsulePaddingRight}}px;"
+  >
+    <view class="school-header-content" style="height: {{navBarHeight}}px;">
+      <view class="school-brand">
+        <text class="school-badge-icon">🏛️</text>
+        <text class="school-name-text">{{schoolName}}</text>
+      </view>
+      <view class="identity-tag {{isGuest ? 'guest-tag' : 'auth-tag'}}">
+        <text class="tag-dot"></text>
+        <text>{{isGuest ? '访客免密态' : '全功能已授权'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 顶部占位插槽，确保大卡片内容严格在沉浸式导航栏下方 -->
+  <view style="height: {{headerTotalHeight}}px; width: 100%; pointer-events: none; margin-bottom: 12rpx;"></view>
+
+  <!-- 顶部 AI Copilot 战略大卡片 -->
+  <view wx:if="{{aiCopilotBanner.enabled}}" class="ai-copilot-banner-card" bindtap="handleCopilotBannerTap">
+    <view class="copilot-banner-glow"></view>
+    <view class="copilot-header-row">
+      <view class="copilot-title-group">
+        <text class="copilot-avatar">✨</text>
+        <view class="copilot-text-wrap">
+          <text class="copilot-title">AI 智能后勤 Copilot</text>
+          <text class="copilot-greeting">{{aiCopilotBanner.greeting}}</text>
+        </view>
+      </view>
+      <view class="copilot-arrow-btn">
+        <text class="arrow-text">问问 AI →</text>
+      </view>
+    </view>
+
+    <!-- 伪搜索输入栏 -->
+    <view class="copilot-search-box">
+      <text class="search-icon">🔍</text>
+      <text class="placeholder-text">{{aiCopilotBanner.placeholder}}</text>
+      <text class="sparkle-badge">流式响应</text>
+    </view>
+
+    <!-- 快捷提问气泡滑块 -->
+    <scroll-view class="quick-prompts-scroll" scroll-x enable-flex enhanced show-scrollbar="{{false}}">
+      <view class="prompts-list">
+        <view 
+          wx:for="{{aiCopilotBanner.quickPrompts}}" 
+          wx:key="index" 
+          class="prompt-pill"
+          catchtap="handleQuickPromptTap"
+          data-prompt="{{item}}"
+          hover-class="prompt-hover"
+        >
+          <text class="prompt-icon">💡</text>
+          <text class="prompt-text">{{item}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 应用搜索栏 -->
+  <view class="app-search-bar">
+    <view class="search-input-box">
+      <text class="search-lens">🔎</text>
+      <input 
+        class="search-input" 
+        placeholder="搜索微应用（如：报修、巡检、工单）" 
+        value="{{searchKeyword}}" 
+        bindinput="handleSearchInput"
+      />
+      <text wx:if="{{searchKeyword}}" class="clear-lens" bindtap="handleClearSearch">✕</text>
+    </view>
+  </view>
+
+  <!-- 置顶 / 个人常用微应用区 -->
+  <view wx:if="{{!searchKeyword && (pinnedApps.length > 0 || pinManageMode)}}" class="section-card pinned-section">
+    <view class="section-header">
+      <view class="section-title-wrap">
+        <text class="section-icon">⭐</text>
+        <text class="section-title">我的常用微应用</text>
+        <text class="section-count-badge">{{pinnedApps.length}}</text>
+      </view>
+      <view class="section-action-btn {{pinManageMode ? 'active' : ''}}" bindtap="togglePinManageMode">
+        <text>{{pinManageMode ? '完成编辑' : '自定义置顶'}}</text>
+      </view>
+    </view>
+
+    <view wx:if="{{pinnedApps.length === 0}}" class="empty-pinned-hint">
+      <text>点击下方微应用卡片右上角的「+」即可添加至个人置顶</text>
+    </view>
+    <view wx:else class="apps-grid-layout">
+      <block wx:for="{{pinnedApps}}" wx:key="appCode">
+        <app-card-item 
+          app="{{item}}" 
+          pin-manage-mode="{{pinManageMode}}" 
+          bind:togglePin="handleTogglePin"
+        />
+      </block>
+    </view>
+  </view>
+
+  <!-- 四象限微应用分类过滤器 -->
+  <view class="category-tabs-bar">
+    <view 
+      class="tab-item {{activeCategory === 'all' ? 'active' : ''}}" 
+      bindtap="handleCategorySelect" 
+      data-category="all"
+    >
+      全部应用
+    </view>
+    <view 
+      class="tab-item {{activeCategory === 'emergency' ? 'active' : ''}}" 
+      bindtap="handleCategorySelect" 
+      data-category="emergency"
+    >
+      🔴 应急调度
+    </view>
+    <view 
+      class="tab-item {{activeCategory === 'service' ? 'active' : ''}}" 
+      bindtap="handleCategorySelect" 
+      data-category="service"
+    >
+      🟡 师生服务
+    </view>
+    <view 
+      class="tab-item {{activeCategory === 'daily' ? 'active' : ''}}" 
+      bindtap="handleCategorySelect" 
+      data-category="daily"
+    >
+      🔵 日常运维
+    </view>
+    <view 
+      class="tab-item {{activeCategory === 'management' ? 'active' : ''}}" 
+      bindtap="handleCategorySelect" 
+      data-category="management"
+    >
+      🟣 督导治理
+    </view>
+  </view>
+
+  <!-- 动态微应用矩阵象限群组列表 -->
+  <view class="quadrant-groups-container">
+    <block wx:for="{{filteredGroups}}" wx:key="categoryKey">
+      <view wx:if="{{item.apps && item.apps.length > 0}}" class="section-card quadrant-section category-{{item.categoryKey}}">
+        <view class="section-header">
+          <view class="section-title-wrap">
+            <text class="section-icon">{{item.icon}}</text>
+            <view class="title-sub-column">
+              <text class="section-title">{{item.categoryTitle}}</text>
+              <text class="section-subtitle">{{item.subtitle}}</text>
+            </view>
+          </view>
+          <text class="section-count-tag">{{item.apps.length}} 个服务</text>
+        </view>
+
+        <view class="apps-grid-layout">
+          <block wx:for="{{item.apps}}" wx:key="appCode" wx:for-item="appItem">
+            <app-card-item 
+              wx:if="{{appItem.accessStatus !== 'HIDDEN'}}"
+              app="{{appItem}}" 
+              pin-manage-mode="{{pinManageMode}}" 
+              bind:togglePin="handleTogglePin"
+            />
+          </block>
+        </view>
+      </view>
+    </block>
+
+    <!-- 搜索无果缺省态 -->
+    <view wx:if="{{filteredGroups.length === 0 || (filteredGroups.length === 1 && filteredGroups[0].apps.length === 0)}}" class="empty-search-state">
+      <text class="empty-icon">📂</text>
+      <text class="empty-text">未检索到匹配「{{searchKeyword}}」的微应用</text>
+    </view>
+  </view>
+
+  <!-- 底部安全间距与技术版权 -->
+  <view class="workplace-footer">
+    <text class="footer-text">高校后勤巡查e速办 v4.0 · 飞书微应用矩阵</text>
+  </view>
+</view>

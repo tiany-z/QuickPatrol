@@ -1,0 +1,18 @@
+<!-- 高校后勤巡查e速办 v4.0 - M51 值班师傅名牌微组件 -->
+<view wx:if="{{staffData && staffData.name}}" class="shift-card-box">
+  <view class="staff-info-wrap">
+    <view class="staff-avatar">👨‍🔧</view>
+    <view class="staff-meta">
+      <view class="name-line">
+        <text class="staff-name">{{staffData.name}}</text>
+        <text class="dept-badge">{{staffData.departmentName || '后勤值班组'}}</text>
+      </view>
+      <text class="shift-time">{{staffData.shiftTimeText}}</text>
+      <text class="location-text">📍 {{staffData.location || '总控值班室'}}</text>
+    </view>
+  </view>
+  <button class="btn-call" bindtap="handleCall" hover-class="btn-call-hover">
+    <text class="call-icon">📞</text>
+    <text class="call-text">一键呼叫</text>
+  </button>
+</view>

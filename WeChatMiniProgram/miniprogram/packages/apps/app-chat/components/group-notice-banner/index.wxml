@@ -1,0 +1,8 @@
+<view class="group-notice-banner" wx:if="{{notice.visible && notice.content}}">
+  <view class="banner-left-icon">📢</view>
+  <view class="banner-text-content {{isExpanded ? 'expanded' : 'collapsed'}}" bindtap="onTapToggleExpand">
+    <text class="notice-prefix">[置顶公告] </text>
+    <text class="notice-body">{{notice.content}}</text>
+  </view>
+  <view class="banner-close" bindtap="onTapClose" catchtap="onTapClose">✕</view>
+</view>

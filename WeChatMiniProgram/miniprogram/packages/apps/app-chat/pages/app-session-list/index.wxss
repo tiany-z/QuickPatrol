@@ -1,0 +1,56 @@
+.app-session-container {
+  min-height: 100vh;
+  background-color: #F7F8FA;
+  box-sizing: border-box;
+}
+
+.header-banner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 18rpx 28rpx;
+  background-color: #FFF7E6;
+  border-bottom: 1rpx solid #FFE7BA;
+}
+
+.banner-icon {
+  font-size: 28rpx;
+  margin-right: 12rpx;
+}
+
+.banner-text {
+  font-size: 24rpx;
+  color: #D46B08;
+  font-weight: 500;
+}
+
+.session-list {
+  background-color: #FFFFFF;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 240rpx;
+}
+
+.empty-icon {
+  width: 180rpx;
+  height: 180rpx;
+  margin-bottom: 24rpx;
+  opacity: 0.6;
+}
+
+.empty-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #646A73;
+  margin-bottom: 12rpx;
+}
+
+.empty-desc {
+  font-size: 24rpx;
+  color: #8F959E;
+}

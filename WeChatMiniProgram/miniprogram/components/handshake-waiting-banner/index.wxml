@@ -1,0 +1,37 @@
+<view class="handshake-banner-root">
+  <!-- 师傅端: 一键主动握手激活药丸操作栏 -->
+  <block wx:if="{{showHandshakeBtn}}">
+    <view class="handler-action-card">
+      <view class="card-left">
+        <view class="radar-dot"></view>
+        <view class="action-info">
+          <text class="action-title">工单协同通道待开启</text>
+          <text class="action-sub">点击下方按钮主动激活与师生的即时沟通</text>
+        </view>
+      </view>
+      <button class="handshake-btn" bindtap="onHandshakeTap" hover-class="handshake-btn-hover">
+        <text class="btn-icon">⚡</text>
+        <text>主动联络师生</text>
+      </button>
+    </view>
+  </block>
+
+  <!-- 师生端: 静默防骚扰与等待提示卡片 -->
+  <block wx:elif="{{isWaiting}}">
+    <view class="waiting-card">
+      <view class="waiting-header">
+        <view class="hourglass-box">
+          <text class="hourglass-icon">⏳</text>
+          <view class="pulse-ring"></view>
+        </view>
+        <view class="header-text">
+          <text class="waiting-title">{{handlerName}} 正在赶往现场或备料中</text>
+          <text class="waiting-tag">作业防打扰保护中</text>
+        </view>
+      </view>
+      <text class="waiting-desc">
+        为保障一线维修师傅专心作业与人身安全，即时会话将在师傅排查到场或主动发起后自动解锁，请耐心等候。
+      </text>
+    </view>
+  </block>
+</view>

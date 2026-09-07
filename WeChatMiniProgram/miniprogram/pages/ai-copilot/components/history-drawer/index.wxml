@@ -1,0 +1,37 @@
+<view wx:if="{{isOpen}}" class="drawer-mask" bindtap="handleClose">
+  <view class="drawer-content" catchtap="true">
+    <view class="drawer-header">
+      <text class="drawer-title">📋 历史咨询会话</text>
+      <view class="close-btn" bindtap="handleClose">✕</view>
+    </view>
+
+    <scroll-view class="session-scroll-list" scroll-y="true">
+      <view wx:if="{{loading}}" class="loading-state">
+        <text>正在调取历史流水...</text>
+      </view>
+
+      <view wx:elif="{{sessions.length === 0}}" class="empty-state">
+        <text>暂无历史会话记录</text>
+      </view>
+
+      <block wx:else>
+        <view
+          wx:for="{{sessions}}"
+          wx:key="sessionUuid"
+          class="session-item {{item.isPinned ? 'pinned-item' : ''}}"
+          bindtap="handleSelect"
+          data-uuid="{{item.sessionUuid}}"
+        >
+          <view class="session-item-header">
+            <text class="session-title">{{item.title}}</text>
+            <text class="session-time">{{item.timeText}}</text>
+          </view>
+          <view class="session-item-footer">
+            <text class="session-meta">消息 {{item.messageCount}} 条 · {{item.modelName}}</text>
+            <text wx:if="{{item.isPinned}}" class="pin-tag">置顶</text>
+          </view>
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+</view>

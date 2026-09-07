@@ -1,0 +1,119 @@
+<view class="container">
+  <qp-navbar title="巡查质检验收审批" showBack="{{true}}" />
+  <!-- 工单概览头图卡片 -->
+  <view class="card header-card">
+    <view class="order-header">
+      <view class="order-no">{{orderNo}}</view>
+      <view class="status-tag status-pending">待质检复核</view>
+    </view>
+    <view class="order-title">{{title}}</view>
+    <view class="order-meta">
+      <text class="meta-item">📍 {{location}}</text>
+      <text class="meta-item">🔧 施工师傅：{{handlerName}}</text>
+    </view>
+  </view>
+
+  <!-- 审修前后对比实证区块 -->
+  <view class="card contrast-card">
+    <view class="section-title">现场修前修后双轨实证对比</view>
+    
+    <!-- 报修前原状 -->
+    <view class="photo-sub-section">
+      <view class="sub-label">📷 报修前原始现场照片</view>
+      <view class="photo-grid">
+        <block wx:for="{{beforeImages}}" wx:key="index">
+          <image class="grid-image" src="{{item}}" mode="aspectFill" bindtap="onPreviewBeforePhoto" data-index="{{index}}" />
+        </block>
+        <view wx:if="{{beforeImages.length === 0}}" class="empty-tip">暂无原始修前照片</view>
+      </view>
+    </view>
+
+    <!-- 师傅整改后实拍 -->
+    <view class="photo-sub-section">
+      <view class="sub-label">🛠️ 师傅完工交付照片与说明</view>
+      <view class="photo-grid">
+        <block wx:for="{{afterImages}}" wx:key="index">
+          <image class="grid-image" src="{{item}}" mode="aspectFill" bindtap="onPreviewAfterPhoto" data-index="{{index}}" />
+        </block>
+        <view wx:if="{{afterImages.length === 0}}" class="empty-tip">师傅未提交实照</view>
+      </view>
+      <view class="handler-memo-box">
+        <text class="memo-title">师傅完工说明：</text>
+        <text class="memo-content">{{handleContent || '现场已排查整改完毕，请领导复核。'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 质检复核裁决区块 -->
+  <view class="card review-action-card">
+    <view class="section-title">质检复核裁决与到场核验</view>
+
+    <!-- 合格 / 驳回双轨单选切换 -->
+    <view class="decision-toggle">
+      <view 
+        class="toggle-btn pass-btn {{isPassed === 1 ? 'active' : ''}}" 
+        bindtap="onSelectDecision" 
+        data-status="{{1}}"
+      >
+        <text class="icon">✅</text>
+        <text class="text">合格通过 (办结)</text>
+      </view>
+      <view 
+        class="toggle-btn reject-btn {{isPassed === 0 ? 'active' : ''}}" 
+        bindtap="onSelectDecision" 
+        data-status="{{0}}"
+      >
+        <text class="icon">❌</text>
+        <text class="text">不合格驳回 (返工)</text>
+      </view>
+    </view>
+
+    <!-- 复核批复意见输入框 (驳回时必填防呆) -->
+    <view class="input-section">
+      <view class="input-label">
+        <text>质检专家复核意见</text>
+        <text wx:if="{{isPassed === 0}}" class="required-star">* (驳回至少5个字)</text>
+      </view>
+      <textarea 
+        class="remark-textarea" 
+        placeholder="{{isPassed === 0 ? '请详细说明未通过原因及具体整改要求 (至少5字)...' : '请输入质检合格评语或说明 (选填)...'}}" 
+        value="{{remark}}"
+        maxlength="200"
+        bindinput="onInputRemark"
+      />
+      <view class="word-counter">{{remark.length}}/200</view>
+    </view>
+
+    <!-- 质检现场到场核验拍照 -->
+    <view class="input-section">
+      <view class="input-label">
+        <text>质检到场拍照存证 (选填，最多9张)</text>
+        <text class="photo-count">{{reviewImages.length}}/9</text>
+      </view>
+      <view class="review-photo-grid">
+        <block wx:for="{{reviewImages}}" wx:key="index">
+          <view class="photo-item">
+            <image class="grid-image" src="{{item}}" mode="aspectFill" bindtap="onPreviewReviewPhoto" data-index="{{index}}" />
+            <view class="delete-badge" bindtap="onDeletePhoto" data-index="{{index}}">×</view>
+          </view>
+        </block>
+        <view wx:if="{{reviewImages.length < 9}}" class="add-photo-btn" bindtap="onChoosePhoto">
+          <text class="plus-icon">+</text>
+          <text class="add-text">拍照/核验</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部固定提交操作栏 -->
+  <view class="bottom-bar">
+    <button 
+      class="submit-btn {{isPassed === 1 ? 'btn-pass' : 'btn-reject'}}" 
+      loading="{{submitting}}" 
+      disabled="{{submitting}}"
+      bindtap="onSubmitReview"
+    >
+      {{isPassed === 1 ? '确认合格并办结工单' : '确认驳回并打回返工'}}
+    </button>
+  </view>
+</view>

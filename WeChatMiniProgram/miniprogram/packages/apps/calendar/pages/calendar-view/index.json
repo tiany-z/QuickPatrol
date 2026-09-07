@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "shift-card": "../../components/shift-card/index"
+  },
+  "navigationBarTitleText": "全景日程与值班表",
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}

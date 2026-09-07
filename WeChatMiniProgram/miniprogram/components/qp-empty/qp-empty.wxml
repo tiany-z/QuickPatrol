@@ -1,0 +1,24 @@
+<view class="qp-empty-container">
+  <!-- 矢量手绘插画图标 -->
+  <view class="qp-empty-illustration">
+    <view wx:if="{{ mode === 'offline' }}" class="qp-empty-icon qp-empty-icon--offline">⚡</view>
+    <view wx:elif="{{ mode === 'no_permission' }}" class="qp-empty-icon qp-empty-icon--lock">🔒</view>
+    <view wx:elif="{{ mode === 'search' }}" class="qp-empty-icon qp-empty-icon--search">🔍</view>
+    <view wx:else class="qp-empty-icon qp-empty-icon--box">📋</view>
+  </view>
+
+  <!-- 标题与引导语 -->
+  <view class="qp-empty-title">
+    {{ title || (mode === 'offline' ? '网络连接已断开' : mode === 'no_permission' ? '无访问权限' : mode === 'search' ? '无匹配搜索结果' : '暂无待办事项') }}
+  </view>
+  <view class="qp-empty-desc" wx:if="{{ description }}">
+    {{ description }}
+  </view>
+
+  <!-- 核心交互按钮 -->
+  <view class="qp-empty-action" wx:if="{{ showAction }}">
+    <button class="qp-empty-btn" bindtap="handleActionTap">
+      {{ actionText || (mode === 'offline' ? '重新加载' : mode === 'no_permission' ? '切换单位身份' : '刷新页面') }}
+    </button>
+  </view>
+</view>

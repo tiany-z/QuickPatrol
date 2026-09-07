@@ -1,0 +1,19 @@
+<view class="slider-container" id="sliderContainer" bindtouchstart="onTouchStart" bindtouchmove="onTouchMove" bindtouchend="onTouchEnd">
+  <!-- 维修后底图 (完整图) -->
+  <image class="slider-image after-image" src="{{afterImageUrl}}" mode="aspectFill" />
+  <view class="badge after-badge">整改后</view>
+
+  <!-- 维修前顶图 (受 clip-path 或宽度百分比裁剪) -->
+  <view class="before-wrapper" style="width: {{sliderPercent}}%;">
+    <image class="slider-image before-image" src="{{beforeImageUrl}}" mode="aspectFill" style="width: {{containerWidth ? containerWidth + 'px' : '100vw'}};" />
+    <view class="badge before-badge">报修前</view>
+  </view>
+
+  <!-- 中间拖动分割轴 -->
+  <view class="divider-line" style="left: {{sliderPercent}}%;">
+    <view class="handle-btn">
+      <text class="arrow left-arrow">◀</text>
+      <text class="arrow right-arrow">▶</text>
+    </view>
+  </view>
+</view>

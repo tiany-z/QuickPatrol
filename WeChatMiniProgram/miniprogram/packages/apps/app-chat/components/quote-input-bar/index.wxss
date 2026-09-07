@@ -1,0 +1,65 @@
+/* M39: 输入框吸顶待发引用条样式 */
+.quote-bar-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #F7FAFC;
+  padding: 12rpx 24rpx;
+  border-top: 1rpx solid #E2E8F0;
+  border-bottom: 1rpx solid #EDF2F7;
+  position: relative;
+  z-index: 10;
+  transition: all 0.2s ease-in-out;
+}
+
+.quote-bar-left-border {
+  width: 6rpx;
+  height: 36rpx;
+  background-color: #3182CE;
+  border-radius: 3rpx;
+  margin-right: 14rpx;
+  flex-shrink: 0;
+}
+
+.quote-bar-content {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.quote-bar-sender {
+  font-size: 24rpx;
+  color: #3182CE;
+  font-weight: 500;
+  margin-right: 8rpx;
+  flex-shrink: 0;
+}
+
+.quote-bar-summary {
+  font-size: 24rpx;
+  color: #4A5568;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quote-bar-close-btn {
+  padding: 8rpx 14rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.close-icon {
+  font-size: 26rpx;
+  color: #A0AEC0;
+}
+
+.quote-bar-close-btn:active .close-icon {
+  color: #4A5568;
+}

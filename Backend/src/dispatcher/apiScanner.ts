@@ -8,17 +8,17 @@ import {
   StandardResult,
   tryCatchErrorToString,
 } from "../shared/index.js";
+import { ApiEndpointModule } from "./gatewayTypes.js";
+import { normalizeUrlPath } from "../utils/httpHelper.js";
 
-export interface ApiEndpointModule {
-  routePath: string;
-  authRequired?: boolean;
-  astConfig?: any;
-  run?: ((params: any, ctx?: any) => Promise<StandardResult<any>>) | null;
-  handler: (req: any, ctx: any) => Promise<StandardResult<any>>;
-}
+export { ApiEndpointModule } from "./gatewayTypes.js";
 
-const registry: Map<string, ApiEndpointModule> = new Map();
+const routeRegistry: Map<string, ApiEndpointModule> = new Map();
 
+/**
+ * 遍历扫描物理 API 目录树，自动契约装配并预编译 SQL AST (算法 2)
+ * 物理目录结构即逻辑 API 路径：src/api/system/ping/index.ts -> /api/system/ping
+ */
 export async function scanAndPrecompileApiRoutes(apiDir?: string): Promise<StandardResult<number>> {
   try {
     const targetDir = apiDir || path.resolve(process.cwd(), "src", "api");
@@ -35,38 +35,46 @@ export async function scanAndPrecompileApiRoutes(apiDir?: string): Promise<Stand
       const endpoint: ApiEndpointModule = mod.api || mod.default;
 
       if (endpoint && typeof endpoint.handler === "function") {
-        // 计算路由路径 (如 /api/system/ping)
+        // 计算标准相对路径 (如 /api/system/ping)
         const relative = path.relative(targetDir, path.dirname(filePath)).replace(/\\/g, "/");
-        const routePath = `/api/${relative}`;
+        const routePath = normalizeUrlPath(`/api/${relative}`);
+        const customRoute = endpoint.routePath ? normalizeUrlPath(endpoint.routePath) : null;
         endpoint.routePath = routePath;
 
-        // 预编译 SQL AST 并注入 run 函数
-        if (endpoint.astConfig) {
+        // 启动期预编译 SQL AST 并注入 run 函数，消除运行时高并发编译开销
+        if (endpoint.astConfig && !endpoint.run) {
           endpoint.run = compileAstRunFunction(endpoint.astConfig);
         }
 
-        registry.set(routePath, endpoint);
+        routeRegistry.set(routePath, endpoint);
+        if (customRoute && customRoute !== routePath) {
+          routeRegistry.set(customRoute, endpoint);
+        }
         count++;
       }
     }
 
-    TerminalLogger.info(`成功装载并预编译 ${count} 个 API 路由契约接口`, "ApiScanner");
+    TerminalLogger.info(`[M04] 成功装载并预编译 ${count} 个微应用 API 路由端点`, "ApiScanner");
     return returnSuccess(count);
   } catch (error) {
     return returnError(`扫描并预编译 API 路由失败: ${tryCatchErrorToString(error)}`);
   }
 }
 
-export function getApiRoute(routePath: string): ApiEndpointModule | null {
-  if (!routePath) return null;
-  // 规范化处理：剥除末尾冗余斜杠（如 /api/system/ping/ -> /api/system/ping）
-  const cleanPath = routePath.length > 1 ? routePath.replace(/\/+$/, "") : routePath;
+/**
+ * 检索 API 路由契约对象 (支持精确匹配与前缀通配)
+ */
+export function getApiRoute(rawPath: string): ApiEndpointModule | null {
+  if (!rawPath) return null;
+  const cleanPath = normalizeUrlPath(rawPath);
 
-  if (registry.has(cleanPath)) {
-    return registry.get(cleanPath)!;
+  // 1. O(1) 常数级哈希查找
+  if (routeRegistry.has(cleanPath)) {
+    return routeRegistry.get(cleanPath)!;
   }
-  // 支持通配路径匹配 (例如 /api/oss/file/*)
-  for (const [registeredPath, endpoint] of registry.entries()) {
+
+  // 2. 通配前缀扫描 (支持 /api/oss/file/* 与 /_wildcard)
+  for (const [registeredPath, endpoint] of routeRegistry.entries()) {
     if (registeredPath.endsWith("/*") || registeredPath.endsWith("/_wildcard")) {
       const prefix = registeredPath.replace(/\/\*$/, "").replace(/\/_wildcard$/, "");
       if (cleanPath.startsWith(prefix)) {
@@ -74,11 +82,34 @@ export function getApiRoute(routePath: string): ApiEndpointModule | null {
       }
     }
   }
+
   return null;
 }
 
+/**
+ * 动态注册路由端点 (支持测试桩点与微前端热插拔)
+ */
+export function registerRoute(routePath: string, endpoint: ApiEndpointModule): void {
+  const cleanPath = normalizeUrlPath(routePath);
+  endpoint.routePath = cleanPath;
+  if (endpoint.astConfig && !endpoint.run) {
+    endpoint.run = compileAstRunFunction(endpoint.astConfig);
+  }
+  routeRegistry.set(cleanPath, endpoint);
+}
+
+/**
+ * 获取当前全局注册表中已登记的全部 API 路径
+ */
 export function getAllRoutes(): string[] {
-  return Array.from(registry.keys());
+  return Array.from(routeRegistry.keys());
+}
+
+/**
+ * 清空路由注册表
+ */
+export function clearRoutes(): void {
+  routeRegistry.clear();
 }
 
 function getIndexFiles(dir: string): string[] {

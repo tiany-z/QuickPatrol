@@ -1,0 +1,11 @@
+<!-- M39: 输入框吸顶待发引用条组件 -->
+<view class="quote-bar-container" wx:if="{{visible}}">
+  <view class="quote-bar-left-border"></view>
+  <view class="quote-bar-content">
+    <text class="quote-bar-sender">引用 {{senderName || '用户'}}：</text>
+    <text class="quote-bar-summary">{{summary}}</text>
+  </view>
+  <view class="quote-bar-close-btn" bindtap="onTapClose">
+    <text class="close-icon">✕</text>
+  </view>
+</view>

@@ -153,6 +153,7 @@ CREATE TABLE `users` (
   `nickName` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '微信昵称',
   `avatarUrl` VARCHAR(512) NOT NULL DEFAULT '' COMMENT '用户头像 URL',
   `phone` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '手机联系电话',
+  `email` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '电子邮箱 (校级管理员/通知)',
   `jobNo` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '学号 / 工号 (高校统一身份认证)',
   `role` TINYINT NOT NULL DEFAULT 0 COMMENT '层级身份角色: 0学生, 1教职工, 2维修人员, 3科室管理员, 4学校管理员, 9系统管理员',
   `departmentId` INT NOT NULL DEFAULT 0 COMMENT '所属部门ID (逻辑关联 departments.id)',
@@ -910,9 +911,9 @@ SELECT
   u.`phone` AS `adminPhone`,
   u.`jobNo` AS `jobNo`,
   u.`email` AS `email`,
-  u.`status` AS `userStatus`,
+  CASE WHEN u.`isBan` = 1 THEN '已封禁' ELSE '正常' END AS `userStatus`,
   u.`createdAt` AS `registeredAt`,
-  u.`lastLoginAt` AS `lastLoginAt`
+  u.`lastLoginTime` AS `lastLoginAt`
 FROM `users` u
 JOIN `schools` s ON u.`schoolId` = s.`id`
 WHERE u.`role` = 4 AND u.`isDeleted` = 0 AND s.`isDeleted` = 0;

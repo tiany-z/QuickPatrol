@@ -1,0 +1,111 @@
+<!-- M20: 线下固定资产二维码与防作弊打卡核心页 -->
+<view class="scan-point-page">
+  <!-- 动态科技背景微光 -->
+  <view class="aurora-bg-glow glow-top"></view>
+  <view class="aurora-bg-glow glow-bottom"></view>
+
+  <!-- 1. 顶部沉浸式自定义导航栏 -->
+  <view class="custom-nav-header" style="padding-top: {{statusBarHeight}}px;">
+    <view class="nav-content-row">
+      <view class="nav-btn back-btn" bindtap="handleBack" hover-class="btn-hover">
+        <text class="back-icon">←</text>
+      </view>
+      <text class="nav-title">现场防伪巡查打卡</text>
+      <view class="nav-placeholder"></view>
+    </view>
+  </view>
+
+  <scroll-view class="page-scroll-body" scroll-y enable-flex>
+    <!-- 2. 全景雷达测距与全息取景感知卡片 -->
+    <view class="radar-hero-section">
+      <view class="radar-stage {{isProcessing ? 'scanning' : ''}}">
+        <!-- 雷达波纹扩散环 -->
+        <view class="radar-wave wave-1"></view>
+        <view class="radar-wave wave-2"></view>
+        <view class="radar-wave wave-3"></view>
+
+        <!-- 激光扫描线 -->
+        <view class="laser-beam" wx:if="{{isProcessing}}"></view>
+
+        <!-- HUD 准星取景方框 -->
+        <view class="viewfinder-hud">
+          <view class="hud-corner top-left"></view>
+          <view class="hud-corner top-right"></view>
+          <view class="hud-corner bottom-left"></view>
+          <view class="hud-corner bottom-right"></view>
+          
+          <view class="hud-center-icon">
+            <text class="qr-target-icon">📷</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 防作弊状态徽标 -->
+      <view class="status-capsule {{isProcessing ? 'processing' : 'ready'}}">
+        <view class="pulse-indicator"></view>
+        <text class="status-capsule-text">{{isProcessing ? '防伪验真核算中' : '双阶防作弊系统已就绪'}}</text>
+      </view>
+
+      <!-- 实时状态引导文字 -->
+      <view class="status-message-box">
+        <text class="status-main-text">{{verifyingText}}</text>
+        <text class="status-sub-text">请对准设备或点位现场防伪码，系统将自动核对现场 GPS 地理围栏</text>
+      </view>
+    </view>
+
+    <!-- 3. 三阶防伪安全引擎特性说明 -->
+    <view class="security-card">
+      <view class="security-header">
+        <text class="sec-badge">🛡️ 防作弊验真引擎</text>
+        <text class="sec-version">M20 Standard</text>
+      </view>
+
+      <view class="feature-list">
+        <view class="feature-item">
+          <view class="feature-icon-box blue-glow">📷</view>
+          <view class="feature-detail">
+            <text class="feature-title">强制物理镜头取景</text>
+            <text class="feature-desc">底层禁用相册选图，从根源封死翻拍图片、微信截图代扫作弊</text>
+          </view>
+        </view>
+
+        <view class="feature-item">
+          <view class="feature-icon-box green-glow">🛰️</view>
+          <view class="feature-detail">
+            <text class="feature-title">硬件高精度 GPS 比对</text>
+            <text class="feature-desc">毫秒级三阶地理围栏核验，真实核验巡检员现场物理距离</text>
+          </view>
+        </view>
+
+        <view class="feature-item">
+          <view class="feature-icon-box purple-glow">🔐</view>
+          <view class="feature-detail">
+            <text class="feature-title">HMAC-SHA256 动态时间盐</text>
+            <text class="feature-desc">加密时效性防伪签名，杜绝资产二维码复制、盗印与异地转发</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 4. 底部操作按钮群 -->
+    <view class="action-footer">
+      <button 
+        class="primary-scan-btn {{isProcessing ? 'btn-disabled' : ''}}" 
+        bindtap="handleRescan" 
+        disabled="{{isProcessing}}"
+        hover-class="primary-btn-hover"
+      >
+        <text class="btn-icon">⚡</text>
+        <text class="btn-text">{{isProcessing ? '正在验证中...' : '调起现场物理扫码'}}</text>
+      </button>
+
+      <button class="secondary-back-btn" bindtap="handleBack" hover-class="secondary-btn-hover">
+        <text>返回工作台</text>
+      </button>
+
+      <view class="brand-footer-text">
+        <text>高校后勤巡查e速办 v4.0 · 空间防作弊现场巡检</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

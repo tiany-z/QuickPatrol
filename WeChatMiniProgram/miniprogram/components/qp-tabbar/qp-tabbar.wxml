@@ -1,0 +1,29 @@
+<view class="qp-tabbar-wrapper">
+  <view class="qp-tabbar-panel">
+    <block wx:for="{{ tabList }}" wx:key="pagePath">
+      <view
+        class="qp-tabbar-item {{ activeIndex === index ? 'qp-tabbar-item--active' : '' }}"
+        bindtap="onTabTap"
+        data-index="{{ index }}"
+      >
+        <!-- 图标与徽标容器 -->
+        <view class="qp-tabbar-icon-box">
+          <image
+            class="qp-tabbar-icon"
+            src="{{ activeIndex === index ? item.selectedIconPath : item.iconPath }}"
+            mode="aspectFit"
+          />
+          <!-- 动态未读红点 -->
+          <view class="qp-tabbar-badge-slot" wx:if="{{ item.badgeCount > 0 }}">
+            <qp-badge variant="danger" count="{{ item.badgeCount }}" />
+          </view>
+        </view>
+
+        <!-- 标签文字 -->
+        <text class="qp-tabbar-label">{{ item.text }}</text>
+      </view>
+    </block>
+  </view>
+  <!-- 全面屏底部横条安全区占位 -->
+  <view class="qp-tabbar-safe-bottom"></view>
+</view>

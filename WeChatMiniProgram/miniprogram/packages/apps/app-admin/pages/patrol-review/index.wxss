@@ -1,0 +1,272 @@
+/* packages/apps/app-admin/pages/patrol-review/index.wxss */
+.container {
+  min-height: 100vh;
+  background-color: #f4f6f9;
+  padding: 24rpx 24rpx 140rpx;
+  box-sizing: border-box;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.header-card .order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.order-no {
+  font-size: 24rpx;
+  color: #8c9ba8;
+  font-family: monospace;
+}
+
+.status-tag {
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  font-weight: 500;
+}
+
+.status-pending {
+  background-color: #fff7e6;
+  color: #fa8c16;
+  border: 1rpx solid #ffd591;
+}
+
+.order-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1f2d3d;
+  margin-bottom: 16rpx;
+}
+
+.order-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  font-size: 26rpx;
+  color: #5a6e85;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 20rpx;
+  border-left: 6rpx solid #1890ff;
+  padding-left: 12rpx;
+}
+
+.photo-sub-section {
+  margin-bottom: 24rpx;
+}
+
+.sub-label {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #475669;
+  margin-bottom: 12rpx;
+}
+
+.photo-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.grid-image {
+  width: 150rpx;
+  height: 150rpx;
+  border-radius: 10rpx;
+  background-color: #edf2f7;
+}
+
+.empty-tip {
+  font-size: 24rpx;
+  color: #a0aec0;
+  padding: 16rpx 0;
+}
+
+.handler-memo-box {
+  margin-top: 14rpx;
+  background-color: #f7fafc;
+  border-radius: 8rpx;
+  padding: 16rpx;
+  font-size: 24rpx;
+}
+
+.memo-title {
+  color: #718096;
+  font-weight: 500;
+}
+
+.memo-content {
+  color: #2d3748;
+}
+
+/* 决策切换器 */
+.decision-toggle {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 28rpx;
+}
+
+.toggle-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  padding: 22rpx 0;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  border: 2rpx solid #e2e8f0;
+  background-color: #ffffff;
+  color: #4a5568;
+  transition: all 0.2s ease;
+}
+
+.pass-btn.active {
+  background-color: #f6ffed;
+  border-color: #52c41a;
+  color: #52c41a;
+  font-weight: 600;
+}
+
+.reject-btn.active {
+  background-color: #fff1f0;
+  border-color: #f5222d;
+  color: #f5222d;
+  font-weight: 600;
+}
+
+.input-section {
+  margin-bottom: 24rpx;
+}
+
+.input-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 26rpx;
+  color: #4a5568;
+  margin-bottom: 12rpx;
+  font-weight: 500;
+}
+
+.required-star {
+  color: #f5222d;
+  font-size: 22rpx;
+}
+
+.photo-count {
+  color: #a0aec0;
+  font-size: 22rpx;
+}
+
+.remark-textarea {
+  width: 100%;
+  height: 160rpx;
+  background-color: #f8fafc;
+  border: 1rpx solid #e2e8f0;
+  border-radius: 10rpx;
+  padding: 16rpx;
+  font-size: 26rpx;
+  box-sizing: border-box;
+}
+
+.word-counter {
+  text-align: right;
+  font-size: 20rpx;
+  color: #a0aec0;
+  margin-top: 6rpx;
+}
+
+.review-photo-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.photo-item {
+  position: relative;
+  width: 150rpx;
+  height: 150rpx;
+}
+
+.delete-badge {
+  position: absolute;
+  top: -8rpx;
+  right: -8rpx;
+  width: 36rpx;
+  height: 36rpx;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+}
+
+.add-photo-btn {
+  width: 150rpx;
+  height: 150rpx;
+  border: 2rpx dashed #cbd5e0;
+  border-radius: 10rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8fafc;
+}
+
+.plus-icon {
+  font-size: 40rpx;
+  color: #a0aec0;
+  line-height: 1;
+}
+
+.add-text {
+  font-size: 20rpx;
+  color: #718096;
+  margin-top: 6rpx;
+}
+
+/* 底部吸底操作栏 */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx 24rpx 40rpx;
+  background: #ffffff;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.06);
+  z-index: 100;
+}
+
+.submit-btn {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.btn-pass {
+  background: linear-gradient(135deg, #52c41a, #389e0d);
+}
+
+.btn-reject {
+  background: linear-gradient(135deg, #ff4d4f, #cf1322);
+}

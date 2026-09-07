@@ -1,0 +1,71 @@
+<view class="decree-card {{isStamped ? 'stamped-active' : ''}}" wx:if="{{decreeData}}">
+  <!-- 红头公函顶部旗标 -->
+  <view class="decree-header">
+    <view class="decree-emblem">🏛️</view>
+    <view class="decree-heading">
+      <text class="decree-dept">{{decreeData.departmentName || '后勤服务保障中心'}}</text>
+      <text class="decree-official-tag">官方正式答复公函</text>
+    </view>
+  </view>
+
+  <view class="decree-divider"></view>
+
+  <!-- 公函标题 -->
+  <view class="decree-title">{{decreeData.decreeTitle}}</view>
+
+  <!-- 经办人头衔与发布时间 -->
+  <view class="decree-meta">
+    <view class="meta-item">
+      <text class="meta-label">承办职务：</text>
+      <text class="meta-value">{{decreeData.responderTitle || '科室经办主管'}}</text>
+    </view>
+    <view class="meta-item">
+      <text class="meta-label">发布时间：</text>
+      <text class="meta-value">{{decreeData.repliedAt || decreeData.createdAt || '-'}}</text>
+    </view>
+  </view>
+
+  <!-- 整改承诺 SLA 倒计时看板 -->
+  <view class="decree-countdown-box {{countdownClass}}">
+    <view class="countdown-icon">{{countdownIcon}}</view>
+    <view class="countdown-content">
+      <text class="countdown-title">{{remainingDaysText}}</text>
+      <text class="countdown-sub">承诺办结截止：{{decreeData.deadlineAt || '-'}}</text>
+    </view>
+  </view>
+
+  <!-- 公函事实正文 -->
+  <view class="decree-body">
+    <text class="body-text">{{decreeData.body || decreeData.content}}</text>
+  </view>
+
+  <!-- 整改现场凭证照片 -->
+  <view class="decree-images-grid" wx:if="{{decreeData.images && decreeData.images.length > 0}}">
+    <image 
+      wx:for="{{decreeData.images}}" 
+      wx:key="*this"
+      src="{{item}}" 
+      mode="aspectFill" 
+      class="decree-image-thumb"
+      data-url="{{item}}"
+      bindtap="onPreviewImage"
+    />
+  </view>
+
+  <!-- 底部印章与防伪特征码 -->
+  <view class="decree-footer">
+    <view class="fingerprint-box">
+      <text class="fp-label">数字防伪特征码</text>
+      <text class="fp-code">{{decreeData.digitalFingerprint || 'VERIFIED-OFFICIAL'}}</text>
+    </view>
+
+    <!-- 官方红色防伪公章微动效 -->
+    <view class="official-seal {{isStamped ? 'seal-stamped' : ''}}">
+      <view class="seal-inner-circle">
+        <text class="seal-star">★</text>
+        <text class="seal-dept-text">{{decreeData.departmentName || '后勤处'}}</text>
+        <text class="seal-type-text">正式答复专用章</text>
+      </view>
+    </view>
+  </view>
+</view>

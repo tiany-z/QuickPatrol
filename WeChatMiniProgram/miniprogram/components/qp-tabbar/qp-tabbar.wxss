@@ -1,0 +1,71 @@
+.qp-tabbar-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--qp-bg-translucent);
+  backdrop-filter: var(--qp-blur-glass);
+  -webkit-backdrop-filter: var(--qp-blur-glass);
+  border-top: 1rpx solid rgba(226, 232, 240, 0.7);
+  box-sizing: border-box;
+}
+
+.qp-tabbar-panel {
+  display: flex;
+  height: 100rpx;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.qp-tabbar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.qp-tabbar-item:active {
+  transform: scale(0.92);
+}
+
+.qp-tabbar-icon-box {
+  width: 48rpx;
+  height: 48rpx;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qp-tabbar-icon {
+  width: 44rpx;
+  height: 44rpx;
+}
+
+.qp-tabbar-badge-slot {
+  position: absolute;
+  top: -8rpx;
+  right: -24rpx;
+}
+
+.qp-tabbar-label {
+  font-size: 20rpx;
+  font-weight: 500;
+  color: var(--qp-text-muted);
+  margin-top: 6rpx;
+}
+
+.qp-tabbar-item--active .qp-tabbar-label {
+  color: var(--qp-primary);
+  font-weight: 600;
+}
+
+.qp-tabbar-safe-bottom {
+  height: var(--qp-safe-bottom);
+  width: 100%;
+}

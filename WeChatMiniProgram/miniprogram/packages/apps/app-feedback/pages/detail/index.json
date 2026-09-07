@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "诉求与官方答复公函",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "usingComponents": {
+    "qp-navbar": "/components/qp-navbar/qp-navbar",
+    "official-decree-card": "/components/official-decree-card/index",
+    "thanks-card-dialog": "/components/thanks-card-dialog/index"
+  }
+}

@@ -4,9 +4,10 @@ import { decodeLegacyToken } from "./legacyToken.js";
 
 export interface UserTokenPayload {
   userId?: string | number;
+  schoolId?: number;
   openId?: string;
   username?: string;
-  role?: string;
+  role?: string | number;
   iat?: number;
   exp?: number;
 }

@@ -1,0 +1,163 @@
+.thread-list-container {
+  padding: 16rpx 24rpx;
+}
+
+.thread-node {
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #f1f3f5;
+}
+
+.root-comment-box {
+  display: flex;
+  align-items: flex-start;
+}
+
+.author-avatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  margin-right: 16rpx;
+  background: #e9ecef;
+  flex-shrink: 0;
+}
+
+.comment-main {
+  flex: 1;
+}
+
+.author-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.name-badge-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.author-name {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #343a40;
+}
+
+.guest-tag {
+  margin-left: 8rpx;
+  font-size: 18rpx;
+  color: #0078d7;
+  background: rgba(0, 120, 215, 0.1);
+  padding: 2rpx 8rpx;
+  border-radius: 6rpx;
+}
+
+.time-text {
+  font-size: 20rpx;
+  color: #adb5bd;
+}
+
+.comment-text {
+  font-size: 26rpx;
+  color: #212529;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.action-bar {
+  display: flex;
+  align-items: center;
+  margin-top: 10rpx;
+}
+
+.reply-trigger {
+  display: flex;
+  align-items: center;
+  padding: 4rpx 10rpx;
+  background: #f8f9fa;
+  border-radius: 8rpx;
+}
+
+.reply-icon {
+  font-size: 20rpx;
+  margin-right: 6rpx;
+}
+
+.reply-label {
+  font-size: 20rpx;
+  color: #6c757d;
+}
+
+/* 楼中楼嵌套回复 */
+.sub-replies-nest {
+  margin-left: 80rpx;
+  margin-top: 16rpx;
+  padding: 16rpx 20rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+}
+
+.sub-item {
+  margin-bottom: 12rpx;
+}
+
+.sub-item:last-child {
+  margin-bottom: 0;
+}
+
+.sub-line {
+  font-size: 24rpx;
+  line-height: 1.45;
+  word-break: break-all;
+}
+
+.sub-author {
+  font-weight: 600;
+  color: #495057;
+}
+
+.reply-arrow {
+  color: #adb5bd;
+  font-size: 22rpx;
+}
+
+.reply-target {
+  color: #0078d7;
+  font-weight: 500;
+}
+
+.colon {
+  color: #495057;
+}
+
+.sub-content {
+  color: #212529;
+}
+
+.sub-meta {
+  display: flex;
+  align-items: center;
+  margin-top: 4rpx;
+}
+
+.sub-time {
+  font-size: 18rpx;
+  color: #adb5bd;
+  margin-right: 16rpx;
+}
+
+.sub-reply-btn {
+  font-size: 20rpx;
+  color: #0078d7;
+}
+
+.expand-more-btn {
+  padding-top: 12rpx;
+  text-align: left;
+}
+
+.expand-text {
+  font-size: 22rpx;
+  color: #0078d7;
+  font-weight: 500;
+}
